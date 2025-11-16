@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 
 const string defaultSqlDefaultConnectionStringName = "SqlDefault";
+const string heathCheckEndpointPath = "/health";
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -22,10 +23,12 @@ var todoDb = sqlserver.AddDatabase("Todo");
 var identityDb = sqlserver.AddDatabase("Identity");
 
 builder.AddProject<Projects.Todo_Presentation_Api>("todo-api")
+    .WithHttpHealthCheck(heathCheckEndpointPath)
     .WithReference(todoDb, defaultSqlDefaultConnectionStringName)
     .WaitFor(todoDb);
 
 builder.AddProject<Projects.Identity_Presentation_Api>("identity-api")
+    .WithHttpHealthCheck(heathCheckEndpointPath)
     .WithReference(identityDb, defaultSqlDefaultConnectionStringName)
     .WaitFor(identityDb);
 

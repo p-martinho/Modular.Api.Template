@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace SharedCore.Presentation.OpenApi;
 
@@ -25,7 +24,7 @@ public class ApiVersionOperationTransformer : IOpenApiOperationTransformer
         }
 
         apiVersionParameter.Description = "The API version, in the format 'major.minor'.";
-        apiVersionParameter.Schema.Example = new OpenApiString(context.DocumentName.Replace("v", string.Empty));
+        (apiVersionParameter.Schema as OpenApiSchema)?.Example = context.DocumentName.Replace("v", string.Empty);
 
         return Task.CompletedTask;
     }

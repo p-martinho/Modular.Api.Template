@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using OpenIddict.Validation.AspNetCore;
 
 namespace SharedCore.Presentation.OpenApi;
@@ -38,26 +38,19 @@ public class AuthorizationOperationTransformer : IOpenApiOperationTransformer
             return;
         }
 
-        operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
-        operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
+        operation.Responses ??= new OpenApiResponses();
+
+        operation.Responses.TryAdd("401", new OpenApiResponse {Description = "Unauthorized"});
+        operation.Responses.TryAdd("403", new OpenApiResponse {Description = "Forbidden"});
 
         var authenticationSchemes = await _authenticationSchemeProvider.GetAllSchemesAsync();
 
         if (authenticationSchemes.Any(s => s.Name == OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme))
         {
-            var bearerScheme = new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = BearerAuthenticationScheme
-                }
-            };
+            var securitySchemeReference =
+                new OpenApiSecuritySchemeReference(BearerAuthenticationScheme, context.Document);
 
-            operation.Security = new List<OpenApiSecurityRequirement>
-            {
-                new() { { bearerScheme, [BearerAuthenticationScheme] } }
-            };
+            operation.Security = new List<OpenApiSecurityRequirement> {new() {{securitySchemeReference, []}}};
         }
     }
 }

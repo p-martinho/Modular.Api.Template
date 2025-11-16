@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Todo.Presentation.Api.OpenApi;
 
@@ -41,13 +41,11 @@ internal class InfoDocumentTransformer : IOpenApiDocumentTransformer
         document.Info.Version = apiVersionDescription.ApiVersion.ToString();
         document.Info.Contact = new OpenApiContact
         {
-            Name = ApiInfoDetails.Contact.Name,
-            Email = ApiInfoDetails.Contact.Email
+            Name = ApiInfoDetails.Contact.Name, Email = ApiInfoDetails.Contact.Email
         };
         document.Info.License = new OpenApiLicense
         {
-            Name = ApiInfoDetails.Licence.Name,
-            Url = new Uri(ApiInfoDetails.Licence.Url)
+            Name = ApiInfoDetails.Licence.Name, Url = new Uri(ApiInfoDetails.Licence.Url)
         };
 
         document.Servers = [];

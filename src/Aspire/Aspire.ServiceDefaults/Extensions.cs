@@ -94,7 +94,12 @@ public static class Extensions
                 }
 
                 tracing.AddSource(builder.Environment.ApplicationName)
-                    .AddAspNetCoreInstrumentation()
+                    .AddAspNetCoreInstrumentation(t =>
+                        // Exclude health check requests from tracing
+                        t.Filter = context =>
+                            !context.Request.Path.StartsWithSegments(HealthChecksEndpoints.HealthEndpointPath)
+                            && !context.Request.Path.StartsWithSegments(HealthChecksEndpoints.AlivenessEndpointPath)
+                    )
                     // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                     //.AddGrpcClientInstrumentation()
                     .AddHttpClientInstrumentation()
@@ -137,7 +142,7 @@ public static class Extensions
         }
 
         builder.Services.AddHealthChecks()
-            // Add a default liveness check to ensure app is responsive
+            // Add a default aliveness check to ensure app is responsive
             .AddCheck("Self", () => HealthCheckResult.Healthy(), [HealthChecksTags.Live]);
 
         return builder;
@@ -160,15 +165,15 @@ public static class Extensions
             .CacheOutput(OutputCachePolicyForHealthChecksName);
 
         // All health checks must pass for app to be considered ready to accept traffic after starting
-        healthChecksGroup.MapHealthChecks("/health");
+        healthChecksGroup.MapHealthChecks(HealthChecksEndpoints.HealthEndpointPath);
 
-        healthChecksGroup.MapHealthChecks("/health/full",
-                new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse })
+        healthChecksGroup.MapHealthChecks(HealthChecksEndpoints.FullHealthEndpointPath,
+                new HealthCheckOptions {ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse})
             .RequireAuthorization(Policies.HealthChecksFull);
 
         // Only health checks tagged with the "live" tag must pass for app to be considered alive
-        app.MapHealthChecks("/alive",
-            new HealthCheckOptions { Predicate = r => r.Tags.Contains(HealthChecksTags.Live) });
+        app.MapHealthChecks(HealthChecksEndpoints.AlivenessEndpointPath,
+            new HealthCheckOptions {Predicate = r => r.Tags.Contains(HealthChecksTags.Live)});
 
         return app;
     }

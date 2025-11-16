@@ -390,7 +390,7 @@ You can, also, build your own [custom health check](https://learn.microsoft.com/
 
 The template has a test project for each module and layer. The `SharedCore` projects are also tested. Some of them are integration tests (for instance, for **Persistence** and **Presentation**), others are unit tests.
 
-The tests use the [XUnit](https://xunit.net/) as the testing framework and [NSubstitute](https://nsubstitute.github.io/) as the mocking library.
+The tests use the [XUnit](https://xunit.net/) V3 (with the Microsoft Testing Platform V2 enabled) as the testing framework and [NSubstitute](https://nsubstitute.github.io/) as the mocking library.
 
 The integration tests use a real database, using the [TestContainers](https://dotnet.testcontainers.org/) library (requires **Docker Desktop** running). 
 These tests take longer because they need to start the Docker containers.
@@ -443,14 +443,20 @@ The enumeration classes bring several benefits, you can explore a library like [
 
 
 # TODO
-- Remove the Microsoft.NET.Test.Sdk package and check if the tests are not marked as unused and if code coverage works (wait for Rider fix)
 - Figure out how to skip integration tests, without running the fixture
 - Update to .NET 10 (when stable)
-  - It will unlock XML comments in OpenAPI documents (https://github.com/dotnet/aspnetcore/issues/39927#issuecomment-2661021705, https://github.com/captainsafia/aspnet-openapi-xml//)
+  - Remove the Microsoft.NET.Test.Sdk package and check if the tests are not marked as unused and if code coverage works (wait for Rider fix)
   - Check .slnx file is better supported (not preview anymore, the template engine supports it, etc.)
-  - Update the tests for MTP mode:
-    - https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test#microsofttestingplatform-mtp-mode-of-dotnet-test (removing, for instance, <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport> may not be possible with Rider)
-    - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test?tabs=dotnet-test-with-mtp#vstest-and-microsofttestingplatform-mtp
-  - Update Github flow (change the SDK version, dotnet test command, etc.)
+  - Update Github flow (change the SDK version, dotnet test command, use dotnet tool exec, etc.)
+  - Explore minimal API validation
+  - Redo migrations
 - Update dependencies
+- Replace MockLogger with FakeLogger
 - Pipeline to pack and publish
+- To test:
+  - dotnet test --solution ... --ignore-exit-code 8 --coverage --coverage-output-format cobertura --coverage-settings ./tests/CodeCoverage-settings.xml
+  - dotnet tool exec dotnet-reportgenerator-globaltool --interactive false -- -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
+- Add bad request transformer? https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0?view=aspnetcore-10.0#support-for-generating-openapischemas-in-transformers
+- Proper Dispose pattern
+- Check Scalar (types, xml comments, responses, authentication, etc.)
+- Tests: Aspire, Scalar, unit tests, code coverage, requests

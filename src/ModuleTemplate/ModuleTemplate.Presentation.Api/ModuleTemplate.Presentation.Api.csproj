@@ -2,23 +2,19 @@
 
     <PropertyGroup>
         <UserSecretsId>ModuleTemplate-480adbee-9136-4f7b-9ee5-32d5021b7a6f</UserSecretsId>
-
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <!--#if (IsToAddDocker) -->
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-        <DockerfileContext>..\..\..</DockerfileContext>
         <!--#endif -->
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <!--#if (IsToAddDocker) -->
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2"/>
-        <!--#endif -->
-        <PackageReference Include="Scalar.AspNetCore" Version="2.1.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.10.3"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -28,9 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Dtos\V1\" />
-      <Folder Include="Endpoints\V1\" />
-      <Folder Include="MappingExtensions\V1\" />
+        <Folder Include="Dtos\V1\"/>
+        <Folder Include="Endpoints\V1\"/>
+        <Folder Include="MappingExtensions\V1\"/>
     </ItemGroup>
 
 </Project>

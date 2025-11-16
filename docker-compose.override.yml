@@ -61,7 +61,7 @@ services:
       start_period: 10s
   
   aspire-dashboard:
-    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9
     environment:
       - Dashboard__Frontend__BrowserToken=f7007f8fae2ecff308a9c3965f7bf1c1
       - Dashboard__Otlp__AuthMode=ApiKey

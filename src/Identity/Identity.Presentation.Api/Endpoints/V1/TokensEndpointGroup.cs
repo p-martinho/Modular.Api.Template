@@ -29,8 +29,7 @@ internal class TokensEndpointGroup : IEndpointGroup
         var group = app.MapGroup("")
             .WithApiVersionSet(apiVersionSet)
             .MapToApiVersion(ApiVersion)
-            .WithTags(EndpointGroupName)
-            .WithOpenApi();
+            .WithTags(EndpointGroupName);
 
         group.MapPost("connect/token", ExchangeAsync)
             .ProducesProblem(StatusCodes.Status400BadRequest)

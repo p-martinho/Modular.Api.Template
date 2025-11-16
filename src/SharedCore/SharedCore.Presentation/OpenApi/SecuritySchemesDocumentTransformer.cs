@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using OpenIddict.Validation.AspNetCore;
 
 namespace SharedCore.Presentation.OpenApi;
@@ -32,10 +32,11 @@ public class SecuritySchemesDocumentTransformer : IOpenApiDocumentTransformer
     {
         var authenticationSchemes = await _authenticationSchemeProvider.GetAllSchemesAsync();
 
-        if (authenticationSchemes.Any(authScheme => authScheme.Name == OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme))
+        if (authenticationSchemes.Any(authScheme =>
+                authScheme.Name == OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme))
         {
             document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
             document.Components.SecuritySchemes.Add(
                 BearerAuthenticationScheme,

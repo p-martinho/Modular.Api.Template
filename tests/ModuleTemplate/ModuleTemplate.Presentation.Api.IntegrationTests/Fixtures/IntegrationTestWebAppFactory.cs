@@ -12,7 +12,7 @@ using Testcontainers.MsSql;
 
 namespace ModuleTemplate.Presentation.Api.IntegrationTests.Fixtures;
 
-public class IntegrationTestWebAppFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
+public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
@@ -33,7 +33,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<IApiMarker>, I
         // Override the connection string for the database, with the one from the container.
         // The same could be done removing the DbContextOptions<> and call services.AddDbContext<>(...) in ConfigureTestServices(), but this way we don't change how it is being registered and configured.
         // Using Environment.SetEnvironmentVariable instead of builder.ConfigureAppConfiguration(), because we need to set it earlier, to apply the migrations.
-        Environment.SetEnvironmentVariable($"ConnectionStrings:{ConnectionStrings.SqlDefault}", _msSqlContainer.GetConnectionString());
+        Environment.SetEnvironmentVariable($"ConnectionStrings:{ConnectionStrings.SqlDefault}",
+            _msSqlContainer.GetConnectionString());
 
         // Override/add logging configuration (e.g. add a provider that writes to the test output). This runs after the app is built (Program.cs was already executed).
         builder.ConfigureLogging(loggingBuilder =>

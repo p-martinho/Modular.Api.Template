@@ -51,8 +51,7 @@ public static class EndpointExtensions
         var group = app.MapGroup($"{EndpointGroupPrefix}/{groupName}")
             .WithApiVersionSet(apiVersionSet)
             .MapToApiVersion(apiVersion ?? new ApiVersion(1, 0))
-            .WithTags(groupName)
-            .WithOpenApi();
+            .WithTags(groupName);
 
         if (isAuthorizationRequired)
         {

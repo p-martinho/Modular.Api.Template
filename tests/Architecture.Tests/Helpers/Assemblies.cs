@@ -22,8 +22,8 @@ internal static class Assemblies
     public static readonly Assembly[] Presentation =
     [
         typeof(IEndpointGroup).Assembly,
-        typeof(Todo.Presentation.Api.IApiMarker).Assembly,
-        typeof(Identity.Presentation.Api.IApiMarker).Assembly
+        typeof(Todo.Presentation.Api.DependencyInjection.DependencyInjectionExtensions).Assembly,
+        typeof(Identity.Presentation.Api.DependencyInjection.DependencyInjectionExtensions).Assembly
     ];
 
     public static readonly Assembly[] Application =

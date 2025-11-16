@@ -10,14 +10,14 @@ using Testcontainers.MsSql;
 
 namespace ModuleTemplate.Persistence.IntegrationTests.Fixtures;
 
-public class EfCoreFixture : IAsyncLifetime
+public sealed class EfCoreFixture : IAsyncLifetime
 {
     private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
     private IServiceScope? _serviceScope;
 
     internal ModuleTemplateDbContext Context => _serviceScope!.ServiceProvider.GetRequiredService<ModuleTemplateDbContext>();
 
-    public virtual async ValueTask InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await _msSqlContainer.StartAsync();
 
@@ -41,7 +41,7 @@ public class EfCoreFixture : IAsyncLifetime
         _serviceScope = serviceProvider.CreateScope();
     }
 
-    public virtual async ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         _serviceScope?.Dispose();
         await _msSqlContainer.DisposeAsync();

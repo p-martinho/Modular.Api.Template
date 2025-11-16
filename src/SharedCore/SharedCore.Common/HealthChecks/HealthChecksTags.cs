@@ -9,7 +9,7 @@ namespace SharedCore.Common.HealthChecks;
 public static class HealthChecksTags
 {
     /// <summary>
-    /// The live tag.
+    /// The alive tag.
     /// </summary>
     public const string Live = "Live";
 

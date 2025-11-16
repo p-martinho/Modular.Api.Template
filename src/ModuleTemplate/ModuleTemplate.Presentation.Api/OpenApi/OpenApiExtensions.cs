@@ -50,10 +50,10 @@ internal static class OpenApiExtensions
         {
             options.WithTitle(ApiInfoDetails.Title);
 
-            options.WithPreferredScheme(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
-                .WithHttpBearerAuthentication(bearerOptions =>
+            options.AddPreferredSecuritySchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
+                .AddHttpAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, securityScheme =>
                 {
-                    bearerOptions.Token = "your-token";
+                    securityScheme.Token = "your-token";
                 });
 
             if (documentNames.Length != 0)
