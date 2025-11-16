@@ -4,34 +4,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SharedCore.Persistence.IntegrationTests.TestServices;
+using Todo.Persistence;
 
 #nullable disable
 
-namespace SharedCore.Persistence.IntegrationTests.Migrations
+namespace Todo.Persistence.Migrations
 {
-    [DbContext(typeof(TestDbContext))]
-    partial class TestDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(TodoDbContext))]
+    partial class TodoDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("testing")
+                .HasDefaultSchema("todo")
                 .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SharedCore.Persistence.IntegrationTests.TestEntities.TestChildEntity", b =>
+            modelBuilder.Entity("Todo.Domain.Entities.TodoLists.TodoItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -40,10 +35,19 @@ namespace SharedCore.Persistence.IntegrationTests.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("Description")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<bool>("IsDone")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<Guid>("TodoListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
@@ -55,23 +59,15 @@ namespace SharedCore.Persistence.IntegrationTests.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
+                    b.HasIndex("TodoListId");
 
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("TestChildEntitiesTable", "testing");
+                    b.ToTable("TodoItems", "todo");
                 });
 
-            modelBuilder.Entity("SharedCore.Persistence.IntegrationTests.TestEntities.TestEntity", b =>
+            modelBuilder.Entity("Todo.Domain.Entities.TodoLists.TodoList", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -82,6 +78,11 @@ namespace SharedCore.Persistence.IntegrationTests.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
@@ -97,50 +98,41 @@ namespace SharedCore.Persistence.IntegrationTests.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.ToTable("TestEntitiesTable", "testing");
+                    b.ToTable("TodoLists", "todo");
                 });
 
-            modelBuilder.Entity("SharedCore.Persistence.IntegrationTests.TestEntities.TestChildEntity", b =>
+            modelBuilder.Entity("Todo.Domain.Entities.TodoLists.TodoItem", b =>
                 {
-                    b.HasOne("SharedCore.Persistence.IntegrationTests.TestEntities.TestEntity", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
+                    b.HasOne("Todo.Domain.Entities.TodoLists.TodoList", null)
+                        .WithMany("Items")
+                        .HasForeignKey("TodoListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("SharedCore.Persistence.IntegrationTests.TestEntities.TestEntity", b =>
-                {
-                    b.OwnsOne("SharedCore.Persistence.IntegrationTests.TestEntities.TestOwnedEntity", "OwnedEntity", b1 =>
+                    b.OwnsOne("Todo.Domain.ValueObjects.TodoLists.TodoItemSchedule", "Schedule", b1 =>
                         {
-                            b1.Property<Guid>("TestEntityId")
+                            b1.Property<Guid>("TodoItemId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasMaxLength(512)
-                                .HasColumnType("nvarchar(512)");
+                            b1.Property<DateTimeOffset?>("DueDate")
+                                .HasColumnType("datetimeoffset")
+                                .HasColumnName("DueDate");
 
-                            b1.HasKey("TestEntityId");
+                            b1.HasKey("TodoItemId");
 
-                            b1.ToTable("TestEntitiesTable", "testing");
+                            b1.ToTable("TodoItems", "todo");
 
                             b1.WithOwner()
-                                .HasForeignKey("TestEntityId");
+                                .HasForeignKey("TodoItemId");
                         });
 
-                    b.Navigation("OwnedEntity")
+                    b.Navigation("Schedule")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SharedCore.Persistence.IntegrationTests.TestEntities.TestEntity", b =>
+            modelBuilder.Entity("Todo.Domain.Entities.TodoLists.TodoList", b =>
                 {
-                    b.Navigation("Children");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

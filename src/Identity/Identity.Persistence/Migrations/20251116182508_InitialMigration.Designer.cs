@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Persistence.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20250407170649_InitialMigration")]
+    [Migration("20251116182508_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace Identity.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("identity")
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -428,8 +428,8 @@ namespace Identity.Persistence.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
