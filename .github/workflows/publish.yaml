@@ -1,0 +1,35 @@
+name: Publish Template
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'Modular.Api.Template.csproj'
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: 9.0.x
+  BuildConfiguration: Release
+  ProjectFile: Modular.Api.Template.csproj
+  PackageName: PMart.Modular.Api.Template.*.nupkg
+  NuGetUrl: https://api.nuget.org/v3/index.json
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Pack
+        run: dotnet pack ${{ env.ProjectFile }} --configuration ${{ env.BuildConfiguration }}
+
+      - name: Publish to nuget.org
+        run: dotnet nuget push ./**/${{ env.PackageName }} --source ${{ env.NuGetUrl }} --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate --no-symbols

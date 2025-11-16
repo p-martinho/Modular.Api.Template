@@ -1,0 +1,59 @@
+@startuml
+
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam RoundCorner 10
+skinparam ParticipantBackgroundColor #LightBlue
+skinparam DatabaseBackgroundColor #LightBlue
+skinparam ActorBackgroundColor #LightBlue
+skinparam EntityBackgroundColor #LightBlue
+skinparam SequenceLifeLineBackgroundColor #LightGoldenRodYellow
+skinparam SequenceBoxBackgroundColor #White
+
+actor Client
+box Presentation
+participant API
+end box
+box Application
+participant IQueryHandler
+participant IValidator
+end box
+box Persistence
+participant IRepository
+database Database
+end box
+
+Client -> API ++ : Request (ApiDto)
+    API -> IQueryHandler ++ : HandleAsync(Input [e.g. PaginatedQueryDto])
+        IQueryHandler -> IQueryHandler ++ : ValidateInputAsync(Input)
+
+            IQueryHandler -> IValidator ++ : ValidateAsync(Input)
+            IValidator --> IQueryHandler -- : ValidationResult
+
+        IQueryHandler --> IQueryHandler -- : IEnumerable<ResultDetails>
+
+alt If any validation error
+
+        IQueryHandler -> IQueryHandler ++ : HandleValidationErrors(IEnumerable<ResultDetail>)
+        IQueryHandler --> IQueryHandler -- : QueryOut<Dto>.ValidationError
+
+    IQueryHandler --> API : QueryOut<Dto>.ValidationError
+
+API --> Client : Response (ProblemDetails)
+
+end
+
+        IQueryHandler-> IQueryHandler ++ : HandleQueryInAsync(Input)
+
+            IQueryHandler -> IRepository ++ : GetAsync(...)
+                IRepository -> Database ++
+                Database --> IRepository --
+            IRepository --> IQueryHandler -- : BaseEntity
+
+        IQueryHandler --> IQueryHandler -- : QueryOut<Dto>
+
+    IQueryHandler --> API : QueryOut<Dto>
+
+API --> Client : Response (ApiDto)
+
+@enduml

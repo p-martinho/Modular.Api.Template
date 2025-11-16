@@ -1,0 +1,65 @@
+name: Build and Test
+
+on:
+  push:
+    branches: 
+      - 'develop'
+  pull_request:
+    branches:
+      - 'main'
+      - 'develop'
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: 9.0.x
+  BuildConfiguration: Release
+  SolutionFile: Modular.Api.Template.sln
+  TestResultsDirectory: TestResults
+  CoverageReportDirectory: CoverageReport
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SolutionFile }}
+      
+      - name: Build
+        run: dotnet build ${{ env.SolutionFile }} --configuration ${{ env.BuildConfiguration }} --no-restore
+      
+      - name: Test
+        run: dotnet test ${{ env.SolutionFile }} --configuration ${{ env.BuildConfiguration }} --no-restore --no-build -- --results-directory ${{ env.TestResultsDirectory }} --ignore-exit-code 8 --coverage --coverage-output-format cobertura --coverage-output coverage.xml --coverage-settings CodeCoverage-settings.xml
+
+      # Note: need to install tool outside working dir: dotnet command returns the error "contains more than one project file"
+      - name: Create code coverage report
+        run: |
+          cd ..
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          cd ${{ github.workspace }}
+          reportgenerator -reports:**/${{ env.TestResultsDirectory }}/coverage.xml -targetdir:${{ env.CoverageReportDirectory }} -reporttypes:MarkdownSummaryGithub
+
+      - name: Add comment to PR
+        if: github.event_name == 'pull_request'
+        run: gh pr comment $PR_NUMBER --body-file ${{ env.CoverageReportDirectory }}/SummaryGithub.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
+    
+      - name: Publish coverage in build summary
+        run: cat ${{ env.CoverageReportDirectory }}/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v4
+        with:
+            name: test-results
+            path: '**/${{ env.TestResultsDirectory }}/*'
+        if: ${{ always() }}

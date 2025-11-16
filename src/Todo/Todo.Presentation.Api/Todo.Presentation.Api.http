@@ -1,0 +1,100 @@
+@TodoApi_HostAddress = https://localhost:7217
+@accessToken = <past-here-access-token-got-from-identity-api>
+@adminAccessToken = <past-here-access-token-got-from-identity-api>
+
+### Create a to do list
+
+# @name createTodoList
+POST {{TodoApi_HostAddress}}/api/todolists
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "the to do list name {{$randomInt 1 1000}}"
+}
+
+### Get a to do list by id
+
+@todoListId = {{createTodoList.response.body.$.id}}
+
+GET {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}
+Authorization: Bearer {{accessToken}}
+
+### Get to do lists paginated
+
+@pageNumber = 1
+@pageSize = 5
+@orderBy = name
+@isDescendingOrder = true
+@filterBy = name
+@filterValue = the
+
+GET {{TodoApi_HostAddress}}/api/todolists?pageNumber={{pageNumber}}&pageSize={{pageSize}}&orderBy={{orderBy}}&isDescendingOrder={{isDescendingOrder}}&filterBy={{filterBy}}&filterValue={{filterValue}}
+Authorization: Bearer {{accessToken}}
+
+### Update a to do list
+
+@todoListId = {{createTodoList.response.body.$.id}}
+
+PATCH {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "the new to do list name {{$randomInt 1 1000}}"
+}
+
+### Delete a to do list
+
+@todoListId = {{createTodoList.response.body.$.id}}
+
+DELETE {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}
+Authorization: Bearer {{accessToken}}
+
+### Create a to do item
+
+# @name createTodoItem
+POST {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}/todoItems
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "the to do item title {{$randomInt 1 1000}}",
+  "description": null,
+  "schedule": null
+}
+
+### Update a to do item
+
+PATCH {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}/todoItems/{{todoItemId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "the new to do item title {{$randomInt 1 1000}}",
+  "description": "the new description",
+  "isDone": true,
+  "schedule": {
+    "dueDate": "{{$datetime iso8601 1 d}}"
+  }
+}
+
+### Delete a to do item
+
+@todoItemId = {{createTodoItem.response.body.$.id}}
+
+DELETE {{TodoApi_HostAddress}}/api/todolists/{{todoListId}}/todoItems/{{todoItemId}}
+Authorization: Bearer {{accessToken}}
+
+### Health check alive
+
+GET {{TodoApi_HostAddress}}/alive
+
+### Health check simple
+
+GET {{TodoApi_HostAddress}}/health
+
+### Healt check full (requires authorization and "Admin" role)
+
+GET {{TodoApi_HostAddress}}/health/full
+Authorization: Bearer {{adminAccessToken}}

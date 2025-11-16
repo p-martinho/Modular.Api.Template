@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="6.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Persistence\SharedCore.Persistence.csproj"/>
+        <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj"/>
+        <ProjectReference Include="..\Identity.Common\Identity.Common.csproj"/>
+    </ItemGroup>
+
+</Project>

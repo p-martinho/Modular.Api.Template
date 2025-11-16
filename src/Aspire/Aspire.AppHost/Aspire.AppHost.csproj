@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.0"/>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>cf3293e2-5be6-40c8-ab31-0c4c0334d633</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0"/>
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj"/>
+        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj"/>
+    </ItemGroup>
+
+</Project>

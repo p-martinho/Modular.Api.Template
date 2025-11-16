@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4"/>
+        <PackageReference Include="Testcontainers.MsSql" Version="4.3.0"/>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <UserSecretsId>todo-e63bb7a1-1644-4dd2-9b51-9f8dbdb6c4ad</UserSecretsId>
+
+        <!--#if (IsToAddDocker) -->
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+        <DockerfileContext>..\..\..</DockerfileContext>
+        <!--#endif -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <!--#if (IsToAddDocker) -->
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2"/>
+        <!--#endif -->
+        <PackageReference Include="Scalar.AspNetCore" Version="2.1.11"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj"/>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj"/>
+        <ProjectReference Include="..\Todo.Application\Todo.Application.csproj"/>
+    </ItemGroup>
+
+</Project>

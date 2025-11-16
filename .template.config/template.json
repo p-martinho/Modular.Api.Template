@@ -1,0 +1,229 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "PMart",
+  "classifications": [
+    "ASP.NET",
+    "API",
+    "Modular Monolith"
+  ],
+  "description": "A solution template for creating a modular monolith with several ASP.NET Core APIs.",
+  "identity": "Modular.Api",
+  "name": "Modular API Solution",
+  "shortName": "mod-api",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Modular.Api.Template",
+  "preferNameDirectory": true,
+  "symbols": {
+    "add": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "solution",
+          "description": "New solution with example modules"
+        },
+        {
+          "choice": "module",
+          "description": "New empty module (add it to an existent solution)"
+        },
+        {
+          "choice": "tests",
+          "description": "Tests for a module (add it to an existent solution, refering one existing module)"
+        }
+      ],
+      "defaultValue": "solution",
+      "description": "The type of project to create"
+    },
+    "module-name": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "ModuleTemplate",
+      "fileRename": "ModuleTemplate",
+      "replaces": "ModuleTemplate",
+      "isEnabled": "(add == \"module\" || add == \"tests\")",
+      "isRequired": "(add == \"module\"|| add == \"tests\")",
+      "description": "The name of the module to add or to add tests for"
+    },
+    "with-docker": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Option to add Docker and Docker compose support"
+    },
+    "IsSolution": {
+      "type": "computed",
+      "value": "(add == \"solution\")"
+    },
+    "IsNewModule": {
+      "type": "computed",
+      "value": "(add == \"module\")"
+    },
+    "IsModuleTests": {
+      "type": "computed",
+      "value": "(add == \"tests\")"
+    },
+    "IsToAddDocker": {
+      "type": "computed",
+      "value": "(with-docker)"
+    }
+  },
+  "sources": [
+    {
+      "condition": "IsSolution",
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        ".template.config/**/*",
+        "**/*.filelist",
+        "**/*.user",
+        "**/*.lock.json",
+        "**/[Ll]og/**",
+        "**/[Ll]ogs/**",
+        ".git/**",
+        ".github/**",
+        ".idea/**",
+        ".vs/**",
+        "sqldata/**",
+        "README.md",
+        "*.csproj",
+        "icon.*",
+        "docs/**",
+        "src/ModuleTemplate/**",
+        "tests/ModuleTemplate/**"
+      ],
+      "rename": {
+        "README-template.md": "README.md"
+      },
+      "copyOnly": ["README-template.md"],
+      "modifiers": [
+        {
+          "condition": "!IsToAddDocker",
+          "exclude": [
+            ".dockerignore",
+            "docker-compose.*",
+            "**/Dockerfile",
+            "launchSettings.json"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "IsNewModule",
+      "include": [
+        "src/ModuleTemplate/**"
+      ],
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        "**/[Ll]og/**",
+        "**/[Ll]ogs/**"
+      ],
+      "modifiers": [
+        {
+          "condition": "!IsToAddDocker",
+          "exclude": [
+            "**/Dockerfile"
+          ]
+        }
+      ]
+    },
+    {
+      "condition": "IsModuleTests",
+      "include": [
+        "tests/ModuleTemplate/**"
+      ],
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        "**/[Ll]og/**",
+        "**/[Ll]ogs/**"
+      ]
+    }
+  ],
+  "guids": [
+    "480adbee-9136-4f7b-9ee5-32d5021b7a6f"
+  ],
+  "primaryOutputs": [
+    {
+      "condition": "IsNewModule",
+      "path": "src/ModuleTemplate/ModuleTemplate.Presentation.Api/ModuleTemplate.Presentation.Api.csproj"
+    },
+    {
+      "condition": "IsNewModule",
+      "path": "src/ModuleTemplate/ModuleTemplate.Application/ModuleTemplate.Application.csproj"
+    },
+    {
+      "condition": "IsNewModule",
+      "path": "src/ModuleTemplate/ModuleTemplate.Domain/ModuleTemplate.Domain.csproj"
+    },
+    {
+      "condition": "IsNewModule",
+      "path": "src/ModuleTemplate/ModuleTemplate.Persistence/ModuleTemplate.Persistence.csproj"
+    },
+    {
+      "condition": "IsNewModule",
+      "path": "src/ModuleTemplate/ModuleTemplate.Common/ModuleTemplate.Common.csproj"
+    },
+    {
+      "condition": "IsModuleTests",
+      "path": "tests/ModuleTemplate/ModuleTemplate.Presentation.Api.IntegrationTests/ModuleTemplate.Presentation.Api.IntegrationTests.csproj"
+    },
+    {
+      "condition": "IsModuleTests",
+      "path": "tests/ModuleTemplate/ModuleTemplate.Application.Tests/ModuleTemplate.Application.Tests.csproj"
+    },
+    {
+      "condition": "IsModuleTests",
+      "path": "tests/ModuleTemplate/ModuleTemplate.Domain.Tests/ModuleTemplate.Domain.Tests.csproj"
+    },
+    {
+      "condition": "IsModuleTests",
+      "path": "tests/ModuleTemplate/ModuleTemplate.Persistence.IntegrationTests/ModuleTemplate.Persistence.IntegrationTests.csproj"
+    },
+    {
+      "condition": "IsModuleTests",
+      "path": "tests/ModuleTemplate/ModuleTemplate.Common.Tests/ModuleTemplate.Common.Tests.csproj"
+    }
+  ],
+  "postActions": [
+    {
+      "condition": "IsNewModule",
+      "description": "Adding module projects to the solution",
+      "manualInstructions": [
+        {
+          "text": "Add generated projects to solution manually (into a new solution folder 'ModuleTemplate', inside the folder 'Modules')."
+        }
+      ],
+      "applyFileRenamesToArgs": [
+        "solutionFolder"
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "args": {
+        "solutionFolder": "Modules/ModuleTemplate"
+      },
+      "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
+      "continueOnError": true
+    },
+    {
+      "condition": "IsModuleTests",
+      "description": "Adding test projects to the solution",
+      "manualInstructions": [
+        {
+          "text": "Add generated projects to solution manually (into a new solution folder named 'ModuleTemplate', inside the folder 'Tests')."
+        }
+      ],
+      "applyFileRenamesToArgs": [
+        "solutionFolder"
+      ],
+      "applyFileRenamesToManualInstructions": true,
+      "args": {
+        "solutionFolder": "Tests/ModuleTemplate"
+      },
+      "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
+      "continueOnError": true
+    }
+  ]
+}
