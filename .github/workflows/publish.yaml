@@ -1,11 +1,11 @@
-name: Publish Template
+name: Publish to NuGet
 
 on:
   push:
     branches:
       - 'main'
     paths:
-      - 'Modular.Api.Template.csproj'
+      - '**/Modular.Api.Template.csproj'
   workflow_dispatch:
 
 env:
