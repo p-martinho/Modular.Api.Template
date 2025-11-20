@@ -1,22 +1,22 @@
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Testing;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using SharedCore.Presentation.Middleware;
 using SharedCore.Presentation.Settings;
-using SharedCore.Presentation.Tests.TestHelpers;
 
 namespace SharedCore.Presentation.Tests.Middleware;
 
 public class InternalErrorMiddlewareTests
 {
     private readonly InternalErrorMiddleware _middleware;
-    private readonly MockLogger<InternalErrorMiddleware> _logger;
+    private readonly FakeLogger<InternalErrorMiddleware> _fakeLogger;
     private readonly InternalErrorMiddlewareSettings _settings;
 
     public InternalErrorMiddlewareTests()
     {
-        _logger = Substitute.For<MockLogger<InternalErrorMiddleware>>();
+        _fakeLogger = new FakeLogger<InternalErrorMiddleware>();
 
         _settings = new InternalErrorMiddlewareSettings();
 
@@ -44,10 +44,10 @@ public class InternalErrorMiddlewareTests
         await _middleware.InvokeAsync(httpContext);
 
         // Assert
-        _logger.Received(1)
-            .LogError(Arg.Is<string>(s =>
-                s.Contains($"{requestMethod} {requestPath}?{queryStringKey}={queryStringValue}") &&
-                s.Contains($"Body: {bodyContent}")));
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.Contains($"{requestMethod} {requestPath}?{queryStringKey}={queryStringValue}",
+            _fakeLogger.LatestRecord.Message);
+        Assert.Contains($"Body: {bodyContent}", _fakeLogger.LatestRecord.Message);
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public class InternalErrorMiddlewareTests
         await _middleware.InvokeAsync(httpContext);
 
         // Assert
-        _logger.Received(1)
-            .LogError(Arg.Is<string>(s => !s.Contains("Body:")));
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.DoesNotContain("Body:", _fakeLogger.LatestRecord.Message);
     }
 
     [Fact]
@@ -79,8 +79,8 @@ public class InternalErrorMiddlewareTests
 
         // Assert
         var truncatedBody = bodyContent[.._settings.MaxBodyLengthInLog];
-        _logger.Received(1)
-            .LogError(Arg.Is<string>(s => s.Contains($"Body: {truncatedBody} ...")));
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.Contains($"Body: {truncatedBody} ...", _fakeLogger.LatestRecord.Message);
     }
 
     [Fact]
@@ -97,8 +97,8 @@ public class InternalErrorMiddlewareTests
         await middleware.InvokeAsync(httpContext);
 
         // Assert
-        _logger.Received(1)
-            .LogError(Arg.Is<string>(s => s.Contains("Error reading the request body")));
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.Contains("Error reading the request body", _fakeLogger.LatestRecord.Message);
     }
 
     [Fact]
@@ -112,8 +112,7 @@ public class InternalErrorMiddlewareTests
         await middleware.InvokeAsync(httpContext);
 
         // Assert
-        _logger.DidNotReceiveWithAnyArgs()
-            .LogError(null!);
+        Assert.Empty(_fakeLogger.Collector.GetSnapshot());
     }
 
     private InternalErrorMiddleware BuildMiddleware(int statusCodeFromNext, InternalErrorMiddlewareSettings settings)
@@ -124,6 +123,6 @@ public class InternalErrorMiddlewareTests
             return Task.CompletedTask;
         };
 
-        return new InternalErrorMiddleware(next, _logger, Options.Create(settings));
+        return new InternalErrorMiddleware(next, _fakeLogger, Options.Create(settings));
     }
 }

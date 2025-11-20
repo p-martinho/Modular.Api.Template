@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
+using Microsoft.Extensions.Logging.Testing;
 using SharedCore.Presentation.Middleware;
-using SharedCore.Presentation.Tests.TestHelpers;
 
 namespace SharedCore.Presentation.Tests.Middleware;
 
@@ -18,11 +17,11 @@ public class CustomExceptionHandlerTests
 {
     private const string EndpointThatThrows = "/exception";
 
-    private readonly MockLogger<CustomExceptionHandler> _logger;
+    private readonly FakeLogger<CustomExceptionHandler> _fakeLogger;
 
     public CustomExceptionHandlerTests()
     {
-        _logger = Substitute.For<MockLogger<CustomExceptionHandler>>();
+        _fakeLogger = new FakeLogger<CustomExceptionHandler>();
     }
 
     [Fact]
@@ -37,8 +36,13 @@ public class CustomExceptionHandlerTests
 
         // Assert
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        _logger.Received(1).LogError(exception,
-            $"An unexpected error occurred while processing the request: {exception.Message}");
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.Equal(exception, _fakeLogger.LatestRecord.Exception);
+        Assert.Contains($"An unexpected error occurred while processing the request: {exception.Message}",
+            _fakeLogger.LatestRecord.Message);
+        Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
+        Assert.Equal(exception, _fakeLogger.LatestRecord.Exception);
+        Assert.Contains(exception.Message, _fakeLogger.LatestRecord.Message);
         var problemDetails =
             await response.Content.ReadFromJsonAsync<ProblemDetails>(TestContext.Current.CancellationToken);
         Assert.NotNull(problemDetails);
@@ -58,7 +62,7 @@ public class CustomExceptionHandlerTests
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        _logger.DidNotReceiveWithAnyArgs().LogError(null!, null!);
+        Assert.Empty(_fakeLogger.Collector.GetSnapshot());
         var problemDetails =
             await response.Content.ReadFromJsonAsync<ProblemDetails>(TestContext.Current.CancellationToken);
         Assert.NotNull(problemDetails);
@@ -78,7 +82,7 @@ public class CustomExceptionHandlerTests
                         services.AddProblemDetails();
                         services.AddExceptionHandler<CustomExceptionHandler>();
                         services.AddRouting();
-                        services.AddScoped<ILogger<CustomExceptionHandler>>(_ => _logger);
+                        services.AddScoped<ILogger<CustomExceptionHandler>>(_ => _fakeLogger);
                     })
                     .Configure(app =>
                     {
