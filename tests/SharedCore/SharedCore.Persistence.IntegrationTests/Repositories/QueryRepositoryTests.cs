@@ -11,7 +11,7 @@ using SharedCore.Persistence.Repositories.Settings;
 
 namespace SharedCore.Persistence.IntegrationTests.Repositories;
 
-public class QueryRepositoryTests : BaseRepositoryIntegrationTest
+public class QueryRepositoryTests : BaseRepositoryIntegrationTests
 {
     private const int QueryMaxLimit = 10;
 

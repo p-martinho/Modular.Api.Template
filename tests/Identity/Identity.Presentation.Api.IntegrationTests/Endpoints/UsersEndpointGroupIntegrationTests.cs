@@ -11,7 +11,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Identity.Presentation.Api.IntegrationTests.Endpoints;
 
-public class UsersEndpointGroupIntegrationTests : BaseIntegrationTest
+public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 {
     private const string UsersPath = "api/users";
     private const string UsersInfoPath = $"{UsersPath}/info";

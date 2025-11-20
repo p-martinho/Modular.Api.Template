@@ -8,7 +8,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Identity.Presentation.Api.IntegrationTests.Endpoints;
 
-public class TokensEndpointGroupIntegrationTests : BaseIntegrationTest
+public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 {
     private const string UsersPath = "api/users";
     private const string TokensPath = "connect/token";

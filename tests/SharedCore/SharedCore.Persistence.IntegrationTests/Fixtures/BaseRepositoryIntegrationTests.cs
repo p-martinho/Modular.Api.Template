@@ -4,14 +4,14 @@ using SharedCore.Persistence.IntegrationTests.TestServices;
 
 namespace SharedCore.Persistence.IntegrationTests.Fixtures;
 
-public abstract class BaseRepositoryIntegrationTest : IClassFixture<RepositoryFixture>, IDisposable
+public abstract class BaseRepositoryIntegrationTests : IClassFixture<RepositoryFixture>, IDisposable
 {
     private readonly IServiceScope _testScope;
 
     protected readonly TestDbContext DbContext;
     protected readonly TestCurrentUser CurrentUser;
 
-    protected BaseRepositoryIntegrationTest(RepositoryFixture fixture)
+    protected BaseRepositoryIntegrationTests(RepositoryFixture fixture)
     {
         _testScope = fixture.ServiceProvider.CreateScope();
 
@@ -25,6 +25,17 @@ public abstract class BaseRepositoryIntegrationTest : IClassFixture<RepositoryFi
 
     public void Dispose()
     {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing)
+        {
+            return;
+        }
+
         DbContext.Dispose();
         _testScope.Dispose();
     }

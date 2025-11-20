@@ -9,7 +9,7 @@ using SharedCore.Persistence.IntegrationTests.TestServices;
 
 namespace SharedCore.Persistence.IntegrationTests;
 
-public class BaseDbContextTests : IClassFixture<EfCoreFixture>, IDisposable
+public sealed class BaseDbContextTests : IClassFixture<EfCoreFixture>, IDisposable
 {
     private readonly IServiceScope _testScope;
     private readonly TestDbContext _context;

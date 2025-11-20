@@ -2,18 +2,25 @@ using System.Net.Http.Headers;
 
 namespace Todo.Presentation.Api.IntegrationTests.Fixtures;
 
-public class BaseIntegrationTest : IAsyncDisposable
+public class BaseIntegrationTests : IAsyncDisposable
 {
     protected readonly HttpClient Client;
 
-    protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
+    protected BaseIntegrationTests(IntegrationTestWebAppFactory factory)
     {
         Client = factory.CreateClient();
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: TestAuthHandler.SchemeName,
             TestAuthHandler.DefaultUserToken);
     }
+    
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore().ConfigureAwait(false);
 
-    public ValueTask DisposeAsync()
+        GC.SuppressFinalize(this);
+    }
+    
+    protected virtual ValueTask DisposeAsyncCore()
     {
         Client.Dispose();
 

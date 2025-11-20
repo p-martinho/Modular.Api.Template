@@ -20,9 +20,9 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
 
     public override async ValueTask DisposeAsync()
     {
+        await _msSqlContainer.DisposeAsync();
+        
         await base.DisposeAsync();
-
-        await _msSqlContainer.StopAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

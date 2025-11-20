@@ -42,6 +42,13 @@ public class EfCoreFixture : IAsyncLifetime
 
     public virtual async ValueTask DisposeAsync()
     {
-        await _msSqlContainer.DisposeAsync();
+        await DisposeAsyncCore().ConfigureAwait(false);
+
+        GC.SuppressFinalize(this);
+    }
+    
+    protected virtual ValueTask DisposeAsyncCore()
+    {
+        return _msSqlContainer.DisposeAsync();
     }
 }

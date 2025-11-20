@@ -397,7 +397,27 @@ These tests take longer because they need to start the Docker containers.
 
 ✅ The template has **100%** code coverage.
 
-To assess the code coverage, and if your IDE does not include a tool for it, follow the instructions [here](https://xunit.net/docs/getting-started/v3/code-coverage-with-mtp).
+To assess the code coverage, and if your IDE does not include a tool for it, follow these instructions:
+
+1. Install (if not already) the **ReportGenerator** tool:
+
+    ``` bash
+    dotnet tool install dotnet-reportgenerator-globaltool --global
+    ```
+
+2. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
+
+    ``` bash
+    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --coverage-settings ./tests/CodeCoverage-settings.xml
+    ```
+
+3. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
+
+    ``` bash
+    ReportGenerator -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
+    ```
+
+4. Open the HTML file `CoverageReport\index.html` to see the results.
 
 ## Mapping
 
@@ -444,19 +464,7 @@ The enumeration classes bring several benefits, you can explore a library like [
 
 # TODO
 - Figure out how to skip integration tests, without running the fixture
-- Update to .NET 10 (when stable)
-  - Remove the Microsoft.NET.Test.Sdk package and check if the tests are not marked as unused and if code coverage works (wait for Rider fix)
-  - Check .slnx file is better supported (not preview anymore, the template engine supports it, etc.)
-  - Update Github flow (change the SDK version, dotnet test command, use dotnet tool exec, etc.)
-  - Explore minimal API validation
-  - Redo migrations
-- Update dependencies
-- Replace MockLogger with FakeLogger
-- Pipeline to pack and publish
-- To test:
-  - dotnet test --solution ... --ignore-exit-code 8 --coverage --coverage-output-format cobertura --coverage-settings ./tests/CodeCoverage-settings.xml
-  - dotnet tool exec dotnet-reportgenerator-globaltool --interactive false -- -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
-- Add bad request transformer? https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0?view=aspnetcore-10.0#support-for-generating-openapischemas-in-transformers
-- Proper Dispose pattern
+- Check .slnx file is better supported (not preview anymore, the template engine supports it, etc.)
 - Check Scalar (types, xml comments, responses, authentication, etc.)
-- Tests: Aspire, Scalar, unit tests, code coverage, requests
+- Update dependencies
+- Tests: Aspire, Scalar, unit tests, code coverage, requests, pipelines

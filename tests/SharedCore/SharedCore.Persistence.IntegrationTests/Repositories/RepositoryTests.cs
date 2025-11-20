@@ -8,7 +8,7 @@ using SharedCore.Persistence.Repositories.Settings;
 
 namespace SharedCore.Persistence.IntegrationTests.Repositories;
 
-public class RepositoryTests : BaseRepositoryIntegrationTest
+public class RepositoryTests : BaseRepositoryIntegrationTests
 {
     private readonly TestRepository _repository;
 

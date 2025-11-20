@@ -13,7 +13,7 @@ using Todo.Presentation.Api.IntegrationTests.Fixtures;
 
 namespace Todo.Presentation.Api.IntegrationTests.Endpoints;
 
-public class TodoListsEndpointGroupIntegrationTests : BaseIntegrationTest
+public class TodoListsEndpointGroupIntegrationTests : BaseIntegrationTests
 {
     private const string TodoListsPathBase = "api/todoLists";
     private const string TodoItemsPathSegment = "todoItems";

@@ -1,12 +1,14 @@
 name: CodeQL Analysis
 
 on:
+  push:
+    branches:
+      - 'main'
+      - 'develop'
   pull_request:
     branches:
       - 'main'
-    paths:
-    - '**.cs'
-    - '**.csproj'
+      - 'develop'
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * 4'
@@ -14,18 +16,21 @@ on:
 jobs:
   analyze:
 
+    name: Analyze C#
+
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
       
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: 'csharp'
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v4
+          languages: csharp
+          build-mode: none
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4

@@ -43,7 +43,8 @@ public sealed class EfCoreFixture : IAsyncLifetime
 
     public async ValueTask DisposeAsync()
     {
-        _serviceScope?.Dispose();
         await _msSqlContainer.DisposeAsync();
+        
+        _serviceScope?.Dispose();
     }
 }

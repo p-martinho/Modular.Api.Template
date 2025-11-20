@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - '**/Modular.Api.Template.csproj'
   workflow_dispatch:
 
 env:

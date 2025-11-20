@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Identity.Presentation.Api.IntegrationTests.Fixtures;
 
-public class BaseIntegrationTest : IAsyncDisposable
+public class BaseIntegrationTests : IAsyncDisposable
 {
     private readonly IServiceScope _testScope;
 
     protected readonly HttpClient Client;
     protected readonly UserManager<AppIdentityUser> UserManager;
 
-    protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
+    protected BaseIntegrationTests(IntegrationTestWebAppFactory factory)
     {
         _testScope = factory.Services.CreateScope();
 
@@ -21,7 +21,14 @@ public class BaseIntegrationTest : IAsyncDisposable
         UserManager = _testScope.ServiceProvider.GetRequiredService<UserManager<AppIdentityUser>>();
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore().ConfigureAwait(false);
+
+        GC.SuppressFinalize(this);
+    }
+    
+    protected virtual ValueTask DisposeAsyncCore()
     {
         UserManager.Dispose();
         _testScope.Dispose();
