@@ -13,7 +13,7 @@ on:
 
 env:
   BuildConfiguration: Release
-  SolutionFile: Modular.Api.Template.sln
+  SolutionFile: Modular.Api.Template.slnx
   CoverageReportDirectory: CoverageReport
 
 jobs:
