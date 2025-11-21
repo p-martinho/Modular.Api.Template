@@ -27,6 +27,7 @@
         <!-- Match the path of the source files in which each method is defined: -->
         <Sources>
             <Exclude>
+                <Source>.*\\Aspire.*\\.*</Source>
                 <Source>.*\\.*Persistence\\Migrations\\.*</Source>
                 <Source>.*\\Program.cs</Source>
             </Exclude>

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -21,7 +20,6 @@ namespace Aspire.ServiceDefaults;
 /// <summary>
 /// The service defaults extensions.
 /// </summary>
-[ExcludeFromCodeCoverage]
 public static class Extensions
 {
     private const string TimeoutPolicyForHealthChecksName = "HealthChecks";
