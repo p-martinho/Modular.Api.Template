@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Architecture.Tests.Extensions;
 using Architecture.Tests.Helpers;
 using NetArchTest.Rules;
@@ -265,7 +266,9 @@ public class ApplicationTests
             !commandHandlersWithoutInputInterfaces.Contains(t) &&
             !commandHandlersInterfaces.Contains(t) &&
             !queryHandlersInterfaces.Contains(t) &&
-            !queryHandlersWithoutInputInterfaces.Contains(t));
+            !queryHandlersWithoutInputInterfaces.Contains(t) &&
+            // Static extension classes using extension blocks has a nested type public (even when they are internal)
+            !t.IsNestedTypeForExtensionBlock());
 
         // Assert
         Assert.Empty(failingTypes);
