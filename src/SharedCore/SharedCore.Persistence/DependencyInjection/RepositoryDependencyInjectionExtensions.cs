@@ -12,21 +12,26 @@ namespace SharedCore.Persistence.DependencyInjection;
 internal static class RepositoryDependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the shared repositories dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddSharedRepositories(this IServiceCollection services,
-        IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddSettings(configuration);
+        /// <summary>
+        /// Adds the shared repositories dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddSharedRepositories(IConfiguration configuration)
+        {
+            services.AddSettings(configuration);
 
-        return services;
-    }
+            return services;
+        }
 
-    private static void AddSettings(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<QueryParametersSettings>(configuration.GetSection(nameof(QueryParametersSettings)));
+        private void AddSettings(IConfiguration configuration)
+        {
+            services.Configure<QueryParametersSettings>(configuration.GetSection(nameof(QueryParametersSettings)));
+        }
     }
 }

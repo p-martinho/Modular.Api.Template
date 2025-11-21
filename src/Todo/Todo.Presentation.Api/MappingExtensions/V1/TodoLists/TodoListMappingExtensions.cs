@@ -15,45 +15,63 @@ namespace Todo.Presentation.Api.MappingExtensions.V1.TodoLists;
 internal static class TodoListMappingExtensions
 {
     /// <summary>
-    /// Converts the application DTO into an API DTO.
+    /// The <see cref="TodoListDto"/> extensions.
     /// </summary>
     /// <param name="dto">The application DTO.</param>
-    /// <returns>The API DTO.</returns>
-    public static TodoListApiDto ToApiDto(this TodoListDto dto)
+    extension(TodoListDto dto)
     {
-        return new TodoListApiDto
+        /// <summary>
+        /// Converts the application DTO into an API DTO.
+        /// </summary>
+        /// <returns>The API DTO.</returns>
+        public TodoListApiDto ToApiDto()
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            Items = dto.Items?.Select(i => i.ToApiDto()).ToList().AsReadOnly()
-        };
+            return new TodoListApiDto
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Items = dto.Items?.Select(i => i.ToApiDto()).ToList().AsReadOnly()
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="CreateTodoListApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <returns>The application DTO.</returns>
-    public static CreateTodoListDto ToDto(this CreateTodoListApiDto apiDto)
+    extension(CreateTodoListApiDto apiDto)
     {
-        return new CreateTodoListDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <returns>The application DTO.</returns>
+        public CreateTodoListDto ToDto()
         {
-            Name = apiDto.Name
-        };
+            return new CreateTodoListDto
+            {
+                Name = apiDto.Name
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="UpdateTodoListApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <param name="id">The to do list identifier.</param>
-    /// <returns>The application DTO.</returns>
-    public static UpdateTodoListDto ToDto(this UpdateTodoListApiDto apiDto, Guid id)
+    extension(UpdateTodoListApiDto apiDto)
     {
-        return new UpdateTodoListDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <param name="id">The to do list identifier.</param>
+        /// <returns>The application DTO.</returns>
+        public UpdateTodoListDto ToDto(Guid id)
         {
-            Id = id,
-            Name = apiDto.Name
-        };
+            return new UpdateTodoListDto
+            {
+                Id = id,
+                Name = apiDto.Name
+            };
+        }
     }
 }

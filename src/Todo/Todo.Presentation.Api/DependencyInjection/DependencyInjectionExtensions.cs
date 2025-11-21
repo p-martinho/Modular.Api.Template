@@ -11,36 +11,39 @@ namespace Todo.Presentation.Api.DependencyInjection;
 internal static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the custom health checks dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services,
-        IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        // Add here specific health checks for this API. Default health checks were already registered in ServiceDefaults project.
+        /// <summary>
+        /// Adds the custom health checks dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddCustomHealthChecks(IConfiguration configuration)
+        {
+            // Add here specific health checks for this API. Default health checks were already registered in ServiceDefaults project.
 
-        services.AddHealthChecks()
-            .AddApplicationHealthChecks(configuration);
+            services.AddHealthChecks()
+                .AddApplicationHealthChecks(configuration);
 
-        return services;
-    }
+            return services;
+        }
 
-    /// <summary>
-    /// Adds the API dependencies.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <param name="hostEnvironment">The host environment.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddApiDependencies(this IServiceCollection services, IConfiguration configuration,
-        IHostEnvironment hostEnvironment)
-    {
-        services.AddSharedPresentation(configuration, hostEnvironment);
+        /// <summary>
+        /// Adds the API dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="hostEnvironment">The host environment.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddApiDependencies(IConfiguration configuration, IHostEnvironment hostEnvironment)
+        {
+            services.AddSharedPresentation(configuration, hostEnvironment);
 
-        services.AddApplication(configuration);
+            services.AddApplication(configuration);
 
-        return services;
+            return services;
+        }
     }
 }

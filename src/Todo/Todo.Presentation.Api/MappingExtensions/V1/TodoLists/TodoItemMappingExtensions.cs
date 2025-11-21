@@ -15,66 +15,98 @@ namespace Todo.Presentation.Api.MappingExtensions.V1.TodoLists;
 internal static class TodoItemMappingExtensions
 {
     /// <summary>
-    /// Converts the application DTO into an API DTO.
+    /// The <see cref="TodoItemDto"/> extensions.
     /// </summary>
     /// <param name="dto">The application DTO.</param>
-    /// <returns>The API DTO.</returns>
-    public static TodoItemApiDto ToApiDto(this TodoItemDto dto)
+    extension(TodoItemDto dto)
     {
-        return new TodoItemApiDto
+        /// <summary>
+        /// Converts the application DTO into an API DTO.
+        /// </summary>
+        /// <returns>The API DTO.</returns>
+        public TodoItemApiDto ToApiDto()
         {
-            Id = dto.Id,
-            Title = dto.Title,
-            Description = dto.Description,
-            IsDone = dto.IsDone,
-            Schedule = dto.Schedule.ToApiDto()
-        };
+            return new TodoItemApiDto
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Description = dto.Description,
+                IsDone = dto.IsDone,
+                Schedule = dto.Schedule.ToApiDto()
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="CreateTodoItemApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <param name="todoListId">The to do list identifier.</param>
-    /// <returns>The application DTO.</returns>
-    public static CreateTodoItemDto ToDto(this CreateTodoItemApiDto apiDto, Guid todoListId)
+    extension(CreateTodoItemApiDto apiDto)
     {
-        return new CreateTodoItemDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <param name="todoListId">The to do list identifier.</param>
+        /// <returns>The application DTO.</returns>
+        public CreateTodoItemDto ToDto(Guid todoListId)
         {
-            ListId = todoListId,
-            Title = apiDto.Title,
-            Description = apiDto.Description,
-            Schedule = apiDto.Schedule.ToDto()
-        };
+            return new CreateTodoItemDto
+            {
+                ListId = todoListId,
+                Title = apiDto.Title,
+                Description = apiDto.Description,
+                Schedule = apiDto.Schedule.ToDto()
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="UpdateTodoItemApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <param name="todoListId">The to do list identifier.</param>
-    /// <param name="todoItemId">The to do item identifier.</param>
-    /// <returns>The application DTO.</returns>
-    public static UpdateTodoItemDto ToDto(this UpdateTodoItemApiDto apiDto, Guid todoListId, Guid todoItemId)
+    extension(UpdateTodoItemApiDto apiDto)
     {
-        return new UpdateTodoItemDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <param name="todoListId">The to do list identifier.</param>
+        /// <param name="todoItemId">The to do item identifier.</param>
+        /// <returns>The application DTO.</returns>
+        public UpdateTodoItemDto ToDto(Guid todoListId, Guid todoItemId)
         {
-            ListId = todoListId,
-            Id = todoItemId,
-            Title = apiDto.Title,
-            Description = apiDto.Description,
-            IsDone = apiDto.IsDone,
-            Schedule = apiDto.Schedule.ToDto()
-        };
+            return new UpdateTodoItemDto
+            {
+                ListId = todoListId,
+                Id = todoItemId,
+                Title = apiDto.Title,
+                Description = apiDto.Description,
+                IsDone = apiDto.IsDone,
+                Schedule = apiDto.Schedule.ToDto()
+            };
+        }
     }
 
-    private static TodoItemScheduleApiDto ToApiDto(this TodoItemScheduleDto dto)
+    /// <summary>
+    /// The <see cref="TodoItemScheduleDto"/> extensions.
+    /// </summary>
+    /// <param name="dto">The application DTO.</param>
+    extension(TodoItemScheduleDto dto)
     {
-        return new TodoItemScheduleApiDto(dto.DueDate);
+        private TodoItemScheduleApiDto ToApiDto()
+        {
+            return new TodoItemScheduleApiDto(dto.DueDate);
+        }
     }
 
-    private static TodoItemScheduleDto? ToDto(this TodoItemScheduleApiDto? apiDto)
+    /// <summary>
+    /// The <see cref="TodoItemScheduleApiDto"/> extensions.
+    /// </summary>
+    /// <param name="apiDto">The API DTO.</param>
+    extension(TodoItemScheduleApiDto? apiDto)
     {
-        return apiDto is null ? null : new TodoItemScheduleDto(apiDto.DueDate);
+        private TodoItemScheduleDto? ToDto()
+        {
+            return apiDto is null ? null : new TodoItemScheduleDto(apiDto.DueDate);
+        }
     }
 }

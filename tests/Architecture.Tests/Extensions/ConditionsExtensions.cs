@@ -4,22 +4,25 @@ namespace Architecture.Tests.Extensions;
 
 internal static class ConditionsExtensions
 {
-    public static ConditionList ResideInAnyOfNamespaces(this Condition conditions, string[] namespaces)
+    extension(Condition conditions)
     {
-        if (namespaces.Length == 0)
+        public ConditionList ResideInAnyOfNamespaces(string[] namespaces)
         {
-            throw new ArgumentException("Namespaces cannot be empty.", nameof(namespaces));
+            if (namespaces.Length == 0)
+            {
+                throw new ArgumentException("Namespaces cannot be empty.", nameof(namespaces));
+            }
+
+            ConditionList conditionList = null!;
+
+            foreach (var name in namespaces)
+            {
+                conditionList = conditionList is null
+                    ? conditions.ResideInNamespace(name)
+                    : conditionList.Or().ResideInNamespace(name);
+            }
+
+            return conditionList;
         }
-
-        ConditionList conditionList = null!;
-
-        foreach (var name in namespaces)
-        {
-            conditionList = conditionList is null
-                ? conditions.ResideInNamespace(name)
-                : conditionList.Or().ResideInNamespace(name);
-        }
-
-        return conditionList;
     }
 }

@@ -13,18 +13,24 @@ namespace SharedCore.Presentation.Extensions;
 public static class WebApplicationExtensions
 {
     /// <summary>
-    /// Adds the internal error middleware into the Web application.
+    /// The <see cref="WebApplication"/> extensions.
     /// </summary>
     /// <param name="app">The Web application.</param>
-    /// <returns>The Web application.</returns>
-    public static WebApplication UseInternalErrorMiddleware(this WebApplication app)
+    extension(WebApplication app)
     {
-        if (IsInternalErrorMiddlewareEnabled(app.Configuration))
+        /// <summary>
+        /// Adds the internal error middleware into the Web application.
+        /// </summary>
+        /// <returns>The Web application.</returns>
+        public WebApplication UseInternalErrorMiddleware()
         {
-            app.UseMiddleware<InternalErrorMiddleware>();
-        }
+            if (IsInternalErrorMiddlewareEnabled(app.Configuration))
+            {
+                app.UseMiddleware<InternalErrorMiddleware>();
+            }
 
-        return app;
+            return app;
+        }
     }
 
     private static bool IsInternalErrorMiddlewareEnabled(IConfiguration configuration)

@@ -4,8 +4,11 @@ namespace Architecture.Tests.Extensions;
 
 internal static class PredicateExtensions
 {
-    public static PredicateList DoNotResideInNamespaceStartingWith(this Predicate predicate, string namespaceStart)
+    extension(Predicate predicate)
     {
-        return predicate.DoNotResideInNamespaceMatching($"^{namespaceStart}");
+        public PredicateList DoNotResideInNamespaceStartingWith(string namespaceStart)
+        {
+            return predicate.DoNotResideInNamespaceMatching($"^{namespaceStart}");
+        }
     }
 }

@@ -11,20 +11,26 @@ namespace SharedCore.Presentation.MappingExtensions;
 public static class PaginatedQueryMappingExtensions
 {
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="PaginatedQueryApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <returns>The application DTO.</returns>
-    public static PaginatedQueryDto ToDto(this PaginatedQueryApiDto apiDto)
+    extension(PaginatedQueryApiDto apiDto)
     {
-        return new PaginatedQueryDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <returns>The application DTO.</returns>
+        public PaginatedQueryDto ToDto()
         {
-            PageNumber = apiDto.PageNumber.GetValueOrDefault(),
-            PageSize = apiDto.PageSize.GetValueOrDefault(),
-            OrderBy = apiDto.OrderBy,
-            IsDescendingOrder = apiDto.IsDescendingOrder.GetValueOrDefault(),
-            FilterBy = apiDto.FilterBy,
-            FilterValue = apiDto.FilterValue
-        };
+            return new PaginatedQueryDto
+            {
+                PageNumber = apiDto.PageNumber.GetValueOrDefault(),
+                PageSize = apiDto.PageSize.GetValueOrDefault(),
+                OrderBy = apiDto.OrderBy,
+                IsDescendingOrder = apiDto.IsDescendingOrder.GetValueOrDefault(),
+                FilterBy = apiDto.FilterBy,
+                FilterValue = apiDto.FilterValue
+            };
+        }
     }
 }

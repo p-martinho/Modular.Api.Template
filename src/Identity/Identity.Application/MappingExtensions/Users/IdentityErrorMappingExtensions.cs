@@ -11,12 +11,18 @@ namespace Identity.Application.MappingExtensions.Users;
 internal static class IdentityErrorMappingExtensions
 {
     /// <summary>
-    /// Converts the identity error into a result detail.
+    /// The <see cref="IdentityError"/> extensions.
     /// </summary>
     /// <param name="error">The identity error.</param>
-    /// <returns>The result detail.</returns>
-    public static ResultDetail ToResultDetail(this IdentityError error)
+    extension(IdentityError error)
     {
-        return new ResultDetail(error.Code, error.Description);
+        /// <summary>
+        /// Converts the identity error into a result detail.
+        /// </summary>
+        /// <returns>The result detail.</returns>
+        public ResultDetail ToResultDetail()
+        {
+            return new ResultDetail(error.Code, error.Description);
+        }
     }
 }

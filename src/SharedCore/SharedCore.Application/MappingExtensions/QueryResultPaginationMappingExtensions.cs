@@ -11,18 +11,24 @@ namespace SharedCore.Application.MappingExtensions;
 public static class QueryResultPaginationMappingExtensions
 {
     /// <summary>
-    /// Converts the query result pagination into a DTO.
+    /// The <see cref="QueryResultPagination"/> extensions.
     /// </summary>
     /// <param name="queryResultPagination">The query result pagination.</param>
-    /// <returns>The DTO.</returns>
-    public static QueryResultPaginationDto ToDto(this QueryResultPagination queryResultPagination)
+    extension(QueryResultPagination queryResultPagination)
     {
-        return new QueryResultPaginationDto
+        /// <summary>
+        /// Converts the query result pagination into a DTO.
+        /// </summary>
+        /// <returns>The DTO.</returns>
+        public QueryResultPaginationDto ToDto()
         {
-            PageNumber = queryResultPagination.PageNumber,
-            PageSize = queryResultPagination.PageSize,
-            PageRecords = queryResultPagination.PageRecords,
-            TotalRecords = queryResultPagination.TotalRecords
-        };
+            return new QueryResultPaginationDto
+            {
+                PageNumber = queryResultPagination.PageNumber,
+                PageSize = queryResultPagination.PageSize,
+                PageRecords = queryResultPagination.PageRecords,
+                TotalRecords = queryResultPagination.TotalRecords
+            };
+        }
     }
 }

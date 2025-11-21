@@ -14,71 +14,94 @@ namespace Identity.Persistence.DependencyInjection;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the persistence dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddSharedPersistence<IdentityDbContext>(configuration);
+        /// <summary>
+        /// Adds the persistence dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddPersistence(IConfiguration configuration)
+        {
+            services.AddSharedPersistence<IdentityDbContext>(configuration);
 
-        services.AddCommon(configuration);
+            services.AddCommon(configuration);
 
-        services.AddOpenIddictCore();
+            services.AddOpenIddictCore();
 
-        return services;
+            return services;
+        }
+
+        private void AddOpenIddictCore()
+        {
+            services.AddOpenIddict()
+                // Register the OpenIddict core components.
+                .AddCore(options =>
+                {
+                    // Configure OpenIddict to use the Entity Framework Core stores and models.
+                    options.UseEntityFrameworkCore()
+                        .UseDbContext<IdentityDbContext>();
+                });
+        }
     }
 
     /// <summary>
-    /// Adds the persistence health checks.
+    /// The <see cref="IHealthChecksBuilder"/> extensions.
     /// </summary>
     /// <param name="healthChecksBuilder">The health checks builder.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The health checks builder.</returns>
-    public static IHealthChecksBuilder AddPersistenceHealthChecks(this IHealthChecksBuilder healthChecksBuilder,
-        IConfiguration configuration)
+    extension(IHealthChecksBuilder healthChecksBuilder)
     {
-        healthChecksBuilder.AddSharedPersistenceHealthChecks<IdentityDbContext>();
+        /// <summary>
+        /// Adds the persistence health checks.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The health checks builder.</returns>
+        public IHealthChecksBuilder AddPersistenceHealthChecks(IConfiguration configuration)
+        {
+            healthChecksBuilder.AddSharedPersistenceHealthChecks<IdentityDbContext>();
 
-        return healthChecksBuilder;
+            return healthChecksBuilder;
+        }
     }
 
     /// <summary>
-    /// Adds the persistence for identity.
+    /// The <see cref="IdentityBuilder"/> extensions.
     /// </summary>
     /// <param name="identityBuilder">The identity builder.</param>
-    /// <returns>The identity builder.</returns>
-    public static IdentityBuilder AddIdentityStore(this IdentityBuilder identityBuilder)
+    extension(IdentityBuilder identityBuilder)
     {
-        identityBuilder.AddEntityFrameworkStores<IdentityDbContext>();
+        /// <summary>
+        /// Adds the persistence for identity.
+        /// </summary>
+        /// <returns>The identity builder.</returns>
+        public IdentityBuilder AddIdentityStore()
+        {
+            identityBuilder.AddEntityFrameworkStores<IdentityDbContext>();
 
-        return identityBuilder;
+            return identityBuilder;
+        }
     }
 
     /// <summary>
-    /// Adds the persistence for OpenIddict.
+    /// The <see cref="OpenIddictCoreBuilder"/> extensions.
     /// </summary>
     /// <param name="builder">The OpenIddict builder.</param>
-    /// <returns>The OpenIddict builder.</returns>
-    public static OpenIddictCoreBuilder AddOpenIddictStore(this OpenIddictCoreBuilder builder)
+    extension(OpenIddictCoreBuilder builder)
     {
-        // Register the OpenIddict core components.
-        builder.UseEntityFrameworkCore()
-            .UseDbContext<IdentityDbContext>();
-
-        return builder;
-    }
-
-    private static void AddOpenIddictCore(this IServiceCollection services)
-    {
-        services.AddOpenIddict()
+        /// <summary>
+        /// Adds the persistence for OpenIddict.
+        /// </summary>
+        /// <returns>The OpenIddict builder.</returns>
+        public OpenIddictCoreBuilder AddOpenIddictStore()
+        {
             // Register the OpenIddict core components.
-            .AddCore(options =>
-            {
-                // Configure OpenIddict to use the Entity Framework Core stores and models.
-                options.UseEntityFrameworkCore()
-                    .UseDbContext<IdentityDbContext>();
-            });
+            builder.UseEntityFrameworkCore()
+                .UseDbContext<IdentityDbContext>();
+
+            return builder;
+        }
     }
 }

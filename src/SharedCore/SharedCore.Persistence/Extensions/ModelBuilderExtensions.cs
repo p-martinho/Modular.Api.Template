@@ -13,25 +13,31 @@ namespace SharedCore.Persistence.Extensions;
 internal static class ModelBuilderExtensions
 {
     /// <summary>
-    /// Adds the soft delete property to the soft deletable entity types.
+    /// The <see cref="ModelBuilder"/> extensions.
     /// </summary>
     /// <param name="modelBuilder">The model builder.</param>
-    /// <returns>The model builder.</returns>
-    public static ModelBuilder AddSoftDeleteProperty(this ModelBuilder modelBuilder)
+    extension(ModelBuilder modelBuilder)
     {
-        var softDeletableEntityTypes = modelBuilder.Model.GetEntityTypes()
-            .Where(e => typeof(ISoftDeletableEntity).IsAssignableFrom(e.ClrType));
-
-        foreach (var entityType in softDeletableEntityTypes)
+        /// <summary>
+        /// Adds the soft delete property to the soft deletable entity types.
+        /// </summary>
+        /// <returns>The model builder.</returns>
+        public ModelBuilder AddSoftDeleteProperty()
         {
-            entityType.AddProperty(EntityProperties.IsDeleted, typeof(bool));
+            var softDeletableEntityTypes = modelBuilder.Model.GetEntityTypes()
+                .Where(e => typeof(ISoftDeletableEntity).IsAssignableFrom(e.ClrType));
 
-            var clrType = entityType.ClrType;
+            foreach (var entityType in softDeletableEntityTypes)
+            {
+                entityType.AddProperty(EntityProperties.IsDeleted, typeof(bool));
 
-            modelBuilder.Entity(clrType).HasQueryFilter(BuildIsNotDeletedExpression(clrType));
+                var clrType = entityType.ClrType;
+
+                modelBuilder.Entity(clrType).HasQueryFilter(BuildIsNotDeletedExpression(clrType));
+            }
+
+            return modelBuilder;
         }
-
-        return modelBuilder;
     }
 
     private static LambdaExpression BuildIsNotDeletedExpression(Type entityType)

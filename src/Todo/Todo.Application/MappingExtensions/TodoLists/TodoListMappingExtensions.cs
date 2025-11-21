@@ -11,17 +11,23 @@ namespace Todo.Application.MappingExtensions.TodoLists;
 internal static class TodoListMappingExtensions
 {
     /// <summary>
-    /// Converts the entity into a DTO.
+    /// The <see cref="TodoList"/> extensions.
     /// </summary>
     /// <param name="entity">The entity.</param>
-    /// <returns>The DTO.</returns>
-    public static TodoListDto ToDto(this TodoList entity)
+    extension(TodoList entity)
     {
-        return new TodoListDto
+        /// <summary>
+        /// Converts the entity into a DTO.
+        /// </summary>
+        /// <returns>The DTO.</returns>
+        public TodoListDto ToDto()
         {
-            Id = entity.Id,
-            Name = entity.Name,
-            Items = entity.Items.Select(i => i.ToDto()).ToList().AsReadOnly()
-        };
+            return new TodoListDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Items = entity.Items.Select(i => i.ToDto()).ToList().AsReadOnly()
+            };
+        }
     }
 }

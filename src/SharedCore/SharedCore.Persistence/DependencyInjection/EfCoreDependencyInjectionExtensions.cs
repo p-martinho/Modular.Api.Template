@@ -17,68 +17,87 @@ namespace SharedCore.Persistence.DependencyInjection;
 internal static class EfCoreDependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the shared EF Core dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
-    /// <typeparam name="TContext">The specific type of DB context.</typeparam>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <param name="isToAddDefaultDatabaseProvider">Value indicating whether it should add the default database provider. If set to false, configure the context by overriding the OnConfiguring(DbContextOptionsBuilder) method in your derived context.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddSharedEfCore<TContext>(this IServiceCollection services,
-        IConfiguration configuration, bool isToAddDefaultDatabaseProvider = true)
-        where TContext : DbContext
+    extension(IServiceCollection services)
     {
-        services.AddInterceptors();
-
-        services.AddDbContext<TContext>((serviceProvider, optionsBuilder) =>
+        /// <summary>
+        /// Adds the shared EF Core dependencies.
+        /// </summary>
+        /// <typeparam name="TContext">The specific type of DB context.</typeparam>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="isToAddDefaultDatabaseProvider">
+        /// Value indicating whether it should add the default database provider.
+        /// If set to false, configure the context by overriding the OnConfiguring(DbContextOptionsBuilder) method in your derived context.
+        /// </param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddSharedEfCore<TContext>(IConfiguration configuration,
+            bool isToAddDefaultDatabaseProvider = true) where TContext : DbContext
         {
-            if (isToAddDefaultDatabaseProvider)
+            services.AddInterceptors();
+
+            services.AddDbContext<TContext>((serviceProvider, optionsBuilder) =>
             {
-                optionsBuilder.AddDefaultDatabaseProvider(configuration);
-            }
+                if (isToAddDefaultDatabaseProvider)
+                {
+                    optionsBuilder.AddDefaultDatabaseProvider(configuration);
+                }
 
-            optionsBuilder.AddInterceptors(GetDefaultInterceptors(serviceProvider));
-        });
+                optionsBuilder.AddInterceptors(GetDefaultInterceptors(serviceProvider));
+            });
 
-        ApplyDatabaseMigrationsIfDevelopment<TContext>(services);
+            ApplyDatabaseMigrationsIfDevelopment<TContext>(services);
 
-        return services;
+            return services;
+        }
+
+        private void AddInterceptors()
+        {
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, SoftDeletableEntityInterceptor>();
+        }
     }
 
     /// <summary>
-    /// Adds the shared EF Core health checks.
+    /// The <see cref="IHealthChecksBuilder"/> extensions.
     /// </summary>
     /// <param name="healthChecksBuilder">The health checks builder.</param>
-    public static IHealthChecksBuilder AddSharedEfCoreHealthChecks<TContext>(
-        this IHealthChecksBuilder healthChecksBuilder)
-        where TContext : DbContext
+    extension(IHealthChecksBuilder healthChecksBuilder)
     {
-        healthChecksBuilder.AddDbContextCheck<TContext>(tags: [HealthChecksTags.DbContext]);
+        /// <summary>
+        /// Adds the shared EF Core health checks.
+        /// </summary>
+        public IHealthChecksBuilder AddSharedEfCoreHealthChecks<TContext>()
+            where TContext : DbContext
+        {
+            healthChecksBuilder.AddDbContextCheck<TContext>(tags: [HealthChecksTags.DbContext]);
 
-        return healthChecksBuilder;
+            return healthChecksBuilder;
+        }
     }
 
-    private static void AddInterceptors(this IServiceCollection services)
+    /// <summary>
+    /// The <see cref="DbContextOptionsBuilder"/> extensions.
+    /// </summary>
+    /// <param name="optionsBuilder">The DB context options builder.</param>
+    extension(DbContextOptionsBuilder optionsBuilder)
     {
-        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-        services.AddScoped<ISaveChangesInterceptor, SoftDeletableEntityInterceptor>();
+        private void AddDefaultDatabaseProvider(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString(ConnectionStrings.SqlDefault);
+
+            optionsBuilder
+                .UseSqlServer(connectionString,
+                    sqlOptionsBuilder =>
+                        sqlOptionsBuilder.EnableRetryOnFailure()
+                            .UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        }
     }
 
     private static IEnumerable<IInterceptor> GetDefaultInterceptors(IServiceProvider serviceProvider)
     {
         return serviceProvider.GetServices<ISaveChangesInterceptor>();
-    }
-
-    private static void AddDefaultDatabaseProvider(this DbContextOptionsBuilder optionsBuilder,
-        IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString(ConnectionStrings.SqlDefault);
-
-        optionsBuilder
-            .UseSqlServer(connectionString,
-                sqlOptionsBuilder =>
-                    sqlOptionsBuilder.EnableRetryOnFailure()
-                        .UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
     }
 
     private static void ApplyDatabaseMigrationsIfDevelopment<TContext>(IServiceCollection services)

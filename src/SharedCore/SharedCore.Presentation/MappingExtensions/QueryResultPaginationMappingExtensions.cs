@@ -11,21 +11,27 @@ namespace SharedCore.Presentation.MappingExtensions;
 public static class QueryResultPaginationMappingExtensions
 {
     /// <summary>
-    /// Converts the application DTO into an API DTO.
+    /// The <see cref="QueryResultPaginationDto"/> extensions.
     /// </summary>
     /// <param name="dto">The application DTO.</param>
-    /// <returns>The API DTO.</returns>
-    public static QueryResultPaginationApiDto ToApiDto(this QueryResultPaginationDto dto)
+    extension(QueryResultPaginationDto dto)
     {
-        return new QueryResultPaginationApiDto
+        /// <summary>
+        /// Converts the application DTO into an API DTO.
+        /// </summary>
+        /// <returns>The API DTO.</returns>
+        public QueryResultPaginationApiDto ToApiDto()
         {
-            PageNumber = dto.PageNumber,
-            PageSize = dto.PageSize,
-            PageRecords = dto.PageRecords,
-            TotalRecords = dto.TotalRecords,
-            TotalPages = dto.TotalPages,
-            HasNextPage = dto.HasNextPage,
-            HasPreviousPage = dto.HasPreviousPage
-        };
+            return new QueryResultPaginationApiDto
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                PageRecords = dto.PageRecords,
+                TotalRecords = dto.TotalRecords,
+                TotalPages = dto.TotalPages,
+                HasNextPage = dto.HasNextPage,
+                HasPreviousPage = dto.HasPreviousPage
+            };
+        }
     }
 }

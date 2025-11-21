@@ -11,19 +11,25 @@ namespace Identity.Application.MappingExtensions.Users;
 internal static class UserMappingExtensions
 {
     /// <summary>
-    /// Converts the entity into a DTO.
+    /// The <see cref="AppIdentityUser"/> extensions.
     /// </summary>
     /// <param name="entity">The entity.</param>
-    /// <returns>The DTO.</returns>
-    public static UserInfoDto ToDto(this AppIdentityUser entity)
+    extension(AppIdentityUser entity)
     {
-        return new UserInfoDto
+        /// <summary>
+        /// Converts the entity into a DTO.
+        /// </summary>
+        /// <returns>The DTO.</returns>
+        public UserInfoDto ToDto()
         {
-            Id = entity.Id,
-            Email = entity.Email!,
-            FirstName = entity.Name.FirstName,
-            LastName = entity.Name.LastName,
-            FullName = entity.Name.GetFullName()
-        };
+            return new UserInfoDto
+            {
+                Id = entity.Id,
+                Email = entity.Email!,
+                FirstName = entity.Name.FirstName,
+                LastName = entity.Name.LastName,
+                FullName = entity.Name.GetFullName()
+            };
+        }
     }
 }

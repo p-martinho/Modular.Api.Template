@@ -11,22 +11,34 @@ namespace SharedCore.Application.MappingExtensions;
 public static class ValidationFailureMappingExtensions
 {
     /// <summary>
-    /// Converts the collection of validation failures into application result details.
+    /// The <see cref="IEnumerable{ValidationFailure}"/> extensions.
     /// </summary>
     /// <param name="validationFailures">The collection of validation failures.</param>
-    /// <returns>The collection of application result details.</returns>
-    public static IEnumerable<ResultDetail> ToResultDetails(this IEnumerable<ValidationFailure> validationFailures)
+    extension(IEnumerable<ValidationFailure> validationFailures)
     {
-        return validationFailures.Select(validationFailure => validationFailure.ToResultDetail());
+        /// <summary>
+        /// Converts the collection of validation failures into application result details.
+        /// </summary>
+        /// <returns>The collection of application result details.</returns>
+        public IEnumerable<ResultDetail> ToResultDetails()
+        {
+            return validationFailures.Select(validationFailure => validationFailure.ToResultDetail());
+        }
     }
 
     /// <summary>
-    /// Converts the validation failure into an application result detail.
+    /// The <see cref="ValidationFailure"/> extensions.
     /// </summary>
     /// <param name="validationFailure">The validation failure.</param>
-    /// <returns>The application result detail.</returns>
-    public static ResultDetail ToResultDetail(this ValidationFailure validationFailure)
+    extension(ValidationFailure validationFailure)
     {
-        return new ResultDetail(validationFailure.PropertyName, validationFailure.ErrorMessage);
+        /// <summary>
+        /// Converts the validation failure into an application result detail.
+        /// </summary>
+        /// <returns>The application result detail.</returns>
+        public ResultDetail ToResultDetail()
+        {
+            return new ResultDetail(validationFailure.PropertyName, validationFailure.ErrorMessage);
+        }
     }
 }

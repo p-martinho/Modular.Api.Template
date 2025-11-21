@@ -15,67 +15,91 @@ namespace Identity.Presentation.Api.MappingExtensions.V1.Users;
 internal static class UserMappingExtensions
 {
     /// <summary>
-    /// Converts the application DTO into an API DTO.
+    /// The <see cref="UserInfoDto"/> extensions.
     /// </summary>
     /// <param name="dto">The application DTO.</param>
-    /// <returns>The API DTO.</returns>
-    public static UserInfoApiDto ToApiDto(this UserInfoDto dto)
+    extension(UserInfoDto dto)
     {
-        return new UserInfoApiDto
+        /// <summary>
+        /// Converts the application DTO into an API DTO.
+        /// </summary>
+        /// <returns>The API DTO.</returns>
+        public UserInfoApiDto ToApiDto()
         {
-            Email = dto.Email,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            FullName = dto.FullName
-        };
+            return new UserInfoApiDto
+            {
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                FullName = dto.FullName
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="CreateUserApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <returns>The application DTO.</returns>
-    public static CreateUserDto ToDto(this CreateUserApiDto apiDto)
+    extension(CreateUserApiDto apiDto)
     {
-        return new CreateUserDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <returns>The application DTO.</returns>
+        public CreateUserDto ToDto()
         {
-            Email = apiDto.Email,
-            Password = apiDto.Password,
-            FirstName = apiDto.FirstName,
-            LastName = apiDto.LastName
-        };
+            return new CreateUserDto
+            {
+                Email = apiDto.Email,
+                Password = apiDto.Password,
+                FirstName = apiDto.FirstName,
+                LastName = apiDto.LastName
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="UpdateUserInfoApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>The application DTO.</returns>
-    public static UpdateUserInfoDto ToDto(this UpdateUserInfoApiDto apiDto, string userId)
+    extension(UpdateUserInfoApiDto apiDto)
     {
-        return new UpdateUserInfoDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>The application DTO.</returns>
+        public UpdateUserInfoDto ToDto(string userId)
         {
-            Id = userId,
-            Email = apiDto.Email,
-            FirstName = apiDto.FirstName,
-            LastName = apiDto.LastName
-        };
+            return new UpdateUserInfoDto
+            {
+                Id = userId,
+                Email = apiDto.Email,
+                FirstName = apiDto.FirstName,
+                LastName = apiDto.LastName
+            };
+        }
     }
 
     /// <summary>
-    /// Converts the API DTO into an application DTO.
+    /// The <see cref="UpdateUserPasswordApiDto"/> extensions.
     /// </summary>
     /// <param name="apiDto">The API DTO.</param>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>The application DTO.</returns>
-    public static UpdateUserPasswordDto ToDto(this UpdateUserPasswordApiDto apiDto, string userId)
+    extension(UpdateUserPasswordApiDto apiDto)
     {
-        return new UpdateUserPasswordDto
+        /// <summary>
+        /// Converts the API DTO into an application DTO.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>The application DTO.</returns>
+        public UpdateUserPasswordDto ToDto(string userId)
         {
-            Id = userId,
-            OldPassword = apiDto.OldPassword,
-            NewPassword = apiDto.NewPassword
-        };
+            return new UpdateUserPasswordDto
+            {
+                Id = userId,
+                OldPassword = apiDto.OldPassword,
+                NewPassword = apiDto.NewPassword
+            };
+        }
     }
 }

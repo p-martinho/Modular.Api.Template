@@ -6,27 +6,33 @@ namespace Identity.Common.Extensions;
 public static class AsyncEnumerableExtensions
 {
     /// <summary>
-    /// Converts the <see cref="IAsyncEnumerable{T}"/> into a <see cref="List{T}"/> asynchronously.
+    /// The <see cref="IAsyncEnumerable{T}"/> extensions.
     /// </summary>
     /// <param name="source">The source enumerable.</param>
     /// <typeparam name="T">The type of the values.</typeparam>
-    /// <returns>The list.</returns>
-    public static Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> source)
+    extension<T>(IAsyncEnumerable<T> source)
     {
-        ArgumentNullException.ThrowIfNull(source);
-
-        return ExecuteAsync();
-
-        async Task<List<T>> ExecuteAsync()
+        /// <summary>
+        /// Converts the <see cref="IAsyncEnumerable{T}"/> into a <see cref="List{T}"/> asynchronously.
+        /// </summary>
+        /// <returns>The list.</returns>
+        public Task<List<T>> ToListAsync()
         {
-            var list = new List<T>();
+            ArgumentNullException.ThrowIfNull(source);
 
-            await foreach (var element in source)
+            return ExecuteAsync();
+
+            async Task<List<T>> ExecuteAsync()
             {
-                list.Add(element);
-            }
+                var list = new List<T>();
 
-            return list;
+                await foreach (var element in source)
+                {
+                    list.Add(element);
+                }
+
+                return list;
+            }
         }
     }
 }

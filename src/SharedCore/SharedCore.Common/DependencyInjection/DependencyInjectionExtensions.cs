@@ -12,15 +12,21 @@ namespace SharedCore.Common.DependencyInjection;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the shared common dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddSharedCommon(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddScoped<ICurrentUser, CurrentUser>();
+        /// <summary>
+        /// Adds the shared common dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddSharedCommon(IConfiguration configuration)
+        {
+            services.AddScoped<ICurrentUser, CurrentUser>();
 
-        return services;
+            return services;
+        }
     }
 }

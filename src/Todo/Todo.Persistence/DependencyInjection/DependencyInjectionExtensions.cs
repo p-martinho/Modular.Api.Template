@@ -14,38 +14,49 @@ namespace Todo.Persistence.DependencyInjection;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the persistence dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddSharedPersistence<TodoDbContext>(configuration);
+        /// <summary>
+        /// Adds the persistence dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddPersistence(IConfiguration configuration)
+        {
+            services.AddSharedPersistence<TodoDbContext>(configuration);
 
-        services.AddCommon(configuration);
+            services.AddCommon(configuration);
 
-        services.AddRepositories();
+            services.AddRepositories();
 
-        return services;
+            return services;
+        }
+        
+        private void AddRepositories()
+        {
+            services.AddScoped<ITodoListRepository, TodoListRepository>();
+        }
     }
 
     /// <summary>
-    /// Adds the persistence health checks.
+    /// The <see cref="IHealthChecksBuilder"/> extensions.
     /// </summary>
     /// <param name="healthChecksBuilder">The health checks builder.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The health checks builder.</returns>
-    public static IHealthChecksBuilder AddPersistenceHealthChecks(this IHealthChecksBuilder healthChecksBuilder,
-        IConfiguration configuration)
+    extension(IHealthChecksBuilder healthChecksBuilder)
     {
-        healthChecksBuilder.AddSharedPersistenceHealthChecks<TodoDbContext>();
+        /// <summary>
+        /// Adds the persistence health checks.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The health checks builder.</returns>
+        public IHealthChecksBuilder AddPersistenceHealthChecks(IConfiguration configuration)
+        {
+            healthChecksBuilder.AddSharedPersistenceHealthChecks<TodoDbContext>();
 
-        return healthChecksBuilder;
-    }
-
-    private static void AddRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<ITodoListRepository, TodoListRepository>();
+            return healthChecksBuilder;
+        }
     }
 }

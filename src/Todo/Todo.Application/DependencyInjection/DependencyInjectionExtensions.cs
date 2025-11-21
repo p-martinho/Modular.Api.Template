@@ -26,63 +26,74 @@ namespace Todo.Application.DependencyInjection;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the application dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddSharedApplication(configuration);
+        /// <summary>
+        /// Adds the application dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddApplication(IConfiguration configuration)
+        {
+            services.AddSharedApplication(configuration);
 
-        services.AddPersistence(configuration);
+            services.AddPersistence(configuration);
 
-        services.AddValidators();
+            services.AddValidators();
 
-        services.AddCommandHandlers();
+            services.AddCommandHandlers();
 
-        services.AddQueryHandlers();
+            services.AddQueryHandlers();
 
-        return services;
+            return services;
+        }
+
+        private void AddValidators()
+        {
+            services.AddScoped<IValidator<CreateTodoListDto>, CreateTodoListValidator>();
+            services.AddScoped<IValidator<UpdateTodoListDto>, UpdateTodoListValidator>();
+
+            services.AddScoped<IValidator<CreateTodoItemDto>, CreateTodoItemValidator>();
+            services.AddScoped<IValidator<UpdateTodoItemDto>, UpdateTodoItemValidator>();
+        }
+
+        private void AddCommandHandlers()
+        {
+            services.AddScoped<ICreateTodoListCommandHandler, CreateTodoListCommandHandler>();
+            services.AddScoped<IUpdateTodoListCommandHandler, UpdateTodoListCommandHandler>();
+            services.AddScoped<IDeleteTodoListCommandHandler, DeleteTodoListCommandHandler>();
+
+            services.AddScoped<ICreateTodoItemCommandHandler, CreateTodoItemCommandHandler>();
+            services.AddScoped<IUpdateTodoItemCommandHandler, UpdateTodoItemCommandHandler>();
+            services.AddScoped<IDeleteTodoItemCommandHandler, DeleteTodoItemCommandHandler>();
+        }
+
+        private void AddQueryHandlers()
+        {
+            services.AddScoped<IGetTodoListByIdQueryHandler, GetTodoListByIdQueryHandler>();
+            services.AddScoped<IGetTodoListsQueryHandler, GetTodoListsQueryHandler>();
+        }
     }
 
     /// <summary>
-    /// Adds the application health checks.
+    /// The <see cref="IHealthChecksBuilder"/> extensions.
     /// </summary>
     /// <param name="healthChecksBuilder">The health checks builder.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The health checks builder.</returns>
-    public static IHealthChecksBuilder AddApplicationHealthChecks(this IHealthChecksBuilder healthChecksBuilder,
-        IConfiguration configuration)
+    extension(IHealthChecksBuilder healthChecksBuilder)
     {
-        healthChecksBuilder.AddPersistenceHealthChecks(configuration);
+        /// <summary>
+        /// Adds the application health checks.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The health checks builder.</returns>
+        public IHealthChecksBuilder AddApplicationHealthChecks(IConfiguration configuration)
+        {
+            healthChecksBuilder.AddPersistenceHealthChecks(configuration);
 
-        return healthChecksBuilder;
-    }
-
-    private static void AddValidators(this IServiceCollection services)
-    {
-        services.AddScoped<IValidator<CreateTodoListDto>, CreateTodoListValidator>();
-        services.AddScoped<IValidator<UpdateTodoListDto>, UpdateTodoListValidator>();
-
-        services.AddScoped<IValidator<CreateTodoItemDto>, CreateTodoItemValidator>();
-        services.AddScoped<IValidator<UpdateTodoItemDto>, UpdateTodoItemValidator>();
-    }
-
-    private static void AddCommandHandlers(this IServiceCollection services)
-    {
-        services.AddScoped<ICreateTodoListCommandHandler, CreateTodoListCommandHandler>();
-        services.AddScoped<IUpdateTodoListCommandHandler, UpdateTodoListCommandHandler>();
-        services.AddScoped<IDeleteTodoListCommandHandler, DeleteTodoListCommandHandler>();
-
-        services.AddScoped<ICreateTodoItemCommandHandler, CreateTodoItemCommandHandler>();
-        services.AddScoped<IUpdateTodoItemCommandHandler, UpdateTodoItemCommandHandler>();
-        services.AddScoped<IDeleteTodoItemCommandHandler, DeleteTodoItemCommandHandler>();
-    }
-
-    private static void AddQueryHandlers(this IServiceCollection services)
-    {
-        services.AddScoped<IGetTodoListByIdQueryHandler, GetTodoListByIdQueryHandler>();
-        services.AddScoped<IGetTodoListsQueryHandler, GetTodoListsQueryHandler>();
+            return healthChecksBuilder;
+        }
     }
 }

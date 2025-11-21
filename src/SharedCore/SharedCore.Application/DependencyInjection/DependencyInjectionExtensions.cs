@@ -11,14 +11,19 @@ namespace SharedCore.Application.DependencyInjection;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds the shared application dependencies.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="configuration">The configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddSharedApplication(this IServiceCollection services,
-        IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        return services;
+        /// <summary>
+        /// Adds the shared application dependencies.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddSharedApplication(IConfiguration configuration)
+        {
+            return services;
+        }
     }
 }

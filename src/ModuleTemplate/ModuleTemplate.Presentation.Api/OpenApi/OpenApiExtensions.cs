@@ -13,56 +13,68 @@ namespace ModuleTemplate.Presentation.Api.OpenApi;
 internal static class OpenApiExtensions
 {
     /// <summary>
-    /// Adds OpenAPI documents to the services.
+    /// The <see cref="IServiceCollection"/> extensions.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    /// <param name="apiVersions">The API versions to add.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddOpenApiDocuments(this IServiceCollection services,
-        IEnumerable<ApiVersion> apiVersions)
+    extension(IServiceCollection services)
     {
-        foreach (var version in apiVersions)
+        /// <summary>
+        /// Adds OpenAPI documents to the services.
+        /// </summary>
+        /// <param name="apiVersions">The API versions to add.</param>
+        /// <returns>The service collection.</returns>
+        public IServiceCollection AddOpenApiDocuments(IEnumerable<ApiVersion> apiVersions)
         {
-            services.AddOpenApi(GetDocumentName(version), options =>
+            foreach (var version in apiVersions)
             {
-                options.AddDocumentTransformer<InfoDocumentTransformer>();
-                options.AddDocumentTransformer<SecuritySchemesDocumentTransformer>();
-                options.AddOperationTransformer<AuthorizationOperationTransformer>();
-                options.AddOperationTransformer<ApiVersionOperationTransformer>();
-                options.AddOperationTransformer<DeprecatedStatusOperationTransformer>();
-            });
-        }
+                services.AddOpenApi(GetDocumentName(version), options =>
+                {
+                    options.AddDocumentTransformer<InfoDocumentTransformer>();
+                    options.AddDocumentTransformer<SecuritySchemesDocumentTransformer>();
+                    options.AddOperationTransformer<AuthorizationOperationTransformer>();
+                    options.AddOperationTransformer<ApiVersionOperationTransformer>();
+                    options.AddOperationTransformer<DeprecatedStatusOperationTransformer>();
+                });
+            }
 
-        return services;
+            return services;
+        }
     }
 
     /// <summary>
-    /// Register the Scalar UI into the application.
+    /// The <see cref="WebApplication"/> extensions.
     /// </summary>
     /// <param name="app">The Web application.</param>
-    /// <param name="apiVersions">The API versions to add.</param>
-    /// <returns>The Web application.</returns>
-    public static WebApplication MapScalar(this WebApplication app, IEnumerable<ApiVersion> apiVersions)
+    extension(WebApplication app)
     {
-        var documentNames = apiVersions.Select(GetDocumentName).ToArray();
-
-        app.MapScalarApiReference(options =>
+        /// <summary>
+        /// Register the Scalar UI into the application.
+        /// </summary>
+        /// <param name="apiVersions">The API versions to add.</param>
+        /// <returns>The Web application.</returns>
+        public WebApplication MapScalar(IEnumerable<ApiVersion> apiVersions)
         {
-            options.WithTitle(ApiInfoDetails.Title);
+            var documentNames = apiVersions.Select(GetDocumentName).ToArray();
 
-            options.AddPreferredSecuritySchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
-                .AddHttpAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, securityScheme =>
-                {
-                    securityScheme.Token = "your-token";
-                });
-
-            if (documentNames.Length != 0)
+            app.MapScalarApiReference(options =>
             {
-                options.AddDocuments(documentNames);
-            }
-        });
+                options.WithTitle(ApiInfoDetails.Title);
 
-        return app;
+                options.AddPreferredSecuritySchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
+                    .AddHttpAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+                        securityScheme =>
+                        {
+                            securityScheme.Token = "your-token";
+                        });
+
+                if (documentNames.Length != 0)
+                {
+                    options.AddDocuments(documentNames);
+                }
+            });
+
+            return app;
+        }
     }
 
     private static string GetDocumentName(ApiVersion apiVersion)

@@ -12,24 +12,37 @@ namespace Todo.Application.MappingExtensions.TodoLists;
 internal static class TodoItemMappingExtensions
 {
     /// <summary>
-    /// Converts the entity into a DTO.
+    /// The <see cref="TodoItem"/> extensions.
     /// </summary>
     /// <param name="entity">The entity.</param>
-    /// <returns>The DTO.</returns>
-    public static TodoItemDto ToDto(this TodoItem entity)
+    extension(TodoItem entity)
     {
-        return new TodoItemDto
+        /// <summary>
+        /// Converts the entity into a DTO.
+        /// </summary>
+        /// <returns>The DTO.</returns>
+        public TodoItemDto ToDto()
         {
-            Id = entity.Id,
-            Title = entity.Title,
-            Description = entity.Description,
-            IsDone = entity.IsDone,
-            Schedule = entity.Schedule.ToDto()
-        };
+            return new TodoItemDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                IsDone = entity.IsDone,
+                Schedule = entity.Schedule.ToDto()
+            };
+        }
     }
 
-    private static TodoItemScheduleDto ToDto(this TodoItemSchedule objectValue)
+    /// <summary>
+    /// The <see cref="TodoItemSchedule"/> extensions.
+    /// </summary>
+    /// <param name="valueObject">The value object.</param>
+    extension(TodoItemSchedule valueObject)
     {
-        return new TodoItemScheduleDto(objectValue.DueDate);
+        private TodoItemScheduleDto ToDto()
+        {
+            return new TodoItemScheduleDto(valueObject.DueDate);
+        }
     }
 }
