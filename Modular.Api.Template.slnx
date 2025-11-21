@@ -1,0 +1,93 @@
+<Solution>
+    <Folder Name="/Aspire/">
+        <Project Path="src/Aspire/Aspire.AppHost/Aspire.AppHost.csproj"/>
+        <Project Path="src/Aspire/Aspire.ServiceDefaults/Aspire.ServiceDefaults.csproj"/>
+    </Folder>
+    <Folder Name="/Documentation/">
+        <File Path="LICENSE"/>
+        <File Path="README.md"/>
+    </Folder>
+    <Folder Name="/Modules/">
+        <File Path="src/Directory.Build.props"/>
+    </Folder>
+    <Folder Name="/Modules/Identity/">
+        <Project Path="src/Identity/Identity.Application/Identity.Application.csproj"/>
+        <Project Path="src/Identity/Identity.Common/Identity.Common.csproj"/>
+        <Project Path="src/Identity/Identity.Domain/Identity.Domain.csproj"/>
+        <Project Path="src/Identity/Identity.Persistence/Identity.Persistence.csproj"/>
+        <Project Path="src/Identity/Identity.Presentation.Api/Identity.Presentation.Api.csproj"/>
+    </Folder>
+    <!--#if (false) -->
+    <Folder Name="/Modules/ModuleTemplate/">
+        <Project Path="src/ModuleTemplate/ModuleTemplate.Application/ModuleTemplate.Application.csproj"/>
+        <Project Path="src/ModuleTemplate/ModuleTemplate.Common/ModuleTemplate.Common.csproj"/>
+        <Project Path="src/ModuleTemplate/ModuleTemplate.Domain/ModuleTemplate.Domain.csproj"/>
+        <Project Path="src/ModuleTemplate/ModuleTemplate.Persistence/ModuleTemplate.Persistence.csproj"/>
+        <Project Path="src/ModuleTemplate/ModuleTemplate.Presentation.Api/ModuleTemplate.Presentation.Api.csproj"/>
+    </Folder>
+    <!--#endif -->
+    <Folder Name="/Modules/SharedCore/">
+        <Project Path="src/SharedCore/SharedCore.Application/SharedCore.Application.csproj"/>
+        <Project Path="src/SharedCore/SharedCore.Common/SharedCore.Common.csproj"/>
+        <Project Path="src/SharedCore/SharedCore.Domain/SharedCore.Domain.csproj"/>
+        <Project Path="src/SharedCore/SharedCore.Persistence/SharedCore.Persistence.csproj"/>
+        <Project Path="src/SharedCore/SharedCore.Presentation/SharedCore.Presentation.csproj"/>
+    </Folder>
+    <Folder Name="/Modules/Todo/">
+        <Project Path="src/Todo/Todo.Application/Todo.Application.csproj"/>
+        <Project Path="src/Todo/Todo.Common/Todo.Common.csproj"/>
+        <Project Path="src/Todo/Todo.Domain/Todo.Domain.csproj"/>
+        <Project Path="src/Todo/Todo.Persistence/Todo.Persistence.csproj"/>
+        <Project Path="src/Todo/Todo.Presentation.Api/Todo.Presentation.Api.csproj"/>
+    </Folder>
+    <Folder Name="/Solution Items/">
+        <File Path=".editorconfig"/>
+        <File Path=".gitignore"/>
+        <File Path="Directory.Build.props"/>
+        <File Path="global.json"/>
+        <!--#if (IsToAddDocker) -->
+        <Project Path="docker-compose.dcproj">
+            <Build/>
+        </Project>
+        <!--#endif -->
+    </Folder>
+    <!--#if (false) -->
+    <Folder Name="/Template Items/">
+        <File Path=".template.config/template.json"/>
+        <File Path="Modular.Api.Template.csproj"/>
+        <File Path="README-template.md"/>
+    </Folder>
+    <!--#endif -->
+    <Folder Name="/Tests/">
+        <File Path="tests/CodeCoverage-settings.xml"/>
+        <File Path="tests/Directory.Build.props"/>
+        <Project Path="tests/Architecture.Tests/Architecture.Tests.csproj"/>
+    </Folder>
+    <Folder Name="/Tests/Identity/">
+        <Project Path="tests/Identity/Identity.Application.Tests/Identity.Application.Tests.csproj"/>
+        <Project Path="tests/Identity/Identity.Common.Tests/Identity.Common.Tests.csproj"/>
+        <Project Path="tests/Identity/Identity.Domain.Tests/Identity.Domain.Tests.csproj"/>
+        <Project Path="tests/Identity/Identity.Presentation.Api.IntegrationTests/Identity.Presentation.Api.IntegrationTests.csproj"/>
+    </Folder>
+    <!--#if (false) -->
+    <Folder Name="/Tests/ModuleTemplate/">
+        <Project Path="tests/ModuleTemplate/ModuleTemplate.Application.Tests/ModuleTemplate.Application.Tests.csproj"/>
+        <Project Path="tests/ModuleTemplate/ModuleTemplate.Common.Tests/ModuleTemplate.Common.Tests.csproj"/>
+        <Project Path="tests/ModuleTemplate/ModuleTemplate.Domain.Tests/ModuleTemplate.Domain.Tests.csproj"/>
+        <Project Path="tests/ModuleTemplate/ModuleTemplate.Persistence.IntegrationTests/ModuleTemplate.Persistence.IntegrationTests.csproj"/>
+        <Project Path="tests/ModuleTemplate/ModuleTemplate.Presentation.Api.IntegrationTests/ModuleTemplate.Presentation.Api.IntegrationTests.csproj"/>
+    </Folder>
+    <!--#endif -->
+    <Folder Name="/Tests/SharedCore/">
+        <Project Path="tests/SharedCore/SharedCore.Application.Tests/SharedCore.Application.Tests.csproj"/>
+        <Project Path="tests/SharedCore/SharedCore.Common.Tests/SharedCore.Common.Tests.csproj"/>
+        <Project Path="tests/SharedCore/SharedCore.Persistence.IntegrationTests/SharedCore.Persistence.IntegrationTests.csproj"/>
+        <Project Path="tests/SharedCore/SharedCore.Presentation.Tests/SharedCore.Presentation.Tests.csproj"/>
+    </Folder>
+    <Folder Name="/Tests/Todo/">
+        <Project Path="tests/Todo/Todo.Application.Tests/Todo.Application.Tests.csproj"/>
+        <Project Path="tests/Todo/Todo.Domain.Tests/Todo.Domain.Tests.csproj"/>
+        <Project Path="tests/Todo/Todo.Persistence.IntegrationTests/Todo.Persistence.IntegrationTests.csproj"/>
+        <Project Path="tests/Todo/Todo.Presentation.Api.IntegrationTests/Todo.Presentation.Api.IntegrationTests.csproj"/>
+    </Folder>
+</Solution>

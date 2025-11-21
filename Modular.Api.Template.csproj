@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include=".\**\*" Exclude="**\bin\**;**\obj\**;**\.vs\**;**\.vscode\**;.\.idea\**;.\.git\**;.\.github\**;**\*.filelist;**\*.user;**\*.lock.json;**\log\**;**\logs\**;sqldata\**"/>
+        <Content Include=".\**\*" Exclude="**\bin\**;**\obj\**;**\.vs\**;**\.vscode\**;.\.idea\**;.\.git\**;.\.github\**;**\*.filelist;**\*.user;**\*.lock.json;**\log\**;**\logs\**;sqldata\**;CoverageReport\**"/>
         <Compile Remove="**\*"/>
     </ItemGroup>
 

@@ -17,7 +17,7 @@ public class EfCoreFixture : IAsyncLifetime
 
     public virtual async ValueTask InitializeAsync()
     {
-        await _msSqlContainer.StartAsync();
+        await _msSqlContainer.StartAsync(TestContext.Current.CancellationToken);
 
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>

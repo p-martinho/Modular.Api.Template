@@ -378,6 +378,8 @@ The `docker-compose.override.yml` will run the following services: the modules A
 
 To add a new module to Docker compose, add the new module to `docker-compose.yml` and `docker-compose.override.yml` (check how it is done for the sample modules, use similar configurations).
 
+To access the Aspire Dashboard from Docker, check the logs of the container, there will be the link to the Dashboard with the login token.
+
 ## Health Checks
 
 The application has default health checks in the endpoints `/health` and `/alive`. For instance, it includes the health check for the EF Core DB context.
@@ -458,13 +460,4 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 # Final Notes
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
-The enumeration classes bring several benefits, you can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration) (library from me, but there are others).
-
-
-
-# TODO
-- Figure out how to skip integration tests, without running the fixture
-- Check .slnx file is better supported (not preview anymore, the template engine supports it, etc.)
-- Check Scalar (types, xml comments, responses, authentication, etc.)
-- Update dependencies
-- Tests: Aspire, Scalar, unit tests, code coverage, requests, pipelines
+The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration) (there are others).

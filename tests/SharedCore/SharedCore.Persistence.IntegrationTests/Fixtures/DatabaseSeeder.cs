@@ -21,7 +21,7 @@ internal class DatabaseSeeder
         _currentUser = currentUser;
     }
 
-    public async Task SeedDatabaseAsync()
+    public async Task SeedDatabaseAsync(CancellationToken cancellationToken = default)
     {
         var entities = new List<TestEntity>();
 
@@ -64,6 +64,6 @@ internal class DatabaseSeeder
         _context.Entry(entities.First()).Property(e => e.Id).CurrentValue = CurrentUserKnownTestEntityId;
         _context.Entry(entities.Last()).Property(e => e.Id).CurrentValue = OtherUserKnownTestEntityId;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

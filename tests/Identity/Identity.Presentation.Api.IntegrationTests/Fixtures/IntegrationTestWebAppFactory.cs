@@ -15,7 +15,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
 
     public async ValueTask InitializeAsync()
     {
-        await _msSqlContainer.StartAsync();
+        await _msSqlContainer.StartAsync(TestContext.Current.CancellationToken);
     }
 
     public override async ValueTask DisposeAsync()

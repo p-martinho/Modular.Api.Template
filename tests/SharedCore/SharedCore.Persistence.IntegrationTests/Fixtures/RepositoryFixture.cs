@@ -18,6 +18,6 @@ public class RepositoryFixture : EfCoreFixture
 
         var databaseSeeder = new DatabaseSeeder(context, currentUser);
 
-        await databaseSeeder.SeedDatabaseAsync();
+        await databaseSeeder.SeedDatabaseAsync(TestContext.Current.CancellationToken);
     }
 }

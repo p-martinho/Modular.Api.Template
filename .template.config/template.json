@@ -31,7 +31,7 @@
         },
         {
           "choice": "tests",
-          "description": "Tests for a module (add it to an existent solution, refering one existing module)"
+          "description": "Tests for a module (add it to an existent solution, referring one existing module)"
         }
       ],
       "defaultValue": "solution",
@@ -87,6 +87,7 @@
         ".idea/**",
         ".vs/**",
         "sqldata/**",
+        "CoverageReport/**",
         "README.md",
         "*.csproj",
         "icon.*",
