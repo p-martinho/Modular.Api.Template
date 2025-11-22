@@ -1,0 +1,105 @@
+@IdentityApi_HostAddress = https://localhost:7107
+
+@clientId = test_client
+@clientSecret = test_secret
+
+@username = john.doe@example.com
+@password = 1SuperPassword.
+
+@adminUsername = admin@example.com
+
+### Create User
+
+# @name createUser
+POST {{IdentityApi_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "email": "{{username}}",
+  "password": "{{password}}",
+  "firstName": null,
+  "lastName": null
+}
+
+### Get access token (resource owner password credentials flow)
+
+# @name createToken
+POST {{IdentityApi_HostAddress}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&username={{username}}
+&password={{password}}
+&scope=offline_access todo_app identity_server
+
+### Refresh token
+
+@refreshToken = {{createToken.response.body.$.refresh_token}}
+
+POST {{IdentityApi_HostAddress}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&refresh_token={{refreshToken}}
+
+### Get user info
+
+@accessToken = {{createToken.response.body.$.access_token}}
+
+GET {{IdentityApi_HostAddress}}/api/users/info
+Authorization: Bearer {{accessToken}}
+
+### Update user info
+
+PATCH {{IdentityApi_HostAddress}}/api/users/info
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "email": null,
+  "firstName": "John",
+  "lastName": "Doe"
+}
+
+### Update user password
+
+PUT {{IdentityApi_HostAddress}}/api/users/password
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "oldPassword": "{{password}}",
+  "newPassword": "1SuperPassword.New"
+}
+
+### Get access token for Admin user (first you need to create the user and assign it the role "Admin")
+
+# @name createAdminToken
+POST {{IdentityApi_HostAddress}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&username={{adminUsername}}
+&password={{password}}
+&scope=offline_access todo_app identity_server
+
+### Health check alive
+
+GET {{IdentityApi_HostAddress}}/alive
+
+### Health check simple
+
+GET {{IdentityApi_HostAddress}}/health
+
+### Healt check full (requires authorization and "Admin" role)
+
+@adminAccessToken = {{createAdminToken.response.body.$.access_token}}
+
+GET {{IdentityApi_HostAddress}}/health/full
+Authorization: Bearer {{adminAccessToken}}

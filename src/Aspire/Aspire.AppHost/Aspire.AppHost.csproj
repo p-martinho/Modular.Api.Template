@@ -1,0 +1,18 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+
+        <UserSecretsId>aspire-cf3293e2-5be6-40c8-ab31-0c4c0334d633</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj"/>
+        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj"/>
+    </ItemGroup>
+
+</Project>

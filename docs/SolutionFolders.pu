@@ -1,0 +1,35 @@
+@startfiles
+
+/Aspire/Aspire.AppHost/
+/Aspire/Aspire.ServiceDefaults/
+/Modules/ModuleA/ModuleA.Presentation/
+/Modules/ModuleA/ModuleA.Application/
+/Modules/ModuleA/ModuleA.Persistence/
+/Modules/ModuleA/ModuleA.Domain/
+/Modules/ModuleA/ModuleA.Common/
+/Modules/SharedCore/SharedCore.Presentation/
+/Modules/SharedCore/SharedCore.Application/
+/Modules/SharedCore/SharedCore.Persistence/
+/Modules/SharedCore/SharedCore.Domain/
+/Modules/SharedCore/SharedCore.Common/
+/Modules/Directory.Build.props
+/Tests/ModuleA/ModuleA.Presentation.IntegrationTests/
+/Tests/ModuleA/ModuleA.Application.Tests/
+/Tests/ModuleA/ModuleA.Persistence.IntegrationTests/
+/Tests/ModuleA/ModuleA.Domain.Tests/
+/Tests/ModuleA/ModuleA.Common.Tests/
+/Tests/SharedCore/SharedCore.Presentation.Tests/
+/Tests/SharedCore/SharedCore.Application.Tests/
+/Tests/SharedCore/SharedCore.Persistence.IntegrationTests/
+/Tests/SharedCore/SharedCore.Common.Tests/
+/Tests/Architecture.Tests/
+/Tests/Directory.Build.props
+/Tests/CodeCoverage-settings.xml
+/Solution Items/.editorconfig
+/Solution Items/.gitignore
+/Solution Items/Directory.Build.props
+/Solution Items/global.json
+/Documentation/LICENSE
+/Documentation/README.md
+
+@endfiles

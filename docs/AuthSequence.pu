@@ -1,0 +1,60 @@
+@startuml
+
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam RoundCorner 10
+skinparam ParticipantBackgroundColor #LightBlue
+skinparam DatabaseBackgroundColor #LightBlue
+skinparam ActorBackgroundColor #LightBlue
+skinparam EntityBackgroundColor #LightBlue
+skinparam SequenceLifeLineBackgroundColor #LightGoldenRodYellow
+skinparam SequenceBoxBackgroundColor #White
+
+actor User
+participant "Client App" as ClientApp
+participant "Identity API" as IdentityApi
+participant "TODO API" as TodoApi
+
+User -> ClientApp ++ : Create User
+
+    ClientApp -> IdentityApi ++ : POST /api/users
+    IdentityApi --> ClientApp -- : UserApiDto
+
+ClientApp -> User --
+
+User -> ClientApp ++ : Login (username+password)
+    
+    ClientApp -> IdentityApi ++ : POST /connect/token
+
+        IdentityApi -> IdentityApi ++ : Validate username+password
+        IdentityApi --
+
+    IdentityApi --> ClientApp -- : Access token
+
+ClientApp -> User --
+
+User -> ClientApp ++ : Get User Info
+
+    ClientApp -> IdentityApi ++ : GET /api/users/info (access token in header)
+    
+        IdentityApi -> IdentityApi ++ : Validate access token
+        IdentityApi --
+    
+    IdentityApi --> ClientApp -- : UserApiDto
+
+ClientApp -> User --
+
+User -> ClientApp ++ : Create TODO List
+
+    ClientApp -> TodoApi ++ : POST /api/todoLists (access token in header)
+
+        TodoApi -> IdentityApi ++ : Validate access token
+        IdentityApi --> TodoApi --
+
+    TodoApi --> ClientApp -- : TodoListApiDto
+
+ClientApp -> User --
+
+
+
+@enduml

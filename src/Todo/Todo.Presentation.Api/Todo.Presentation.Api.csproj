@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <UserSecretsId>todo-e63bb7a1-1644-4dd2-9b51-9f8dbdb6c4ad</UserSecretsId>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <!--#if (IsToAddDocker) -->
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <!--#endif -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.11.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj"/>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj"/>
+        <ProjectReference Include="..\Todo.Application\Todo.Application.csproj"/>
+    </ItemGroup>
+
+    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document -->
+    <Target Name="AddOpenApiDependencies" AfterTargets="ResolveReferences">
+        <ItemGroup>
+            <AdditionalFiles
+                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
+                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
+                    KeepMetadata="Identity;HintPath"/>
+        </ItemGroup>
+    </Target>
+
+</Project>

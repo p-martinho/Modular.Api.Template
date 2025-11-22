@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="OpenIddict.AspNetCore" Version="7.2.0"/>
+        <PackageReference Include="OpenIddict.Quartz" Version="7.2.0"/>
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Application\SharedCore.Application.csproj"/>
+        <ProjectReference Include="..\Identity.Persistence\Identity.Persistence.csproj"/>
+    </ItemGroup>
+
+</Project>

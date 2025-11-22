@@ -1,0 +1,16 @@
+@ModuleTemplateApi_HostAddress = https://localhost:7095
+@accessToken = <past-here-access-token-got-from-identity-api>
+@adminAccessToken = <past-here-access-token-got-from-identity-api>
+
+### Health check alive
+
+GET {{TodoApi_HostAddress}}/alive
+
+### Health check simple
+
+GET {{TodoApi_HostAddress}}/health
+
+### Healt check full (requires authorization and "Admin" role)
+
+GET {{TodoApi_HostAddress}}/health/full
+Authorization: Bearer {{adminAccessToken}}

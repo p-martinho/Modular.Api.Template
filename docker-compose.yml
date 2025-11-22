@@ -1,0 +1,12 @@
+services:
+  todo.api:
+    image: ${DOCKER_REGISTRY-}todo.api
+    build:
+      context: .
+      dockerfile: src/Todo/Todo.Presentation.Api/Dockerfile
+
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identity.api
+    build:
+      context: .
+      dockerfile: src/Identity/Identity.Presentation.Api/Dockerfile

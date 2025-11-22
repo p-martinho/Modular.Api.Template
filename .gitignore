@@ -398,3 +398,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+riderModule.iml
+/_ReSharper.Caches/
+**/.idea
+
+# Project Custom
+/sqldata
+/CoverageReport

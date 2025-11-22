@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Domain\SharedCore.Domain.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Entities\" />
+      <Folder Include="ValueObjects\" />
+    </ItemGroup>
+
+</Project>

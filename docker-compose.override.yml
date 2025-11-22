@@ -1,0 +1,71 @@
+services:
+  todo.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+      - OTEL_SERVICE_NAME=todo.api
+      - OTEL_EXPORTER_OTLP_HEADERS=x-otlp-api-key=_super_strong_api_key_
+      - IdentitySettings__Issuer=http://identity.api:8080
+      - ConnectionStrings__SqlDefault=Server=sqlserver,1433;Database=Todo;User Id=sa;Password=Pass@word;TrustServerCertificate=True
+    ports:
+      - "5100:8080"
+      - "5101:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+  
+  identity.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+      - OTEL_SERVICE_NAME=identity.api
+      - OTEL_EXPORTER_OTLP_HEADERS=x-otlp-api-key=_super_strong_api_key_
+      - IdentitySettings__Issuer=http://identity.api:8080
+      - IdentitySettings__DisableHttps=true
+      - ConnectionStrings__SqlDefault=Server=sqlserver,1433;Database=Identity;User Id=sa;Password=Pass@word;TrustServerCertificate=True
+    ports:
+      - "5200:8080"
+      - "5201:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Pass@word"
+      ACCEPT_EULA: Y
+    volumes:
+      - "./sqldata:/var/opt/mssql/data"
+    ports:
+      - "5433:1433"
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -U "sa" -P "Pass@word" -C -Q "SELECT 1" -b -o /dev/null
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 10s
+  
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9
+    environment:
+      - Dashboard__Frontend__BrowserToken=f7007f8fae2ecff308a9c3965f7bf1c1
+      - Dashboard__Otlp__AuthMode=ApiKey
+      - Dashboard__Otlp__PrimaryApiKey=_super_strong_api_key_
+    ports:
+      - "18888:18888"
+      - "4317:18889"

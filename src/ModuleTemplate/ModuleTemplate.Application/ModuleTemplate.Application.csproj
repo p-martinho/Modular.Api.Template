@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Application\SharedCore.Application.csproj"/>
+        <ProjectReference Include="..\ModuleTemplate.Persistence\ModuleTemplate.Persistence.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Commands\" />
+      <Folder Include="Dtos\" />
+      <Folder Include="MappingExtensions\" />
+      <Folder Include="Queries\" />
+    </ItemGroup>
+
+</Project>

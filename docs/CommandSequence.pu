@@ -1,0 +1,70 @@
+@startuml
+
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam RoundCorner 10
+skinparam ParticipantBackgroundColor #LightBlue
+skinparam DatabaseBackgroundColor #LightBlue
+skinparam ActorBackgroundColor #LightBlue
+skinparam EntityBackgroundColor #LightBlue
+skinparam SequenceLifeLineBackgroundColor #LightGoldenRodYellow
+skinparam SequenceBoxBackgroundColor #White
+
+actor Client
+box Presentation
+participant API
+end box
+box Application
+participant ICommandHandler
+participant IValidator
+end box
+box Persistence
+participant IRepository
+database Database
+end box
+box Domain
+entity Entity
+end box
+
+Client -> API ++ : Request (ApiDto)
+    API -> ICommandHandler ++ : HandleAsync(Input [e.g. a Dto])
+        ICommandHandler -> ICommandHandler ++ : ValidateInputAsync(Input)
+
+            ICommandHandler -> IValidator ++ : ValidateAsync(Input)
+            IValidator --> ICommandHandler -- : ValidationResult
+
+        ICommandHandler --> ICommandHandler -- : IEnumerable<ResultDetails>
+
+alt If any validation error
+
+        ICommandHandler -> ICommandHandler ++ : HandleValidationErrors(IEnumerable<ResultDetail>)
+        ICommandHandler --> ICommandHandler -- : CommandOut<Dto>.ValidationError
+
+    ICommandHandler --> API : CommandOut<Dto>.ValidationError
+
+API --> Client : Response (ProblemDetails)
+
+end
+
+        ICommandHandler-> ICommandHandler ++ : HandleInputAsync(Input)
+
+            ICommandHandler -> IRepository ++ : GetAsync(...)
+                IRepository -> Database ++
+                Database --> IRepository --
+            IRepository --> ICommandHandler -- : BaseEntity
+
+            ICommandHandler -> Entity ++ : Update
+            Entity --> ICommandHandler --
+
+            ICommandHandler -> IRepository ++ : SaveChangesAsync()
+                IRepository -> Database ++
+                Database --> IRepository --
+            IRepository --> ICommandHandler --
+
+        ICommandHandler --> ICommandHandler -- : CommandOut<Dto>
+
+    ICommandHandler --> API : CommandOut<Dto>
+
+API --> Client : Response (ApiDto)
+
+@enduml
