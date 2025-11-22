@@ -61,7 +61,7 @@ public class InternalErrorMiddlewareTests
 
         // Assert
         Assert.Equal(LogLevel.Error, _fakeLogger.LatestRecord.Level);
-        Assert.DoesNotContain("Body:", _fakeLogger.LatestRecord.Message);
+        Assert.Contains("Body: <empty>", _fakeLogger.LatestRecord.Message);
     }
 
     [Fact]

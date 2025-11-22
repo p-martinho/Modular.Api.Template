@@ -107,17 +107,41 @@ public class InternalErrorMiddleware
 
     private void LogInternalError(HttpRequest request, string? requestBodyAsString)
     {
-        if (string.IsNullOrWhiteSpace(requestBodyAsString))
+        var sanitizedRequestMethod = SanitizeForLog(request.Method);
+        var sanitizedRequestPath = SanitizeForLog(request.Path);
+        var sanitizedRequestQueryString = SanitizeForLog(request.QueryString.ToString());
+        var sanitizedRequestBody = SanitizeForLog(requestBodyAsString);
+
+        _logger.LogError(
+            "Internal server error for request with parameters: {RequestMethod} {RequestPath}{RequestQueryString}\nBody: {RequestBody}",
+            sanitizedRequestMethod, sanitizedRequestPath, sanitizedRequestQueryString,
+            sanitizedRequestBody ?? "<empty>");
+    }
+
+    private static string? SanitizeForLog(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
         {
-            _logger.LogError(
-                "Internal server error for request with parameters: {RequestMethod} {RequestPath}{RequestQueryString}",
-                request.Method, request.Path, request.QueryString);
+            return null;
         }
-        else
+
+        var buffer = input.Length <= 256
+            ? stackalloc char[input.Length] // allocated on the stack
+            : new char[input.Length]; // allocated on the heap
+
+        var position = 0;
+        foreach (var c in input)
         {
-            _logger.LogError(
-                "Internal server error for request with parameters: {RequestMethod} {RequestPath}{RequestQueryString}\nBody: {RequestBody}",
-                request.Method, request.Path, request.QueryString, requestBodyAsString);
+            if (c == '\r' || c == '\n' || char.IsControl(c))
+            {
+                continue;
+            }
+
+            buffer[position] = c;
+            position++;
         }
+
+        // If nothing was removed, return original string
+        return position == input.Length ? input : new string(buffer[..position]);
     }
 }
