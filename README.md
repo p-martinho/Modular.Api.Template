@@ -176,7 +176,8 @@ This is a representation of the references between the projects, with the divisi
 ## Architecture Testing
 
 The solution includes a special test project: the `Architecture.Tests`. This project aims to validate if the architecture rules are followed.
-For instance, the tests will fail if some class in the **Presentation** layer references a class from the **Domain** layer.
+For instance, the tests will fail if some class in the **Presentation** layer references a class from the **Domain** layer
+or if the **Application** layer has any public type that is not an interface for command handler, interface for query handler or a DTO class (everything else should be internal).
 
 It uses the library [NetArchTest.eNhancedEdition](https://github.com/NeVeSpl/NetArchTest.eNhancedEdition) to help on that. You can explore the unit tests to be more aware of the rules tested.
 
@@ -189,14 +190,14 @@ But there are some dependencies that were decided to use because they are popula
 
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core)
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
-* [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
-  * The solution includes **.NET Aspire**, to orchestrate the several services (APIs, database, etc.). It is so easy running and connecting everything for local development environments.
-It includes the [Aspire Dashboard](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/dashboard/overview), which helps a lot to visualize traces, structured logs, and metrics.
+* [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
+  * The solution includes **Aspire**, to orchestrate the several services (APIs, database, etc.). It is so easy running and connecting everything for local development environments.
+It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
 * [OpenTelemetry](https://opentelemetry.io/docs/languages/dotnet/)
-  * This open source telemetry framework is enabled by the **.NET Aspire** defaults.
+  * This open source telemetry framework is enabled by the **Aspire** defaults.
 * [Docker and Docker compose support](https://docs.docker.com/)
   * For the ones that prefer **Docker**, the template has the option to include the Docker and Docker compose files, necessary to get everything running in Docker containers.
-* [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio)
+* [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?tabs=visual-studio)
   * The solution includes a sample API to create, store, and authenticate users.
 * [OpenIddict](https://documentation.openiddict.com/)
   * The solution contains the authentication and authorization configured out-of-the-box, as explained in the [auth section](#authentication-and-authorization).
@@ -211,7 +212,7 @@ The decision was to use known standards (OAuth 2.0 and OpenId Connect), using an
 * [FluentValidation](https://fluentvalidation.net/)
   * This library is very used and known, but is not absolutely necessary here. The idea is to have a validation in the **Application** layer,
 and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
-* [XUnit](https://xunit.net/)
+* [XUnit V3 (with MTP v2)](https://xunit.net/)
 * [NSubstitute](https://nsubstitute.github.io/)
   * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/) is less verbose, easy to use (and learn) and is well-known as well.
 * [TestContainers](https://dotnet.testcontainers.org/)
@@ -221,8 +222,8 @@ and the flow of a command or query handling should include that validation. Afte
 
 # Features
 
-After creating the solution for the first time, explore the sample modules included. One is an Identity API (as explained [here](#authentication-and-authorization)) and the other is just a simple TODO lists API,
-enough to make understand how the modules work. Just checking the code, it should be easy to follow the pattern.
+After creating the solution for the first time, explore the sample modules included. One is an Identity API (as explained [here](#authentication-and-authorization)),
+and the other is just a simple TODO lists API, enough to make understand how the modules work. Just checking the code, it should be easy to follow the pattern.
 
 ## Layers and CQRS: the Flow
 
@@ -258,7 +259,7 @@ The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response c
 ## API Versioning
 
 The solution supports API versioning by defining the existent versions (including the deprecated ones) and assigning the endpoint groups to a version.
-For each API version, it will be created an **OpenApi** document.
+For each API version, it will be created one **OpenApi** document.
 
 Check the API versions defined in `Program.cs` of the **Todo API** and the way the version is assigned in the `TodoListsEndpointGroup`.
 
@@ -281,7 +282,7 @@ In case of an internal error output from the handlers (not an unhandled exceptio
 
 In case of an unhandled exception (something terrible is happening), the exception handler (`CustomExceptionHandler`) will catch the exception, log it, and return a problem details response.
 
-In case of a binding error (for instance, a request with the wrong format), a `BadHttpRequestException` is thrown by the framework (with minimal APIs there's no model validation).
+In case of a binding error (for instance, a request with the wrong format), a `BadHttpRequestException` is thrown by the framework (currently, even if the new model validation for minimal APIs is enabled).
 The `CustomExceptionHandler` will return a problem details response, with a `400` status code, in this case.
 
 ## Authentication and Authorization
@@ -289,12 +290,12 @@ The `CustomExceptionHandler` will return a problem details response, with a `400
 The modules have endpoints that may require authorization.
 
 In this template, the authentication is done via an **Identity API**, where you can create and update users.
-This API uses services from the [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio), based in the [Identity API endpoints builder](https://github.com/dotnet/aspnetcore/blob/main/src/Identity/Core/src/IdentityApiEndpointRouteBuilderExtensions.cs).
+This API uses services from the [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?tabs=visual-studio), based in the [Identity API endpoints builder](https://github.com/dotnet/aspnetcore/blob/main/src/Identity/Core/src/IdentityApiEndpointRouteBuilderExtensions.cs).
 The ASP.NET Core Identity uses the EF Core as the store; therefore, the Identity database will include several tables related with Identity.
 
-The **Identity API** is just a simple way (but not the most secure way) to store users on your side, for simple applications, but the recommended approach would be using an [external solution](https://learn.microsoft.com/en-us/aspnet/core/security/identity-management-solutions?view=aspnetcore-9.0).
-
-If you don't need authentication, you can remove the **Identity API**.
+This **Identity API** is just a simple way (but not the most secure way) to store users on your side, for simple applications,
+but the recommended approach would be using an [external solution](https://learn.microsoft.com/en-us/aspnet/core/security/identity-management-solutions).
+You can opt out this module just by removing it.
 
 For authorization, the modules are configured to use an authentication scheme based on OAuth 2.0 and OpenId Connect standards, through the library [OpenIddict](https://documentation.openiddict.com/).
 Therefore, for the endpoints requiring authorization, a Bearer token header is required. The token must be issued by the configured issuer.
@@ -304,7 +305,7 @@ Anyway, you can use any other external issuer (compatible with OAuth 2.0 and Ope
 
 The OAuth 2.0 flow implemented in the **Identity API** is the [Resource Owner Password Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow), which is not recommended for security reasons.
 A solution would be having an Identity Server (instead of the API), with UI to create and login users, and use it with the [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce).
-But it is much more complex, and therefore is preferable (and more secure) to use an [external solution](https://learn.microsoft.com/en-us/aspnet/core/security/identity-management-solutions?view=aspnetcore-9.0), than implementing it.
+But it is much more complex, and therefore is preferable (and more secure) to use an [external solution](https://learn.microsoft.com/en-us/aspnet/core/security/identity-management-solutions), than implementing it.
 
 The context of the user may be needed to check permissions or access to resources, in the **Application** or **Persistence** layers.
 The interface `ICurrentUser` is useful to get the details about the logged user, like claims, roles, and identifier (more details can be added).
@@ -350,7 +351,7 @@ dotnet ef migrations add <MigrationName> --startup-project .\tests\SharedCore\Sh
 
 ## Logging and Telemetry
 
-The template includes the [Serilog](https://serilog.net/) as a logger provider. It writes to Console (minimum level `Information` on development, `Warning` on non-development) and to File (check the settings in `appsettings.json`).
+The template includes the [Serilog](https://serilog.net/) as a logger provider. It writes asynchronously to Console (minimum level `Information` on development, `Warning` on non-development) and to File (check the settings in `appsettings.json`).
 
 It uses [OpenTelemetry](https://opentelemetry.io/docs/languages/dotnet/) and, if the endpoint is set in the configuration (`OTEL_EXPORTER_OTLP_ENDPOINT`), exports to an OTLP exporter. Using [Aspire](#aspire), you can visualize this data in the local environment.
 
@@ -358,7 +359,7 @@ The `docker-compose.override.yml` file (if added) includes the **Aspire Dashboar
 
 ## Aspire
 
-The solution has support for [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview). Locally, you only have to run the `Aspire.AppHost` project.
+The solution has support for [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview). Locally, you only have to run the `Aspire.AppHost` project.
 It will automatically instantiate a Docker container for the SQL Server (requires **Docker Desktop** running), add the databases, waits for the databases are up, and then run the modules APIs.
 The **Aspire Dashboard** is launched.
 
@@ -366,8 +367,8 @@ In the **Aspire Dashboard** you can visualize the structured logs (with nice sea
 
 > **Note:** Aspire Dashboard does not persist data, and it is not the solution for telemetry and monitoring for production apps (you can use **Prometheus+Grafana**, or **Azure Application Insights**, for instance).
 
-To add a new module to Aspire, add the reference for the Presentation project of that module in `Aspire.AppHost`, and register it in `Program.cs` with `builder.AddProject<>()`, as it is for the sample projects.
-You may need to create a new database, just follow the same approach of the sample.
+To add a new module to Aspire, add the reference for the Presentation project of that module in `Aspire.AppHost`, and register it in `AppHost.cs` with `builder.AddProject<>()`, as it is for the sample projects.
+You may need to create a new database, in that case just follow the same approach of the samples.
 
 ## Docker Support
 
@@ -392,7 +393,7 @@ You can, also, build your own [custom health check](https://learn.microsoft.com/
 
 The template has a test project for each module and layer. The `SharedCore` projects are also tested. Some of them are integration tests (for instance, for **Persistence** and **Presentation**), others are unit tests.
 
-The tests use the [XUnit](https://xunit.net/) V3 (with the Microsoft Testing Platform V2 enabled) as the testing framework and [NSubstitute](https://nsubstitute.github.io/) as the mocking library.
+The tests use the [XUnit V3](https://xunit.net/) (with the Microsoft Testing Platform V2 enabled) as the testing framework and [NSubstitute](https://nsubstitute.github.io/) as the mocking library.
 
 The integration tests use a real database, using the [TestContainers](https://dotnet.testcontainers.org/) library (requires **Docker Desktop** running). 
 These tests take longer because they need to start the Docker containers.
@@ -425,7 +426,7 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
 
 The way the application is built, we need mappings between DTOs and entities and between DTOs and API DTOs.
 
-The mapping is done via **extensions**. There are several great mapping libraries (like [Mapperly](https://github.com/riok/mapperly) or [AutoMapper](https://automapper.org/)),
+The mapping is done via **extensions**. There are several mapping libraries (like [Mapperly](https://github.com/riok/mapperly) or [AutoMapper](https://automapper.org/)),
 but their usage sometimes brings more problems than advantages, and also, once more, the idea is to keep the external dependencies to a minimum.
 
 ## Code Style
@@ -444,20 +445,20 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 * [Architecting Modern Web Applications with ASP.NET Core and Microsoft Azure](https://aka.ms/webappebook) (eBook)
 * [Andrew Lock: Working with the result pattern](https://andrewlock.net/series/working-with-the-result-pattern/)
 * [Milan Jovanović: Problem Details for ASP.NET Core APIs](https://www.milanjovanovic.tech/blog/problem-details-for-aspnetcore-apis)
-* [Microsoft: Health checks in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-9.0)
-* [Microsoft: Health checks in .NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/health-checks)
-* [Microsoft: Minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0)
-* [Microsoft: Authentication and authorization in minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-9.0)
-* [Microsoft: ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio)
-* [Microsoft: Choose an identity management solution](https://learn.microsoft.com/en-us/aspnet/core/security/how-to-choose-identity-solution?view=aspnetcore-9.0)
+* [Microsoft: Health checks in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks)
+* [Microsoft: Health checks in Aspire](https://aspire.dev/fundamentals/health-checks/)
+* [Microsoft: Minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis)
+* [Microsoft: Authentication and authorization in minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security)
+* [Microsoft: ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?tabs=visual-studio)
+* [Microsoft: Choose an identity management solution](https://learn.microsoft.com/en-us/aspnet/core/security/how-to-choose-identity-solution)
 * [Lê Gimenes: Authorization Server with OpenIddict: The Serie](https://legimenes.medium.com/authorization-server-with-openiddict-the-serie-e2721d0451af)
-* [Microsoft: Middleware in Minimal API apps](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/middleware?view=aspnetcore-9.0)
-* [Microsoft: OpenAPI support](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview?view=aspnetcore-9.0)
-* [Microsoft: Integration Tests](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-9.0)
+* [Microsoft: Middleware in Minimal API apps](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/middleware)
+* [Microsoft: OpenAPI support](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview)
+* [Microsoft: Integration Tests](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests)
 * [Milan Jovanović: Enforcing Software Architecture With Architecture Tests](https://www.milanjovanovic.tech/blog/enforcing-software-architecture-with-architecture-tests)
 * [Dotnet: Template Engine](https://github.com/dotnet/templating/wiki)
 
 # Final Notes
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
-The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration) (there are others).
+The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).

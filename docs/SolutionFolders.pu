@@ -24,6 +24,7 @@
 /Tests/SharedCore/SharedCore.Common.Tests/
 /Tests/Architecture.Tests/
 /Tests/Directory.Build.props
+/Tests/CodeCoverage-settings.xml
 /Solution Items/.editorconfig
 /Solution Items/.gitignore
 /Solution Items/Directory.Build.props

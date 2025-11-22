@@ -23,12 +23,13 @@
 /tests/SharedCore/SharedCore.Persistence.IntegrationTests/
 /tests/SharedCore/SharedCore.Common.Tests/
 /tests/Directory.Build.props
+/tests/CodeCoverage-settings.xml
 /.editorconfig
 /.gitignore
 /Directory.Build.props
 /global.json
 /LICENSE
 /README.md
-/SolutionName.sln
+/SolutionName.slnx
 
 @endfiles
