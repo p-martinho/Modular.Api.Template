@@ -23,14 +23,4 @@
         <ProjectReference Include="..\Identity.Application\Identity.Application.csproj"/>
     </ItemGroup>
 
-    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document -->
-    <Target Name="AddOpenApiDependencies" AfterTargets="ResolveReferences">
-        <ItemGroup>
-            <AdditionalFiles
-                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
-                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
-                    KeepMetadata="Identity;HintPath"/>
-        </ItemGroup>
-    </Target>
-
 </Project>

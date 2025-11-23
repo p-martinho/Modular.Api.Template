@@ -23,16 +23,6 @@
         <ProjectReference Include="..\ModuleTemplate.Application\ModuleTemplate.Application.csproj"/>
     </ItemGroup>
 
-    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document -->
-    <Target Name="AddOpenApiDependencies" AfterTargets="ResolveReferences">
-        <ItemGroup>
-            <AdditionalFiles
-                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
-                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
-                    KeepMetadata="Identity;HintPath"/>
-        </ItemGroup>
-    </Target>
-
     <ItemGroup>
         <Folder Include="Dtos\V1\"/>
         <Folder Include="Endpoints\V1\"/>

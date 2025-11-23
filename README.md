@@ -1,5 +1,5 @@
-[![NuGet](https://img.shields.io/nuget/v/PMart.Modular.Api.template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.template)
-[![NuGet](https://img.shields.io/nuget/dt/PMart.Modular.Api.template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.template)
+[![NuGet](https://img.shields.io/nuget/v/PMart.Modular.Api.Template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.Template)
+[![NuGet](https://img.shields.io/nuget/dt/PMart.Modular.Api.Template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.Template)
 [![Build and Test](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/build-and-test.yaml)
 [![CodeQL Analysis](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/codeql-analysis.yaml)
 
@@ -462,3 +462,10 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
 The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
+
+
+
+# Next release (TODO)
+
+* Removed reference to ProblemDetails assembly because it is removed in the solution created by template
+* Update packages
