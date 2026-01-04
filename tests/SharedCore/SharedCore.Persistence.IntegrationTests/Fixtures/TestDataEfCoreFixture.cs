@@ -1,10 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using SharedCore.Common.ApplicationContext;
+using SharedCore.Persistence.IntegrationTests.Fixtures;
 using SharedCore.Persistence.IntegrationTests.TestServices;
+
+[assembly: AssemblyFixture(typeof(TestDataEfCoreFixture))]
 
 namespace SharedCore.Persistence.IntegrationTests.Fixtures;
 
-public class RepositoryFixture : EfCoreFixture
+public sealed class TestDataEfCoreFixture : EfCoreFixture
 {
     public override async ValueTask InitializeAsync()
     {

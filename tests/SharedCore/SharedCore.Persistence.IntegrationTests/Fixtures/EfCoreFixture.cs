@@ -4,8 +4,11 @@ using Microsoft.Extensions.Hosting;
 using SharedCore.Common.ApplicationContext;
 using SharedCore.Persistence.Constants;
 using SharedCore.Persistence.DependencyInjection;
+using SharedCore.Persistence.IntegrationTests.Fixtures;
 using SharedCore.Persistence.IntegrationTests.TestServices;
 using Testcontainers.MsSql;
+
+[assembly: AssemblyFixture(typeof(EfCoreFixture))]
 
 namespace SharedCore.Persistence.IntegrationTests.Fixtures;
 
@@ -40,7 +43,7 @@ public class EfCoreFixture : IAsyncLifetime
         ServiceProvider = services.BuildServiceProvider();
     }
 
-    public virtual async ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore().ConfigureAwait(false);
 
