@@ -20,8 +20,7 @@ public class DomainTests
         var result = conditionList.GetResult();
 
         // Assert
-        //Assert.True(result.IsSuccessful);
-        Assert.Empty(result.FailingTypes.Select(t => t.Explanation));
+        Assert.True(result.IsSuccessful);
     }
 
     [Fact]
@@ -67,7 +66,7 @@ public class DomainTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Domain)
-            .That().Inherit(typeof(BaseEntity))
+            .That().Inherit<BaseEntity>()
             .Should().ResideInNamespaceContaining(Namespaces.PatternForEntities);
 
         // Act
@@ -82,7 +81,7 @@ public class DomainTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Domain)
-            .That().Inherit(typeof(BaseEntity))
+            .That().Inherit<BaseEntity>()
             .And().AreNotAbstract()
             .Should().BeSealed();
 

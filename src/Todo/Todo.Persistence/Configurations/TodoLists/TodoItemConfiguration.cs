@@ -5,7 +5,7 @@ using SharedCore.Persistence.Configurations;
 using Todo.Domain.Entities.TodoLists;
 using Todo.Domain.ValueObjects.TodoLists;
 
-namespace Todo.Persistence.Configuration.TodoLists;
+namespace Todo.Persistence.Configurations.TodoLists;
 
 /// <summary>
 /// The entity configuration for <see cref="TodoItem"/>.

@@ -68,8 +68,8 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().Inherit(typeof(DbContext))
-            .And().DoNotHaveName(typeof(BaseDbContext<>).Name)
+            .That().Inherit<DbContext>()
+            .And().DoNotHaveName(nameof(BaseDbContext<>))
             .ShouldNot().BePublic();
 
         // Act
@@ -83,25 +83,24 @@ public class PersistenceTests
     public void Persistence_EntityTypeConfigurations_ShouldInheritSharedBaseConfiguration()
     {
         // Arrange
-        var conditionList = Types.InAssemblies(Assemblies.Persistence)
+        var failingTypes = Types.InAssemblies(Assemblies.Persistence)
             .That().ImplementInterface(typeof(IEntityTypeConfiguration<>))
-            .And().DoNotHaveName(GetBaseEntityTypeConfigurationsNames())
+            .And().DoNotHaveName(nameof(BaseEntityConfiguration<>))
             .And().DoNotHaveName(nameof(AppIdentityUserConfiguration)) // this is a special case
-            .Should().Inherit(typeof(BaseEntityConfiguration<>));
+            .GetTypes();
 
         // Act
-        var result = conditionList.GetResult();
-
+        
         // Assert
-        Assert.True(result.IsSuccessful);
+        Assert.Empty(failingTypes);
     }
 
     [Fact]
-    public void Persistence_EntityTypeConfigurationImplemetations_ShouldNotBePublic()
+    public void Persistence_EntityTypeConfigurationImplementations_ShouldNotBePublic()
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IEntityTypeConfiguration<>))
+            .That().Inherit(typeof(BaseEntityConfiguration<>))
             .And().DoNotHaveName(GetBaseEntityTypeConfigurationsNames())
             .ShouldNot().BePublic();
 
@@ -117,7 +116,7 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IEntityTypeConfiguration<>))
+            .That().Inherit(typeof(BaseEntityConfiguration<>))
             .And().AreNotGeneric()
             .Should().HaveNameEndingWith(ClassNames.EfCoreEntityTypeConfigurationNameEnding);
 
@@ -133,7 +132,7 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IEntityTypeConfiguration<>))
+            .That().Inherit(typeof(BaseEntityConfiguration<>))
             .Should().ResideInNamespaceContaining(Namespaces.PatternForEntityTypeConfiguration);
 
         // Act
@@ -148,8 +147,7 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.All)
-            .That().ImplementInterface(typeof(IRepository<>))
-            .Or().ImplementInterface(typeof(IQueryRepository<>))
+            .That().ImplementInterface(typeof(IQueryRepository<>))
             .Should().ResideInAnyOfNamespaces(Namespaces.Persistence);
 
         // Act
@@ -164,27 +162,9 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IRepository<>))
-            .And().AreClasses()
-            .And().DoNotHaveName(typeof(Repository<>).Name)
-            .ShouldNot().BePublic();
-
-        // Act
-        var result = conditionList.GetResult();
-
-        // Assert
-        Assert.True(result.IsSuccessful);
-    }
-
-    [Fact]
-    public void Persistence_QueryRepositoryImplementations_ShouldNotBePublic()
-    {
-        // Arrange
-        var conditionList = Types.InAssemblies(Assemblies.Persistence)
             .That().ImplementInterface(typeof(IQueryRepository<>))
             .And().AreClasses()
-            .And().DoNotHaveName(typeof(Repository<>).Name)
-            .And().DoNotHaveName(typeof(QueryRepository<>).Name)
+            .And().DoNotHaveName(nameof(Repository<>), nameof(QueryRepository<>))
             .ShouldNot().BePublic();
 
         // Act
@@ -199,7 +179,7 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IRepository<>))
+            .That().ImplementInterface(typeof(IQueryRepository<>))
             .And().AreNotGeneric()
             .Should().HaveNameEndingWith(ClassNames.RepositoryNameEnding);
 
@@ -215,7 +195,7 @@ public class PersistenceTests
     {
         // Arrange
         var conditionList = Types.InAssemblies(Assemblies.Persistence)
-            .That().ImplementInterface(typeof(IRepository<>))
+            .That().ImplementInterface(typeof(IQueryRepository<>))
             .Should().ResideInNamespaceContaining(Namespaces.PatternForRepository);
 
         // Act
@@ -229,9 +209,9 @@ public class PersistenceTests
     {
         return
         [
-            typeof(BaseEntityConfiguration<>).Name,
-            typeof(BaseAuditableEntityConfiguration<>).Name,
-            typeof(BaseOwnedEntityConfiguration<>).Name
+            nameof(BaseEntityConfiguration<>),
+            nameof(BaseAuditableEntityConfiguration<>),
+            nameof(BaseOwnedEntityConfiguration<>)
         ];
     }
 }

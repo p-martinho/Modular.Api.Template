@@ -9,7 +9,7 @@ namespace SharedCore.Persistence.Constants;
 public static class ConnectionStrings
 {
     /// <summary>
-    /// The default SQL connection string.
+    /// The name of the default SQL connection string.
     /// </summary>
     public const string SqlDefault = "SqlDefault";
 }
