@@ -49,6 +49,24 @@ public class InternalErrorMiddlewareTests
             _fakeLogger.LatestRecord.Message);
         Assert.Contains($"Body: {bodyContent}", _fakeLogger.LatestRecord.Message);
     }
+    
+    [Fact]
+    public async Task InvokeAsync_WhenInternalErrorAndBodyWithControlChars_ShouldSanitizeLog()
+    {
+        // Arrange
+        const string bodyContent = "{\t\"key1\": \"value 1\",\r\n\t\"key2\": \"value 2\"\r\n}";
+        var requestBodyBytes = Encoding.UTF8.GetBytes(bodyContent);
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Body = new MemoryStream(requestBodyBytes);
+        httpContext.Request.ContentLength = requestBodyBytes.Length;
+
+        // Act
+        await _middleware.InvokeAsync(httpContext);
+
+        // Assert
+        const string expectedBodyContent = "{\"key1\": \"value 1\",\"key2\": \"value 2\"}";
+        Assert.Contains($"Body: {expectedBodyContent}", _fakeLogger.LatestRecord.Message);
+    }
 
     [Fact]
     public async Task InvokeAsync_WhenInternalErrorWithEmptyBody_ShouldNotLogBody()
