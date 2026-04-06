@@ -462,10 +462,3 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
 The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
-
-
-
-# Next release (TODO)
-
-* Removed reference to ProblemDetails assembly because it is removed in the solution created by template
-* Update packages

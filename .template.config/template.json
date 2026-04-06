@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json.schemastore.org/template",
+  "$schema": "https://json.schemastore.org/template",
   "author": "PMart",
   "classifications": [
     "ASP.NET",
@@ -98,7 +98,7 @@
       "rename": {
         "README-template.md": "README.md"
       },
-      "copyOnly": ["README-template.md"],
+      "copyOnly": ["README-template.md", "src/Directory.Build.props"],
       "modifiers": [
         {
           "condition": "!IsToAddDocker",

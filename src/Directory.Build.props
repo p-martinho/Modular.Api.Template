@@ -4,10 +4,22 @@
     <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))"/>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="$(AssemblyName).Tests" />
-        <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
-        <InternalsVisibleTo Include="Architecture.Tests" />
-        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+        <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
+        <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests"/>
+        <InternalsVisibleTo Include="Architecture.Tests"/>
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
     </ItemGroup>
+
+    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document. It is applied for SdkWeb projects only -->
+    <Target Name="AddOpenApiDependencies"
+            AfterTargets="ResolveReferences"
+            Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true'">
+        <ItemGroup>
+            <AdditionalFiles
+                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
+                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
+                    KeepMetadata="Identity;HintPath"/>
+        </ItemGroup>
+    </Target>
 
 </Project>
