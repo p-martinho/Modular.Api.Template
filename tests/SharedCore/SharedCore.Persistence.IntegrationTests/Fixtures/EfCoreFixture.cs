@@ -14,7 +14,9 @@ namespace SharedCore.Persistence.IntegrationTests.Fixtures;
 
 public class EfCoreFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04";
+
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
 
     public IServiceProvider ServiceProvider = null!;
 
@@ -49,7 +51,7 @@ public class EfCoreFixture : IAsyncLifetime
 
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual ValueTask DisposeAsyncCore()
     {
         return _msSqlContainer.DisposeAsync();

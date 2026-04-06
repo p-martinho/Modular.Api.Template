@@ -14,7 +14,9 @@ namespace Todo.Presentation.Api.IntegrationTests.Fixtures;
 
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04";
+
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
 
     public async ValueTask InitializeAsync()
     {
@@ -24,7 +26,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     public override async ValueTask DisposeAsync()
     {
         await _msSqlContainer.DisposeAsync();
-        
+
         await base.DisposeAsync();
     }
 
