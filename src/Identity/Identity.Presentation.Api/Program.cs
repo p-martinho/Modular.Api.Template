@@ -36,6 +36,9 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseInternalErrorMiddleware();
 
 app.MapDefaultEndpoints();
