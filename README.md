@@ -82,6 +82,17 @@ and navigate to [https://localhost:7217/scalar]() to see the sample **Todo API**
 You can test the sample APIs, using the provided examples in the `.http` files:
 [Identity.Presentation.Api.http](./src/Identity/Identity.Presentation.Api/Identity.Presentation.Api.http) and [Todo.Presentation.Api.http](./src/Todo/Todo.Presentation.Api/Todo.Presentation.Api.http).
 
+## Update
+
+After having the solution working, you can implement your own modules:
+
+* Create new modules
+* Update `Aspire.AppHost` to add the new database and reference the new projects (check the [Aspire section](#aspire))
+* If Docker is enabled, add the new modules to `docker-compose.yml` and `docker-compose.override.yml` (check the [Docker section](#docker-support))
+* Implement them, for each layer (you can get base reference from the sample **Todo** module)
+* Remove the sample modules (**Identity** and **Todo**)
+* Update packages version
+
 # Design and Architecture
 
 * **Architecture**:
@@ -106,7 +117,7 @@ The solution could be even simpler, for small playground applications or persona
 I tried to get the balance. I think this solution is enterprise level (not for microservices context, this is a modular monolith) and also simple enough to use in small projects, keeping the decoupling, clean code, and [SOLID](https://en.wikipedia.org/wiki/SOLID) principals.
 
 I tried to keep the dependencies at the minimum, as discussed in the section [Technologies and Dependencies](#technologies-and-dependencies).
-Therefore, it was easy to decide to not use __MediatR__ (not even taking into consideration it is becoming commercial). Instead, the solution applies the [CQRS pattern](https://martinfowler.com/bliki/CQRS.html) using command handlers and query handlers, that are called directly and explicitly.
+Therefore, it was easy to decide to not use __MediatR__ (not even taking into consideration it is commercial). Instead, the solution applies the [CQRS pattern](https://martinfowler.com/bliki/CQRS.html) using command handlers and query handlers, that are called directly and explicitly.
 This way, it is easier to debug and understand what is happening instead of just sending a message and then search for the handlers of the message. And it has also performance benefits.
 I totally agree that using __MediatR__ has a lot of benefits, but the intention here was only to keep things simpler and with the fewer dependencies possible.
 
@@ -192,7 +203,7 @@ But there are some dependencies that were decided to use because they are popula
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
 * [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
   * The solution includes **Aspire**, to orchestrate the several services (APIs, database, etc.). It is so easy running and connecting everything for local development environments.
-It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
+  It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
 * [OpenTelemetry](https://opentelemetry.io/docs/languages/dotnet/)
   * This open source telemetry framework is enabled by the **Aspire** defaults.
 * [Docker and Docker compose support](https://docs.docker.com/)
@@ -201,17 +212,17 @@ It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), whic
   * The solution includes a sample API to create, store, and authenticate users.
 * [OpenIddict](https://documentation.openiddict.com/)
   * The solution contains the authentication and authorization configured out-of-the-box, as explained in the [auth section](#authentication-and-authorization).
-The decision was to use known standards (OAuth 2.0 and OpenId Connect), using an open source library.
+  The decision was to use known standards (OAuth 2.0 and OpenId Connect), using an open source library.
 * [Serilog](https://serilog.net/)
   * The default logging of ASP.NET Core is not perfect yet. **Serilog** is very popular and useful (structured logs, integration with different targets/sinks, etc.).
 * [OpenApi](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi)
   * The API documentation is built using the `Microsoft.AspNetCore.OpenApi` library, included as well in the ASP.NET Core templates.
 * [Scalar](https://guides.scalar.com/scalar/scalar-api-references/net-integration)
   * The new ASP.NET Core templates do not include **Swagger** anymore. In this case, all the documentation is built using **OpenApi** and then the documents can be used by any interface.
-**Scalar** is one of them, selected here because Swagger UI seems outdated and the "Try out" feature is not very friendly. But is straightforward to switch to Swagger, using the same **OpenApi** documents.
+  **Scalar** is one of them, selected here because Swagger UI seems outdated and the "Try out" feature is not very friendly. But is straightforward to switch to Swagger, using the same **OpenApi** documents.
 * [FluentValidation](https://fluentvalidation.net/)
   * This library is very used and known, but is not absolutely necessary here. The idea is to have a validation in the **Application** layer,
-and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
+  and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
 * [XUnit V3 (with MTP v2)](https://xunit.net/)
 * [NSubstitute](https://nsubstitute.github.io/)
   * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/) is less verbose, easy to use (and learn) and is well-known as well.
@@ -342,7 +353,6 @@ dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Prese
 
 > **Note:** The `--environment Migration` parameter is used to the pending migrations not being applied, which is the default in the `Development` environment.
 
-
 If you ever need to add migrations to the `SharedCore.Persistence.IntegrationTests`, this would be the command:
 
 ```
@@ -426,7 +436,7 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
 
 The way the application is built, we need mappings between DTOs and entities and between DTOs and API DTOs.
 
-The mapping is done via **extensions**. There are several mapping libraries (like [Mapperly](https://github.com/riok/mapperly) or [AutoMapper](https://automapper.org/)),
+The mapping is done via **extensions**. There are several mapping libraries (like [Mapperly](https://github.com/riok/mapperly), for instance),
 but their usage sometimes brings more problems than advantages, and also, once more, the idea is to keep the external dependencies to a minimum.
 
 ## Code Style
@@ -462,3 +472,4 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
 The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
+* For a more simple solution with just one API, I would suggest to check an approach like [PMart.Minimal.Api.Template](https://github.com/p-martinho/Minimal.Api.Template)
