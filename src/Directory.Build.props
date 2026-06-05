@@ -10,16 +10,4 @@
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
     </ItemGroup>
 
-    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document. It is applied for SdkWeb projects only -->
-    <Target Name="AddOpenApiDependencies"
-            AfterTargets="ResolveReferences"
-            Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true'">
-        <ItemGroup>
-            <AdditionalFiles
-                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
-                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
-                    KeepMetadata="Identity;HintPath"/>
-        </ItemGroup>
-    </Target>
-
 </Project>

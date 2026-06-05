@@ -98,7 +98,7 @@
       "rename": {
         "README-template.md": "README.md"
       },
-      "copyOnly": ["README-template.md", "src/Directory.Build.props"],
+      "copyOnly": ["README-template.md"],
       "modifiers": [
         {
           "condition": "!IsToAddDocker",

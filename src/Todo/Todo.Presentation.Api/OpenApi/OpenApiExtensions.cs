@@ -32,6 +32,7 @@ internal static class OpenApiExtensions
                 options.Document.AddOperationTransformer<AuthorizationOperationTransformer>();
                 options.Document.AddOperationTransformer<ApiVersionOperationTransformer>();
                 options.Document.AddOperationTransformer<DeprecatedStatusOperationTransformer>();
+                options.Document.AddSchemaTransformer<ProblemDetailsSchemaTransformer>();
             });
 
             return services;
