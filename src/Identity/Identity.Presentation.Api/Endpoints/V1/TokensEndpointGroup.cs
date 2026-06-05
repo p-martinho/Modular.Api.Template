@@ -33,6 +33,7 @@ internal sealed class TokensEndpointGroup : IEndpointGroup
         group.MapPost("connect/token", ExchangeAsync)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden);
     }
 

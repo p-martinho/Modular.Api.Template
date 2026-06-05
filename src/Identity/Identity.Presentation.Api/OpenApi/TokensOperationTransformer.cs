@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
@@ -23,8 +24,7 @@ public class TokensOperationTransformer : IOpenApiOperationTransformer
             return Task.CompletedTask;
         }
 
-        operation.RequestBody ??= new OpenApiRequestBody {Content = new Dictionary<string, OpenApiMediaType>()};
-
+        operation.RequestBody ??= new OpenApiRequestBody { Content = new Dictionary<string, OpenApiMediaType>() };
 
         if (operation.RequestBody.Content is null)
         {
@@ -52,39 +52,83 @@ public class TokensOperationTransformer : IOpenApiOperationTransformer
             operation.RequestBody.Content.Add(FormContentType, mediaType);
         }
 
-        var formParameters = GetFormParameters();
-
         var schema = mediaType.Schema as OpenApiSchema;
-        schema?.Required = formParameters.Select(p => p.Name!).ToHashSet();
 
-        // Add the form parameters to the schema
-        foreach (var parameter in formParameters)
+        if (schema is null)
         {
-            schema?.Properties?[parameter.Name!] = parameter.Schema!;
+            // Not possible to set properties
+            return Task.CompletedTask;
+        }
+
+        schema.Properties ??= new Dictionary<string, IOpenApiSchema>();
+        schema.Required ??= new HashSet<string>();
+
+        foreach (var property in GetRequiredFormProperties())
+        {
+            schema.Properties[property.Key] = property.Value;
+            schema.Required.Add(property.Key);
+        }
+
+        foreach (var property in GetOptionalFormProperties())
+        {
+            schema.Properties[property.Key] = property.Value;
         }
 
         return Task.CompletedTask;
     }
 
-    private static OpenApiParameter[] GetFormParameters()
+    private static Dictionary<string, IOpenApiSchema> GetRequiredFormProperties()
     {
-        return
-        [
-            new OpenApiParameter
-            {
-                Name = "grant_type",
-                Schema = new OpenApiSchema {Type = JsonSchemaType.String, Description = "The grant type."}
-            },
-            new OpenApiParameter
-            {
-                Name = "client_id",
-                Schema = new OpenApiSchema {Type = JsonSchemaType.String, Description = "The client identifier."}
-            },
-            new OpenApiParameter
-            {
-                Name = "client_secret",
-                Schema = new OpenApiSchema {Type = JsonSchemaType.String, Description = "The client secret."}
-            }
-        ];
+        return new Dictionary<string, IOpenApiSchema>
+        {
+            ["grant_type"] =
+                new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                    Description = "The grant type.",
+                    Examples = new List<JsonNode>
+                    {
+                        JsonValue.Create("password"), JsonValue.Create("refresh_token")
+                    }
+                },
+            ["client_id"] =
+                new OpenApiSchema { Type = JsonSchemaType.String, Description = "The client identifier." },
+            ["client_secret"] =
+                new OpenApiSchema { Type = JsonSchemaType.String, Description = "The client secret." }
+        };
+    }
+
+    private static Dictionary<string, IOpenApiSchema> GetOptionalFormProperties()
+    {
+        return new Dictionary<string, IOpenApiSchema>
+        {
+            ["username"] =
+                new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                    Description = "The username (required in the password grant, to create a new access token)."
+                },
+            ["password"] =
+                new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                    Description =
+                        "The user password (required in the password grant, to create a new access token)."
+                },
+            ["scope"] =
+                new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                    Description = "The scope (required in the password grant, to create a new access token).",
+                    Example = JsonValue.Create("offline_access")
+                },
+            ["refresh_token"] =
+                new OpenApiSchema
+                {
+                    Type = JsonSchemaType.String,
+                    Description =
+                        "The refresh token (required in the refresh_token grant, to create a new access token)."
+                }
+        };
     }
 }
