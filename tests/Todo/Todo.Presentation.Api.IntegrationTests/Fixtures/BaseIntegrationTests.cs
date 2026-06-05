@@ -12,14 +12,14 @@ public class BaseIntegrationTests : IAsyncDisposable
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: TestAuthHandler.SchemeName,
             TestAuthHandler.DefaultUserToken);
     }
-    
+
     public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore().ConfigureAwait(false);
 
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual ValueTask DisposeAsyncCore()
     {
         Client.Dispose();

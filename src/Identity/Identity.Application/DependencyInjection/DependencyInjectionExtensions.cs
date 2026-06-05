@@ -119,7 +119,7 @@ public static class DependencyInjectionExtensions
 
                     var customIssuer = configuration["IdentitySettings:Issuer"];
 
-                    // Require only when we want to override it (e.g. in local docker compose).
+                    // Required only when we want to override it (e.g. in local docker compose).
                     if (customIssuer is not null)
                     {
                         options.SetIssuer(customIssuer);

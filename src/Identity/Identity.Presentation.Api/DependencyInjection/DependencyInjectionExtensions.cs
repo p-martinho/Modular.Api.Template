@@ -39,7 +39,8 @@ internal static class DependencyInjectionExtensions
         /// <returns>The service collection.</returns>
         public IServiceCollection AddApiDependencies(IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
-            services.AddSharedPresentation(configuration, hostEnvironment);
+            // Configuration of OpenIdDict validation is in the Application layer, along with the Server configuration.
+            services.AddSharedPresentation(configuration, hostEnvironment, isToConfigOpenIdDictValidation: false);
 
             services.AddApplication(configuration, hostEnvironment);
 

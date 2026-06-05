@@ -19,7 +19,7 @@ public class BaseIntegrationTests : IAsyncDisposable
 
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual ValueTask DisposeAsyncCore()
     {
         Client.Dispose();

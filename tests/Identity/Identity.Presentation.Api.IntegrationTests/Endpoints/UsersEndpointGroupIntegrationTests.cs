@@ -17,6 +17,7 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
     private const string UsersInfoPath = $"{UsersPath}/info";
     private const string UsersPasswordPath = $"{UsersPath}/password";
     private const string TokensPath = "connect/token";
+    private const string IdentityScope = "identity_server";
 
     public UsersEndpointGroupIntegrationTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
@@ -39,7 +40,8 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(userResponse);
         Assert.Equal(request.Email, userResponse.Email);
         Assert.Equal(request.FirstName, userResponse.FirstName);
@@ -84,7 +86,8 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(userResponse);
         Assert.Equal(user.Email, userResponse.Email);
         Assert.Equal(user.FirstName, userResponse.FirstName);
@@ -128,7 +131,8 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(userResponse);
         Assert.Equal(request.Email, userResponse.Email);
         Assert.Equal(request.FirstName, userResponse.FirstName);
@@ -255,7 +259,8 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 
         var response = await Client.PostAsJsonAsync(UsersPath, request, TestContext.Current.CancellationToken);
 
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
 
         if (userResponse is null)
         {
@@ -273,7 +278,7 @@ public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
             new KeyValuePair<string, string>(Parameters.ClientSecret, "test_secret"),
             new KeyValuePair<string, string>(Parameters.Username, email),
             new KeyValuePair<string, string>(Parameters.Password, password),
-            new KeyValuePair<string, string>(Parameters.Scope, "identity_server")
+            new KeyValuePair<string, string>(Parameters.Scope, IdentityScope)
         ]);
 
         var response = await Client.PostAsync(TokensPath, formContent, TestContext.Current.CancellationToken);

@@ -96,7 +96,8 @@ public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 
         var response = await Client.PostAsJsonAsync(UsersPath, request, TestContext.Current.CancellationToken);
 
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
 
         if (userResponse is null)
         {

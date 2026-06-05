@@ -32,8 +32,10 @@ public static class DependencyInjectionExtensions
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="hostEnvironment">The host environment.</param>
+        /// <param name="isToConfigOpenIdDictValidation">Value indicating if is to configure the default OpenIdDict validation. Callers can implement their own configuration instead.</param>
         /// <returns>The service collection.</returns>
-        public IServiceCollection AddSharedPresentation(IConfiguration configuration, IHostEnvironment hostEnvironment)
+        public IServiceCollection AddSharedPresentation(IConfiguration configuration, IHostEnvironment hostEnvironment,
+            bool isToConfigOpenIdDictValidation = true)
         {
             services.AddHttpContextAccessor();
 
@@ -43,7 +45,12 @@ public static class DependencyInjectionExtensions
 
             services.AddExceptionHandler<CustomExceptionHandler>();
 
-            services.AddAuthenticationAndAuthorization(configuration, hostEnvironment);
+            services.AddAuthenticationAndAuthorization();
+
+            if (isToConfigOpenIdDictValidation)
+            {
+                services.AddOpenIddictValidation(configuration, hostEnvironment);
+            }
 
             services.AddApiVersioning();
 
@@ -76,7 +83,7 @@ public static class DependencyInjectionExtensions
                 });
         }
 
-        private void AddAuthenticationAndAuthorization(IConfiguration configuration, IHostEnvironment hostEnvironment)
+        private void AddAuthenticationAndAuthorization()
         {
             services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
@@ -85,21 +92,10 @@ public static class DependencyInjectionExtensions
                 options.AddPolicy(Policies.HealthChecksFull,
                     policyBuilder => policyBuilder.RequireRole(UserRoles.Admin).Build());
             });
-
-            services.AddOpenIddictValidation(configuration, hostEnvironment);
         }
 
         private void AddOpenIddictValidation(IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
-            var isToDisableDefaultConfig =
-                configuration.GetSection("IdentitySettings:DisableDefaultValidationConfiguration").Get<bool>();
-
-            // This way, each service can disable this default configuration and then configure it by itself.
-            if (isToDisableDefaultConfig)
-            {
-                return;
-            }
-
             services.AddOpenIddict()
                 .AddValidation(options =>
                 {
