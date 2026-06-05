@@ -28,16 +28,16 @@ namespace Todo.Presentation.Api.Endpoints.V1;
 /// The To do lists endpoint group.
 /// </summary>
 /// <seealso cref="IEndpointGroup"/>
-internal class TodoListsEndpointGroup : IEndpointGroup
+internal sealed class TodoListsEndpointGroup : IEndpointGroup
 {
     private const string EndpointGroupName = "TodoLists";
 
     private static readonly ApiVersion ApiVersion = new(1, 0);
 
     /// <inheritdoc />
-    public static void Map(WebApplication app, ApiVersionSet apiVersionSet)
+    public static void Map(IVersionedEndpointRouteBuilder apiBuilder)
     {
-        var group = app.MapEndpointGroup(EndpointGroupName, apiVersionSet, ApiVersion, isAuthorizationRequired: true);
+        var group = apiBuilder.MapEndpointGroup(EndpointGroupName, ApiVersion, isAuthorizationRequired: true);
 
         group.MapPost(string.Empty, CreateTodoListAsync)
             .ProducesProblem(StatusCodes.Status400BadRequest);

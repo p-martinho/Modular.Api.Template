@@ -19,16 +19,16 @@ namespace Identity.Presentation.Api.Endpoints.V1;
 /// The users endpoint group.
 /// </summary>
 /// <seealso cref="IEndpointGroup"/>
-internal class UsersEndpointGroup : IEndpointGroup
+internal sealed class UsersEndpointGroup : IEndpointGroup
 {
     private const string EndpointGroupName = "Users";
 
     private static readonly ApiVersion ApiVersion = new(1, 0);
 
     /// <inheritdoc />
-    public static void Map(WebApplication app, ApiVersionSet apiVersionSet)
+    public static void Map(IVersionedEndpointRouteBuilder apiBuilder)
     {
-        var group = app.MapEndpointGroup(EndpointGroupName, apiVersionSet, ApiVersion, isAuthorizationRequired: true);
+        var group = apiBuilder.MapEndpointGroup(EndpointGroupName, ApiVersion, isAuthorizationRequired: true);
 
         group.MapPost("", CreateUserAsync)
             .AllowAnonymous()

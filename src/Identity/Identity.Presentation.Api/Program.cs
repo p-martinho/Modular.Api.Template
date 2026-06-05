@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Aspire.ServiceDefaults;
 using Identity.Presentation.Api.DependencyInjection;
 using Identity.Presentation.Api.Extensions;
@@ -14,13 +13,9 @@ builder.AddServiceDefaults();
 
 builder.Services.AddCustomHealthChecks(builder.Configuration);
 
-ApiVersion[] activeApiVersions = [new(1, 0)];
-ApiVersion[] deprecatedApiVersions = [];
-var apiVersions = activeApiVersions.Concat(deprecatedApiVersions).ToArray();
-
-builder.Services.AddOpenApiDocuments(apiVersions);
-
 builder.Services.AddApiDependencies(builder.Configuration, builder.Environment);
+
+builder.Services.AddOpenApiDocuments();
 
 // Build app.
 
@@ -43,13 +38,16 @@ app.UseInternalErrorMiddleware();
 
 app.MapDefaultEndpoints();
 
-app.MapEndpoints<Program>(activeApiVersions, deprecatedApiVersions);
+app.MapEndpoints<Program>();
 
 if (app.Environment.IsDevelopment())
 {
     // This needs to be after mapping the API versions (in MapEndpoints())
-    app.MapOpenApi().CacheOutput();
-    app.MapScalar(apiVersions);
+    app.MapOpenApi()
+        .WithDocumentPerVersion()
+        .CacheOutput();
+
+    app.MapScalar();
 }
 
 // Run app.

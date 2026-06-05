@@ -16,7 +16,7 @@ public class DeprecatedStatusOperationTransformer : IOpenApiOperationTransformer
     public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context,
         CancellationToken cancellationToken)
     {
-        operation.Deprecated |= context.Description.IsDeprecated();
+        operation.Deprecated |= context.Description.IsDeprecated;
 
         return Task.CompletedTask;
     }

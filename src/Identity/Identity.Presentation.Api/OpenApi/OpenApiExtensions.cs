@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Asp.Versioning;
 using OpenIddict.Validation.AspNetCore;
 using Scalar.AspNetCore;
 using SharedCore.Presentation.OpenApi;
@@ -21,22 +20,20 @@ internal static class OpenApiExtensions
         /// <summary>
         /// Adds OpenAPI documents to the services.
         /// </summary>
-        /// <param name="apiVersions">The API versions to add.</param>
         /// <returns>The service collection.</returns>
-        public IServiceCollection AddOpenApiDocuments(IEnumerable<ApiVersion> apiVersions)
+        public IServiceCollection AddOpenApiDocuments()
         {
-            foreach (var version in apiVersions)
+            // Call "AddOpenApi" after "AddApiVersioning" to ensure Asp.Versioning's variant is used.
+            // This variant of "AddOpenApi" is required to properly integrate with API versioning and generate versioned OpenAPI documents.
+            services.AddApiVersioning().AddOpenApi(options =>
             {
-                services.AddOpenApi(GetDocumentName(version), options =>
-                {
-                    options.AddDocumentTransformer<InfoDocumentTransformer>();
-                    options.AddDocumentTransformer<SecuritySchemesDocumentTransformer>();
-                    options.AddOperationTransformer<AuthorizationOperationTransformer>();
-                    options.AddOperationTransformer<ApiVersionOperationTransformer>();
-                    options.AddOperationTransformer<DeprecatedStatusOperationTransformer>();
-                    options.AddOperationTransformer<TokensOperationTransformer>();
-                });
-            }
+                options.Document.AddDocumentTransformer<InfoDocumentTransformer>();
+                options.Document.AddDocumentTransformer<SecuritySchemesDocumentTransformer>();
+                options.Document.AddOperationTransformer<AuthorizationOperationTransformer>();
+                options.Document.AddOperationTransformer<ApiVersionOperationTransformer>();
+                options.Document.AddOperationTransformer<DeprecatedStatusOperationTransformer>();
+                options.Document.AddOperationTransformer<TokensOperationTransformer>();
+            });
 
             return services;
         }
@@ -51,11 +48,11 @@ internal static class OpenApiExtensions
         /// <summary>
         /// Register the Scalar UI into the application.
         /// </summary>
-        /// <param name="apiVersions">The API versions to add.</param>
         /// <returns>The Web application.</returns>
-        public WebApplication MapScalar(IEnumerable<ApiVersion> apiVersions)
+        public WebApplication MapScalar()
         {
-            var documentNames = apiVersions.Select(GetDocumentName).ToArray();
+            var versions = app.DescribeApiVersions();
+            var defaultVersion = versions.LastOrDefault();
 
             app.MapScalarApiReference(options =>
             {
@@ -68,18 +65,13 @@ internal static class OpenApiExtensions
                             securityScheme.Token = "your-token";
                         });
 
-                if (documentNames.Length != 0)
+                foreach (var version in versions)
                 {
-                    options.AddDocuments(documentNames);
+                    options.AddDocument(version.GroupName, isDefault: version == defaultVersion);
                 }
             });
 
             return app;
         }
-    }
-
-    private static string GetDocumentName(ApiVersion apiVersion)
-    {
-        return $"v{apiVersion}";
     }
 }
