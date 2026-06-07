@@ -32,7 +32,6 @@ public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
         // Act
         var response = await Client.PostAsync(TokensPath, formContent, TestContext.Current.CancellationToken);
 
-
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var tokenResponse =
@@ -92,7 +91,7 @@ public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 
     private async Task CreateUserAsync(string email, string password)
     {
-        var request = new CreateUserApiDto { Email = email, Password = password };
+        var request = new CreateUserApiDto {Email = email, Password = password};
 
         var response = await Client.PostAsJsonAsync(UsersPath, request, TestContext.Current.CancellationToken);
 
