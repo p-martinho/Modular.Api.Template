@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Identity.Presentation.Api.IntegrationTests.Endpoints;
+namespace Identity.Presentation.Api.IntegrationTests.Endpoints.V1;
 
 public class UsersEndpointGroupIntegrationTests : BaseIntegrationTests
 {

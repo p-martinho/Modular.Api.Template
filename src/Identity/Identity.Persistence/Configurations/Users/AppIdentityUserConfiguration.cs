@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Identity.Domain.Entities.Users;
-using Identity.Domain.ValueObjects;
+using Identity.Domain.ValueObjects.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

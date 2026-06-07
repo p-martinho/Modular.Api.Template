@@ -12,7 +12,7 @@ using SharedCore.Application.Commands.Models;
 using SharedCore.Application.Queries.Models;
 using SharedCore.Common.ApplicationContext;
 
-namespace Identity.Presentation.Api.IntegrationTests.Endpoints;
+namespace Identity.Presentation.Api.IntegrationTests.Endpoints.V1;
 
 /// <remarks>
 /// These tests are complementary to the integration tests, to test scenarios not possible to test in the integration tests (for instance, internal errors).

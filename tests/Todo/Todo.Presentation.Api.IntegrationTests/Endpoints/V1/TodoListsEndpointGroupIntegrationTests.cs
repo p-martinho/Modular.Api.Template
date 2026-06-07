@@ -11,7 +11,7 @@ using Todo.Presentation.Api.Dtos.V1.TodoLists.TodoItems.Update;
 using Todo.Presentation.Api.Dtos.V1.TodoLists.Update;
 using Todo.Presentation.Api.IntegrationTests.Fixtures;
 
-namespace Todo.Presentation.Api.IntegrationTests.Endpoints;
+namespace Todo.Presentation.Api.IntegrationTests.Endpoints.V1;
 
 public class TodoListsEndpointGroupIntegrationTests : BaseIntegrationTests
 {

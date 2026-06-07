@@ -1,4 +1,4 @@
-using Identity.Domain.ValueObjects;
+using Identity.Domain.ValueObjects.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.Entities.Users;

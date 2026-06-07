@@ -87,10 +87,11 @@ You can test the sample APIs, using the provided examples in the `.http` files:
 After having the solution working, you can implement your own modules:
 
 * Create new modules
-* Update `Aspire.AppHost` to add the new database and reference the new projects (check the [Aspire section](#aspire))
+* Update `Aspire.AppHost` to add the new database and add reference to the new projects (check the [Aspire section](#aspire))
 * If Docker is enabled, add the new modules to `docker-compose.yml` and `docker-compose.override.yml` (check the [Docker section](#docker-support))
 * Implement them, for each layer (you can get base reference from the sample **Todo** module)
 * Remove the sample modules (**Identity** and **Todo**)
+* Set up the authentication/authorization (with the **Identity** sample, it would be updating the `SeedOpenIdTestingResourcesCommandHandler` and the settings `IdentitySettings`)
 * Update packages version
 
 # Design and Architecture
@@ -471,5 +472,9 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 # Final Notes
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
-The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
-* For a more simple solution with just one API, I would suggest to check an approach like [PMart.Minimal.Api.Template](https://github.com/p-martinho/Minimal.Api.Template)
+  The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
+* For a more simple solution with just one API, I would suggest to check an approach like [PMart.Minimal.Api.Template](https://github.com/p-martinho/Minimal.Api.Template).
+* Adding a UI/UX project (e.g. Blazor web app) is perfectly fine. Add a new project to the src directory and reference the API project, to have access to its DTOs.
+  But, the UI project should not use anything from **Application** and so on (respect the layered architecture).
+* If you prefer to have just one API (a real monolith, one application only, just one deployment), it is easy.
+  You just need to merge the API projects into one, and reference the **Application** projects of each module.

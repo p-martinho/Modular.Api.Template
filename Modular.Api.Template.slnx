@@ -65,7 +65,6 @@
     </Folder>
     <Folder Name="/Tests/Identity/">
         <Project Path="tests/Identity/Identity.Application.Tests/Identity.Application.Tests.csproj"/>
-        <Project Path="tests/Identity/Identity.Common.Tests/Identity.Common.Tests.csproj"/>
         <Project Path="tests/Identity/Identity.Domain.Tests/Identity.Domain.Tests.csproj"/>
         <Project Path="tests/Identity/Identity.Presentation.Api.IntegrationTests/Identity.Presentation.Api.IntegrationTests.csproj"/>
     </Folder>
