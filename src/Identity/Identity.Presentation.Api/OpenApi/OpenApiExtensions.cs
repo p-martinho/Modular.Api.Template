@@ -24,7 +24,7 @@ internal static class OpenApiExtensions
         {
             // Call "AddOpenApi" after "AddApiVersioning" to ensure Asp.Versioning's variant is used.
             // This variant of "AddOpenApi" is required to properly integrate with API versioning and generate versioned OpenAPI documents.
-            services.AddApiVersioning().AddOpenApi(options =>
+            services.AddApiVersioning().AddApiExplorer().AddOpenApi(options =>
             {
                 options.Document.AddDocumentTransformer<InfoDocumentTransformer>();
                 options.Document.AddDocumentTransformer<SecuritySchemesDocumentTransformer>();
