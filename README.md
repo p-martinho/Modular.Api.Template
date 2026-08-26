@@ -225,8 +225,9 @@ But there are some dependencies that were decided to use because they are popula
   * This library is very used and known, but is not absolutely necessary here. The idea is to have a validation in the **Application** layer,
   and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
 * [XUnit V3 (with MTP v2)](https://xunit.net/)
+  * XUnit is on version 3, with a lot of improvements, and supporting the modern and lightweight alternative to VSTest for running tests: the Microsoft Testing Platform (MTP), in version 2.
 * [NSubstitute](https://nsubstitute.github.io/)
-  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/) is less verbose, easy to use (and learn) and is well-known as well.
+  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/), in my opinion, is less verbose, easy to use (and learn) and is well-known as well.
 * [TestContainers](https://dotnet.testcontainers.org/)
   * For integration tests, it is fundamental to use a real database. This library makes it straightforward, using **Docker**.
 * [NetArchTest.eNhancedEdition](https://github.com/NeVeSpl/NetArchTest.eNhancedEdition)
@@ -266,7 +267,8 @@ The Presentation layer uses its owns DTOs (the `ApiDtos`), instead of returning 
 the idea is making the API contracts stable (I would recommend having different API DTOs for each API version as well).
 This way, we make sure that any change in the applicational DTO will not cause a breaking change in the API.
 
-The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code.
+The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code. On success, the endpoint produces a `Status200OK` or `Status201Created` response (depends on the type of operation).
+On a non-success result, a `ProblemDetails` response is produced, and the response code and details are mapped from the `OutputResult` (using the `OutputResultMappingExtensions.ToProblemDetails()`).
 
 ## API Versioning
 
@@ -391,6 +393,27 @@ The `docker-compose.override.yml` will run the following services: the modules A
 To add a new module to Docker compose, add the new module to `docker-compose.yml` and `docker-compose.override.yml` (check how it is done for the sample modules, use similar configurations).
 
 To access the Aspire Dashboard from Docker, check the logs of the container, there will be the link to the Dashboard with the login token.
+
+## HTTPS
+
+The APIs enforce HTTPS, using the HTTPS redirection middleware (`UseHttpsRedirection()`).
+
+For HTTPS in local development, you need to trust the .NET development certificate (just once):
+
+```
+dotnet dev-certs https --trust
+```
+
+Anyway, enforced HTTPS is problematic when running locally with Docker. The certificate must be available in the Docker container.
+For that (**note: only required to run the APIs in Docker**), create a certificate with the same name as the project and set its password in the user secrets (example for the **TODO API**):
+
+```
+dotnet dev-certs https -ep %appdata%\ASP.NET\Https\Todo.Presentation.Api.pfx -p <PASSWORD>
+dotnet dev-certs https --trust
+dotnet user-secrets -p ./src/Todo.Presentation.Api/Todo.Presentation.Api.csproj set "Kestrel:Certificates:Development:Password" "<PASSWORD>"
+```
+
+The `docker-compose.override.yml` has the required volume mappings to share the certificate and user secrets with the container.
 
 ## Health Checks
 
