@@ -261,13 +261,13 @@ the solution uses a custom way to register them by endpoint group. There are ple
 But again, the idea was to keep the external dependencies at the minimum (without having to invent the wheel, of course).
 
 Check the **Todo API** sample, to see how the endpoints are registered, by implementing the `IEndpointGroup`
-(it will be registered automatically by `SharedCore.Presentation.Extensions.EndpointExtensions.MapEndpoints<TProgram>()`).
+(it will be registered automatically by `EndpointExtensions.MapEndpoints<TProgram>()`).
 
 The Presentation layer uses its owns DTOs (the `ApiDtos`), instead of returning the applicational DTOs. Although it introduces more code and complexity (and more mapping),
 the idea is making the API contracts stable (I would recommend having different API DTOs for each API version as well).
 This way, we make sure that any change in the applicational DTO will not cause a breaking change in the API.
 
-The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code. On success, the endpoint produces a `Status200OK` or `Status201Created` response (depends on the type of operation).
+The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code. On success, the endpoint produces a `Status200OK` or `Status201Created` response (depends on the type of operation of the endpoint).
 On a non-success result, a `ProblemDetails` response is produced, and the response code and details are mapped from the `OutputResult` (using the `OutputResultMappingExtensions.ToProblemDetails()`).
 
 ## API Versioning
@@ -275,7 +275,8 @@ On a non-success result, a `ProblemDetails` response is produced, and the respon
 The solution supports API versioning by defining the existent versions (including the deprecated ones) and assigning the endpoint groups to a version.
 For each API version, it will be created one **OpenApi** document.
 
-Check the API versions defined in `Program.cs` of the **Todo API** and the way the version is assigned in the `TodoListsEndpointGroup`.
+Check the way the version is assigned in the `TodoListsEndpointGroup` in the **Todo API**.
+For setting specific versions as deprecated, provide them in `app.MapEndpoints<Program>()` call, in `Program.cs`.
 
 ## Shared Libraries
 
@@ -285,11 +286,11 @@ This way, all the modules can reuse the same code, same patterns, same classes, 
 
 ## Error Handling
 
-The way the command and query handlers are built, they always return a `CommandOut<>` or `QueryOut<>` and never throw exceptions (use the **Result pattern**).
+The way the command and query handlers are built, they always return a `CommandOut<>` or `QueryOut<>` and never throw exceptions (they use the **Result pattern**).
 The exceptions should happen only on exceptional errors.
 
 In case of an exception, the handlers should catch the exception, log it, and then return an output with the result type `ResultType.InternalError`.
-Then, the APIs map it to a `500` response, without exposing details about the internal exception.
+Then, the APIs map it to a `Status500InternalServerError` response, without exposing details about the internal exception.
 
 In case of error (validation error, internal error, resource not found, etc.), the APIs return a [problem details response](https://datatracker.ietf.org/doc/html/rfc9457) (`ProblemHttpResult`).
 In case of an internal error output from the handlers (not an unhandled exception), and if the `InternalErrorMiddleware` is enabled, the request body will be logged, to help the debug of the issue.
@@ -333,15 +334,17 @@ This is the authentication and authorization flow in the samples included in the
 
 The template uses the [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for data persistence.
 
-When you run the application, the database will be automatically created (if not yet) and the latest migrations will be applied.
+When you run the application, the database will be automatically created (if not yet) and the migrations will be applied.
 In a non-development environment, the migrations are not automatic, and you should apply them using [bundles](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#bundles), for instance.
 
 The `SharedCore.Persistence` project adds the **SQL Server** provider by default. To have a different database type, this can be overriden.
  
-The template supports soft delete. If needed, the entity should implement `ISoftDeletableEntity`. Auditable properties can also be automatically added and updated, being the entity derived from `BaseAuditableEntity`.
+The template supports soft delete. For that, the entity should implement `ISoftDeletableEntity`.
+Auditable properties can also be automatically added and updated, being the entity derived from `BaseAuditableEntity`.
 These two features work using [EF Core interceptors](https://learn.microsoft.com/en-us/ef/core/logging-events-diagnostics/interceptors).
 
-Regarding the repositories, they include methods to filter and sort the results, but they are very restricted to simple use cases. There are packages like [Sieve](https://github.com/Biarity/Sieve) to use with more comprehensive use cases.
+Regarding the repositories, they include methods to filter and sort the results, but they are very restricted to simple use cases.
+There are packages like [Sieve](https://github.com/Biarity/Sieve) to use with more comprehensive use cases.
 
 ### Migrations
 
