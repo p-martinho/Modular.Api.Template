@@ -53,3 +53,22 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
     ```
 
 4. Open the HTML file `CoverageReport\index.html` to see the results.
+
+# EF Core Migrations
+
+If you change the EF Core model (e.g., add a new property to an entity, or add a new entity), and you try to run the application, you will get an error: you have pending changes.
+You need to create a new migration.
+
+To create a migration, you need to have installed the [EF Core CLI Tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet). Then, in the root of the solution, run the following command (example for the **Todo** application):
+
+```
+dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Presentation.Api\ --project .\src\Todo\Todo.Persistence\ -- --environment Migration
+```
+
+> **Note:** The `--environment Migration` parameter is used to the pending migrations not being applied, which is the default in the `Development` environment.
+
+If you ever need to add migrations to the `SharedCore.Persistence.IntegrationTests`, this would be the command:
+
+```
+dotnet ef migrations add <MigrationName> --startup-project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\ --project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\
+```

@@ -54,6 +54,7 @@
     <!--#if (false) -->
     <Folder Name="/Template Items/">
         <File Path=".template.config/template.json"/>
+        <File Path="docs/TemplateDeveloperNotes.md"/>
         <File Path="Modular.Api.Template.csproj"/>
         <File Path="README-template.md"/>
     </Folder>

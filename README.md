@@ -92,7 +92,8 @@ After having the solution working, you can implement your own modules:
 * Implement them, for each layer (you can get base reference from the sample **Todo** module)
 * Remove the sample modules (**Identity** and **Todo**)
 * Set up the authentication/authorization (with the **Identity** sample, it would be updating the `SeedOpenIdTestingResourcesCommandHandler` and the settings `IdentitySettings`)
-* Update packages version
+* Review the settings in `appsettings.json`
+* Update NuGet packages
 
 # Design and Architecture
 
