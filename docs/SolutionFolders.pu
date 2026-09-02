@@ -2,7 +2,7 @@
 
 /Aspire/Aspire.AppHost/
 /Aspire/Aspire.ServiceDefaults/
-/Modules/ModuleA/ModuleA.Presentation/
+/Modules/ModuleA/ModuleA.Presentation.Api/
 /Modules/ModuleA/ModuleA.Application/
 /Modules/ModuleA/ModuleA.Persistence/
 /Modules/ModuleA/ModuleA.Domain/
@@ -13,7 +13,7 @@
 /Modules/SharedCore/SharedCore.Domain/
 /Modules/SharedCore/SharedCore.Common/
 /Modules/Directory.Build.props
-/Tests/ModuleA/ModuleA.Presentation.IntegrationTests/
+/Tests/ModuleA/ModuleA.Presentation.Api.IntegrationTests/
 /Tests/ModuleA/ModuleA.Application.Tests/
 /Tests/ModuleA/ModuleA.Persistence.IntegrationTests/
 /Tests/ModuleA/ModuleA.Domain.Tests/

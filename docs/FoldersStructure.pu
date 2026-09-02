@@ -2,7 +2,7 @@
 
 /src/Aspire/Aspire.AppHost/
 /src/Aspire/Aspire.ServiceDefaults/
-/src/ModuleA/ModuleA.Presentation/
+/src/ModuleA/ModuleA.Presentation.Api/
 /src/ModuleA/ModuleA.Application/
 /src/ModuleA/ModuleA.Persistence/
 /src/ModuleA/ModuleA.Domain/
@@ -13,7 +13,7 @@
 /src/SharedCore/SharedCore.Domain/
 /src/SharedCore/SharedCore.Common/
 /src/Directory.Build.props
-/tests/ModuleA/ModuleA.Presentation.IntegrationTests/
+/tests/ModuleA/ModuleA.Presentation.Api.IntegrationTests/
 /tests/ModuleA/ModuleA.Application.Tests/
 /tests/ModuleA/ModuleA.Persistence.IntegrationTests/
 /tests/ModuleA/ModuleA.Domain.Tests/
@@ -22,6 +22,7 @@
 /tests/SharedCore/SharedCore.Application.Tests/
 /tests/SharedCore/SharedCore.Persistence.IntegrationTests/
 /tests/SharedCore/SharedCore.Common.Tests/
+/tests/Architecture.Tests/
 /tests/Directory.Build.props
 /tests/CodeCoverage-settings.xml
 /.editorconfig
