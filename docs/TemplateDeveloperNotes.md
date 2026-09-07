@@ -55,7 +55,7 @@ To re-do the initial migrations:
   ```
   dotnet ef migrations add InitialMigration --startup-project ./src/Todo/Todo.Presentation.Api/ --project ./src/Todo/Todo.Persistence/ -- --environment Migration
   dotnet ef migrations add InitialMigration --startup-project ./src/Identity/Identity.Presentation.Api/ --project ./src/Identity/Identity.Persistence/ -- --environment Migration
-  dotnet ef migrations add <MigrationName> --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
+  dotnet ef migrations add InitialMigration --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
   ```
 - Revert the removal of `Modular.Api.Template.csproj`
 

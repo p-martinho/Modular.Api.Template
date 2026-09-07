@@ -446,19 +446,21 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
     dotnet tool install dotnet-reportgenerator-globaltool --global
     ```
 
-2. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
+2. Remove (if existent) the folder `TestResults` in the **root folder** (it contains previous coverage files)
+
+3. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
 
     ``` bash
-    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --coverage-settings ./tests/CodeCoverage-settings.xml
+    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-settings ./tests/CodeCoverage-settings.xml
     ```
 
-3. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
+4. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
 
     ``` bash
-    ReportGenerator -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
+    ReportGenerator -reports:./TestResults/*.cobertura.xml -targetdir:CoverageReport
     ```
 
-4. Open the HTML file `CoverageReport/index.html` to see the results.
+5. Open the HTML file `CoverageReport/index.html` to see the results.
 
 ## Mapping
 

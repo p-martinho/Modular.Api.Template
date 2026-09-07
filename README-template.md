@@ -40,19 +40,21 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
     dotnet tool install dotnet-reportgenerator-globaltool --global
     ```
 
-2. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
+2. Remove (if existent) the folder `TestResults` in the **root folder** (it contains previous coverage files)
+
+3. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
 
     ``` bash
-    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --coverage-settings ./tests/CodeCoverage-settings.xml
+    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-settings ./tests/CodeCoverage-settings.xml
     ```
 
-3. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
+4. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
 
     ``` bash
-    ReportGenerator -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
+    ReportGenerator -reports:./TestResults/*.cobertura.xml -targetdir:CoverageReport
     ```
 
-4. Open the HTML file `CoverageReport\index.html` to see the results.
+5. Open the HTML file `CoverageReport/index.html` to see the results.
 
 # EF Core Migrations
 
@@ -62,7 +64,7 @@ You need to create a new migration.
 To create a migration, you need to have installed the [EF Core CLI Tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet). Then, in the root of the solution, run the following command (example for the **Todo** application):
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Presentation.Api\ --project .\src\Todo\Todo.Persistence\ -- --environment Migration
+dotnet ef migrations add <MigrationName> --startup-project ./src/Todo/Todo.Presentation.Api/ --project ./src/Todo/Todo.Persistence/ -- --environment Migration
 ```
 
 > **Note:** The `--environment Migration` parameter is used to the pending migrations not being applied, which is the default in the `Development` environment.
@@ -70,5 +72,5 @@ dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Prese
 If you ever need to add migrations to the `SharedCore.Persistence.IntegrationTests`, this would be the command:
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\ --project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\
+dotnet ef migrations add <MigrationName> --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
 ```
