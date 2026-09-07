@@ -4,6 +4,9 @@
         <OutputType>Exe</OutputType>
 
         <UserSecretsId>aspire-cf3293e2-5be6-40c8-ab31-0c4c0334d633</UserSecretsId>
+
+        <!-- Enable the centralized Aspire CLI bundle (in this version, the default is false, with the warning ASPIRE010, but CLI bundle is highly recommended) -->
+        <AspireUseCliBundle>true</AspireUseCliBundle>
     </PropertyGroup>
 
     <ItemGroup>
