@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="OpenIddict.AspNetCore" Version="7.6.0"/>
-        <PackageReference Include="OpenIddict.Quartz" Version="7.6.0"/>
-        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.19.1"/>
+        <PackageReference Include="OpenIddict.AspNetCore" Version="7.7.0" />
+        <PackageReference Include="OpenIddict.Quartz" Version="7.7.0" />
+        <PackageReference Include="Quartz" Version="4.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\SharedCore\SharedCore.Application\SharedCore.Application.csproj"/>
-        <ProjectReference Include="..\Identity.Persistence\Identity.Persistence.csproj"/>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Application\SharedCore.Application.csproj" />
+        <ProjectReference Include="..\Identity.Persistence\Identity.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

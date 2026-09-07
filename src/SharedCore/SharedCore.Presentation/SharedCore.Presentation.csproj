@@ -5,18 +5,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asp.Versioning.Http" Version="10.2.3"/>
-        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.2.1"/>
-        <PackageReference Include="Asp.Versioning.OpenApi" Version="10.2.3"/>
-        <PackageReference Include="OpenIddict.AspNetCore" Version="7.6.0"/>
-        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0"/>
-        <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0"/>
-        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0"/>
+        <PackageReference Include="Asp.Versioning.Http" Version="10.2.3" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.2.1" />
+        <PackageReference Include="Asp.Versioning.OpenApi" Version="10.2.3" />
+        <PackageReference Include="OpenIddict.AspNetCore" Version="7.7.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SharedCore.Application\SharedCore.Application.csproj"/>
+        <ProjectReference Include="..\SharedCore.Application\SharedCore.Application.csproj" />
     </ItemGroup>
 
 </Project>

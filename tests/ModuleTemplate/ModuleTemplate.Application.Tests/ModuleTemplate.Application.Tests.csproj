@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\ModuleTemplate\ModuleTemplate.Application\ModuleTemplate.Application.csproj"/>
+        <ProjectReference Include="..\..\..\src\ModuleTemplate\ModuleTemplate.Application\ModuleTemplate.Application.csproj" />
     </ItemGroup>
 
 </Project>

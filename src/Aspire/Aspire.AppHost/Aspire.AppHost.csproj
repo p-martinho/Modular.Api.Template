@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.5.2">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.5.2"/>
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.5.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj"/>
-        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj"/>
+        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj" />
+        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj" />
     </ItemGroup>
 
 </Project>

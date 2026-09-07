@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.11"/>
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" Version="10.9.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.11" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" Version="10.9.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj"/>
+        <ProjectReference Include="..\..\..\src\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

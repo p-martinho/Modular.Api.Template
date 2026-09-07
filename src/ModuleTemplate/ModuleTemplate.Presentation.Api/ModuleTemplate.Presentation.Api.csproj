@@ -13,19 +13,19 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Scalar.AspNetCore" Version="2.17.1"/>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.17.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj"/>
-        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj"/>
-        <ProjectReference Include="..\ModuleTemplate.Application\ModuleTemplate.Application.csproj"/>
+        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj" />
+        <ProjectReference Include="..\ModuleTemplate.Application\ModuleTemplate.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Dtos\V1\"/>
-        <Folder Include="Endpoints\V1\"/>
-        <Folder Include="MappingExtensions\V1\"/>
+        <Folder Include="Dtos\V1\" />
+        <Folder Include="Endpoints\V1\" />
+        <Folder Include="MappingExtensions\V1\" />
     </ItemGroup>
 
 </Project>

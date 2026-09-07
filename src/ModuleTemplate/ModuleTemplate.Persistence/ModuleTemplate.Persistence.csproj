@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\..\SharedCore\SharedCore.Persistence\SharedCore.Persistence.csproj"/>
-        <ProjectReference Include="..\ModuleTemplate.Domain\ModuleTemplate.Domain.csproj"/>
-        <ProjectReference Include="..\ModuleTemplate.Common\ModuleTemplate.Common.csproj"/>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Persistence\SharedCore.Persistence.csproj" />
+        <ProjectReference Include="..\ModuleTemplate.Domain\ModuleTemplate.Domain.csproj" />
+        <ProjectReference Include="..\ModuleTemplate.Common\ModuleTemplate.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Configurations\"/>
-        <Folder Include="Migrations\"/>
-        <Folder Include="Repositories\"/>
+        <Folder Include="Configurations\" />
+        <Folder Include="Migrations\" />
+        <Folder Include="Repositories\" />
     </ItemGroup>
 
 </Project>
-

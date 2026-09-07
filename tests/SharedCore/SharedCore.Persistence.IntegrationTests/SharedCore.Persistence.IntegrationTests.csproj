@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.11"/>
-        <PackageReference Include="Testcontainers.MsSql" Version="4.14.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.11" />
+        <PackageReference Include="Testcontainers.MsSql" Version="4.15.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\SharedCore\SharedCore.Persistence\SharedCore.Persistence.csproj"/>
+        <ProjectReference Include="..\..\..\src\SharedCore\SharedCore.Persistence\SharedCore.Persistence.csproj" />
     </ItemGroup>
 
 </Project>
