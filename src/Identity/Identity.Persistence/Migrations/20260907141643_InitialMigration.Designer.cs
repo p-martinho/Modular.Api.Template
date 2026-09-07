@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Persistence.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20251116182508_InitialMigration")]
+    [Migration("20260907141643_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace Identity.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("identity")
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -147,7 +147,7 @@ namespace Identity.Persistence.Migrations
 
                     b.ToTable("AspNetUsers", "identity");
 
-                    b.HasDiscriminator().HasValue("IdentityUser");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -528,7 +528,7 @@ namespace Identity.Persistence.Migrations
 
             modelBuilder.Entity("Identity.Domain.Entities.Users.AppIdentityUser", b =>
                 {
-                    b.OwnsOne("Identity.Domain.ValueObjects.AppIdentityUserName", "Name", b1 =>
+                    b.OwnsOne("Identity.Domain.ValueObjects.Users.AppIdentityUserName", "Name", b1 =>
                         {
                             b1.Property<string>("AppIdentityUserId")
                                 .HasColumnType("nvarchar(450)");

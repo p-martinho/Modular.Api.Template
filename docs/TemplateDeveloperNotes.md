@@ -45,6 +45,20 @@ The best way to check the output is installing the template directly from its fo
   - Check the command to uninstall it: `dotnet new uninstall`
   - Run the uninstallation command (instead of the name of the template, it uses the template local full path)
 
+# Re-create Initial Migrations
+
+To re-do the initial migrations:
+
+- Remove the folders 'Migrations' from projects `Todo.Pesistence`, `Identity.Persistence` and `SharedCore.Persistence.IntegrationTests`
+- Temporally remove `Modular.Api.Template.csproj` (its existence along with the solution file will cause an error in the migration command)
+- Create new migrations, using the commands:
+  ```
+  dotnet ef migrations add InitialMigration --startup-project ./src/Todo/Todo.Presentation.Api/ --project ./src/Todo/Todo.Persistence/ -- --environment Migration
+  dotnet ef migrations add InitialMigration --startup-project ./src/Identity/Identity.Presentation.Api/ --project ./src/Identity/Identity.Persistence/ -- --environment Migration
+  dotnet ef migrations add <MigrationName> --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
+  ```
+- Revert the removal of `Modular.Api.Template.csproj`
+
 # References
 
 - [.NET templates for authors](https://learn.microsoft.com/en-us/dotnet/core/tools/templates)

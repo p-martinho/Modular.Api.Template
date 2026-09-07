@@ -355,7 +355,7 @@ You need to create a new migration.
 To create a migration, you need to have installed the [EF Core CLI Tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet). Then, in the root of the solution, run the following command (example for the **Todo** application):
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Presentation.Api\ --project .\src\Todo\Todo.Persistence\ -- --environment Migration
+dotnet ef migrations add <MigrationName> --startup-project ./src/Todo/Todo.Presentation.Api/ --project ./src/Todo/Todo.Persistence/ -- --environment Migration
 ```
 
 > **Note:** The `--environment Migration` parameter is used to the pending migrations not being applied, which is the default in the `Development` environment.
@@ -363,7 +363,7 @@ dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Prese
 If you ever need to add migrations to the `SharedCore.Persistence.IntegrationTests`, this would be the command:
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\ --project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\
+dotnet ef migrations add <MigrationName> --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
 ```
 
 ## Logging and Telemetry
@@ -412,7 +412,7 @@ Anyway, enforced HTTPS is problematic when running locally with Docker. The cert
 For that (**note: only required to run the APIs in Docker**), create a certificate with the same name as the project and set its password in the user secrets (example for the **TODO API**):
 
 ```
-dotnet dev-certs https -ep %appdata%\ASP.NET\Https\Todo.Presentation.Api.pfx -p <PASSWORD>
+dotnet dev-certs https -ep %appdata%/ASP.NET/Https/Todo.Presentation.Api.pfx -p <PASSWORD>
 dotnet dev-certs https --trust
 dotnet user-secrets -p ./src/Todo.Presentation.Api/Todo.Presentation.Api.csproj set "Kestrel:Certificates:Development:Password" "<PASSWORD>"
 ```
@@ -458,7 +458,7 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
     ReportGenerator -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
     ```
 
-4. Open the HTML file `CoverageReport\index.html` to see the results.
+4. Open the HTML file `CoverageReport/index.html` to see the results.
 
 ## Mapping
 
