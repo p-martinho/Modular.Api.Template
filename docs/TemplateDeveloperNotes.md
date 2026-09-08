@@ -63,6 +63,7 @@ The best way to check the output is installing the template directly from its fo
 
 - Increment the `PackageVersion` in `Modular.Api.Template.csproj`.
 - Merge Pull Request to main branch, it will trigger the GitHub action `publish.yaml`.
+- Add new release in GitHub.
 
 # References
 
