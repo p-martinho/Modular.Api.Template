@@ -130,8 +130,7 @@ public static class DependencyInjectionExtensions
                         .EnableTokenEndpointPassthrough();
 
                     // Disable HTTPS requirement (e.g. useful in local docker compose).
-                    if (hostEnvironment.IsDevelopment() &&
-                        configuration.GetSection("IdentitySettings:DisableHttps").Get<bool>())
+                    if (IsToDisableHttps(configuration, hostEnvironment))
                     {
                         aspNetOptions.DisableTransportSecurityRequirement();
                     }
@@ -191,5 +190,19 @@ public static class DependencyInjectionExtensions
 
             return healthChecksBuilder;
         }
+    }
+
+    /// <summary>
+    /// Gets a value indicating if is to disable HTTPS configuration.
+    /// Disabling the HTTPS redirection and requirement is useful in local docker compose, for local container-to-container communication over plain HTTP inside the Docker network.
+    /// It returns true only in Development environment and when the setting "IdentitySettings:DisableHttps" is set to true.
+    /// </summary>
+    /// <param name="configuration">The configuration.</param>
+    /// <param name="hostEnvironment">The host environment.</param>
+    /// <returns>true if is to disable HTTPS; false otherwise.</returns>
+    public static bool IsToDisableHttps(IConfiguration configuration, IHostEnvironment hostEnvironment)
+    {
+        return hostEnvironment.IsDevelopment() &&
+               configuration.GetSection("IdentitySettings:DisableHttps").Get<bool>();
     }
 }

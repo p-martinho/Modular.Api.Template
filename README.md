@@ -419,6 +419,10 @@ dotnet user-secrets -p ./src/Todo.Presentation.Api/Todo.Presentation.Api.csproj 
 
 The `docker-compose.override.yml` has the required volume mappings to share the certificate and user secrets with the container.
 
+> Note: For local container-to-container communication, the easiest approach is to communicate over plain HTTP inside the Docker network.
+  Therefore, HTTPS is disabled for the Identity API in `docker-compose.override.yml` through the option `IdentitySettings:DisableHttps`.
+  This way, TODO API can call Identity API inside local Docker network over HTTP, without certificate (developer certificates only work for localhost domain, not identity.api for instance).
+
 ## Health Checks
 
 The application has default health checks in the endpoints `/health` and `/alive`. For instance, it includes the health check for the EF Core DB context.

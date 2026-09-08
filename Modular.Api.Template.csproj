@@ -34,7 +34,7 @@
 
     <ItemGroup>
         <Content Include=".\**\*"
-                 Exclude="**\bin\**;**\obj\**;**\.vs\**;**\.vscode\**;.\.idea\**;.\.git\**;.\.github\**;**\*.filelist;**\*.user;**\*.lock.json;**\log\**;**\logs\**;sqldata\**;CoverageReport\**" />
+                 Exclude="**\bin\**;**\obj\**;**\.vs\**;**\.vscode\**;.\.idea\**;.\.git\**;.\.github\**;**\*.filelist;**\*.user;**\*.lock.json;**\log\**;**\logs\**;sqldata\**;CoverageReport\**;TestResults\**" />
         <Compile Remove="**\*" />
     </ItemGroup>
 

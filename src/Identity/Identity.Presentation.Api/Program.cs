@@ -4,6 +4,7 @@ using Identity.Presentation.Api.Extensions;
 using Identity.Presentation.Api.OpenApi;
 using Serilog;
 using SharedCore.Presentation.Extensions;
+using AppDiExtensions = Identity.Application.DependencyInjection.DependencyInjectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,11 @@ await app.SeedResourcesAsync();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+// No HTTPS redirection is useful in local docker compose.
+if (!AppDiExtensions.IsToDisableHttps(app.Configuration, app.Environment))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseSerilogRequestLogging();
 

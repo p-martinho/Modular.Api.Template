@@ -88,6 +88,7 @@
         ".vs/**",
         "sqldata/**",
         "CoverageReport/**",
+        "TestResults/**",
         "README.md",
         "*.csproj",
         "icon.*",
