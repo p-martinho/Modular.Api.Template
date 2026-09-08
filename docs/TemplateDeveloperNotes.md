@@ -33,18 +33,6 @@ Some of the configurations used:
 - `module-name`: the name of the module, when creating a new module (with `--add module --module-name YourNewModuleName`) or tests for a module (`--add tests --module-name YourNewModuleName`). If `--add module` or `--add tests` is used without `--module-name`, the default is `ModuleTemplate`.
 - `with-docker`: adds support for Docker in the new solution or new module. The template output will include Docker-related files (like `Dockerfile`and `docker-compose.yml`). Without this option, everything inside `#if (IsToAddDocker)` directives will be excluded from the output.
 
-# Test Template Locally
-
-Before shipping the NuGet package, we need to test the template.
-The best way to check the output is installing the template directly from its folder and then test it:
-
-- Uninstall the template, if installed normally (with package): `dotnet new uninstall PMart.Modular.Api.Template`
-- Install/reinstall from local folder (in the root of the solution): `dotnet new install .\ --force`
-- Test it: `dotnet new mod-api -n YourSolutionName`
-- In the end, uninstall it:
-  - Check the command to uninstall it: `dotnet new uninstall`
-  - Run the uninstallation command (instead of the name of the template, it uses the template local full path)
-
 # Re-create Initial Migrations
 
 To re-do the initial migrations:
@@ -58,6 +46,23 @@ To re-do the initial migrations:
   dotnet ef migrations add InitialMigration --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
   ```
 - Revert the removal of `Modular.Api.Template.csproj`
+
+# Test Template Locally
+
+Before shipping the NuGet package, we need to test the template.
+The best way to check the output is installing the template directly from its folder and then test it:
+
+- Uninstall the template, if installed normally (with package): `dotnet new uninstall PMart.Modular.Api.Template`
+- Install/reinstall from local folder (in the root of the solution): `dotnet new install .\ --force`
+- Test it: `dotnet new mod-api -n YourSolutionName`
+- In the end, uninstall it:
+    - Check the command to uninstall it: `dotnet new uninstall`
+    - Run the uninstallation command (instead of the name of the template, it uses the template local full path)
+
+# Publish Template
+
+- Increment the `PackageVersion` in `Modular.Api.Template.csproj`.
+- Merge Pull Request to main branch, it will trigger the GitHub action `publish.yaml`.
 
 # References
 
