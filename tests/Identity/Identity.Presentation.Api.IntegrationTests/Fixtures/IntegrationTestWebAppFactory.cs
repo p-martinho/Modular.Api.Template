@@ -11,7 +11,7 @@ namespace Identity.Presentation.Api.IntegrationTests.Fixtures;
 
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04";
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-latest";
 
     private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
 
