@@ -164,7 +164,7 @@ No other layer has the knowledge of how persistence happens: what tool is used (
 what type of database, etc.
 The repositories include the permissions to data access and the logic to include in the queries the root aggregate with all its related entities.
 
-**Note**: These repositories are not ORM agnostic, they were made to work with [EF Core](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core).
+> **Note:** These repositories are not ORM agnostic, they were made to work with [EF Core](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core).
 
 ### Common
 
@@ -203,7 +203,7 @@ But there are some dependencies that were decided to use because they are popula
 
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core)
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
-* [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
+* [Aspire](https://aspire.dev/get-started/what-is-aspire/)
   * The solution includes **Aspire**, to orchestrate the several services (APIs, database, etc.). It is so easy running and connecting everything for local development environments.
   It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
 * [OpenTelemetry](https://opentelemetry.io/docs/languages/dotnet/)
@@ -228,7 +228,7 @@ But there are some dependencies that were decided to use because they are popula
 * [XUnit V3 (with MTP v2)](https://xunit.net/)
   * XUnit is on version 3, with a lot of improvements, and supporting the modern and lightweight alternative to VSTest for running tests: the Microsoft Testing Platform (MTP), in version 2.
 * [NSubstitute](https://nsubstitute.github.io/)
-  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/), in my opinion, is less verbose, easy to use (and learn) and is well-known as well.
+  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but **NSubstitute**, in my opinion, is less verbose, easy to use (and learn) and is well-known as well.
 * [TestContainers](https://dotnet.testcontainers.org/)
   * For integration tests, it is fundamental to use a real database. This library makes it straightforward, using **Docker**.
 * [NetArchTest.eNhancedEdition](https://github.com/NeVeSpl/NetArchTest.eNhancedEdition)
@@ -376,7 +376,7 @@ The `docker-compose.override.yml` file (if added) includes the **Aspire Dashboar
 
 ## Aspire
 
-The solution has support for [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview). Locally, you only have to run the `Aspire.AppHost` project.
+The solution has support for [Aspire](https://aspire.dev/get-started/what-is-aspire/). Locally, you only have to run the `Aspire.AppHost` project.
 It will automatically instantiate a Docker container for the SQL Server (requires **Docker Desktop** running), add the databases, waits for the databases are up, and then run the modules APIs.
 The **Aspire Dashboard** is launched.
 
@@ -419,7 +419,7 @@ dotnet user-secrets -p ./src/Todo.Presentation.Api/Todo.Presentation.Api.csproj 
 
 The `docker-compose.override.yml` has the required volume mappings to share the certificate and user secrets with the container.
 
-> Note: For local container-to-container communication, the easiest approach is to communicate over plain HTTP inside the Docker network.
+> **Note:** For local container-to-container communication, the easiest approach is to communicate over plain HTTP inside the Docker network.
   Therefore, HTTPS is disabled for the Identity API in `docker-compose.override.yml` through the option `IdentitySettings:DisableHttps`.
   This way, TODO API can call Identity API inside local Docker network over HTTP, without certificate (developer certificates only work for localhost domain, not identity.api for instance).
 
