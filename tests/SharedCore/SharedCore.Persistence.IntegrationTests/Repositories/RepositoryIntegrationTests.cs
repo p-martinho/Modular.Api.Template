@@ -8,11 +8,11 @@ using SharedCore.Persistence.Repositories.Settings;
 
 namespace SharedCore.Persistence.IntegrationTests.Repositories;
 
-public class RepositoryTests : BaseRepositoryIntegrationTests
+public class RepositoryIntegrationTests : BaseRepositoryIntegrationTests
 {
     private readonly TestRepository _repository;
 
-    public RepositoryTests(RepositoryFixture fixture) : base(fixture)
+    public RepositoryIntegrationTests(TestDataEfCoreFixture fixture) : base(fixture)
     {
         var queryParametersOptions = Substitute.For<IOptionsSnapshot<QueryParametersSettings>>();
         queryParametersOptions.Value.Returns(new QueryParametersSettings());

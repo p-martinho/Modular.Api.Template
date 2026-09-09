@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Identity.Application.Commands.OpenId.Seed;
-using Identity.Common.Extensions;
 using Identity.Domain.Entities.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -153,7 +152,7 @@ internal class ExchangeTokenCommandHandler : CommandHandler<OpenIddictRequest, C
             // Set the list of scopes granted to the client application.
             identity.SetScopes(scopes);
             identity.SetResources(await _scopeManager.ListResourcesAsync(identity.GetScopes(), cancellationToken)
-                .ToListAsync());
+                .ToListAsync(cancellationToken));
         }
 
         identity.SetDestinations(GetDestinations);

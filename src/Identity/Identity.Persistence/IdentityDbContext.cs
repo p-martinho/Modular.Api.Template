@@ -22,6 +22,7 @@ internal class IdentityDbContext : IdentityDbContext<IdentityUser>
     {
     }
 
+    /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -29,6 +30,7 @@ internal class IdentityDbContext : IdentityDbContext<IdentityUser>
         optionsBuilder.UseOpenIddict();
     }
 
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

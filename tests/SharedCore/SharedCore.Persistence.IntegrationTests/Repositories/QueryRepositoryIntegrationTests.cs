@@ -11,13 +11,13 @@ using SharedCore.Persistence.Repositories.Settings;
 
 namespace SharedCore.Persistence.IntegrationTests.Repositories;
 
-public class QueryRepositoryTests : BaseRepositoryIntegrationTests
+public class QueryRepositoryIntegrationTests : BaseRepositoryIntegrationTests
 {
     private const int QueryMaxLimit = 10;
 
     private readonly TestQueryRepository _repository;
 
-    public QueryRepositoryTests(RepositoryFixture fixture) : base(fixture)
+    public QueryRepositoryIntegrationTests(TestDataEfCoreFixture fixture) : base(fixture)
     {
         var queryParametersOptions = Substitute.For<IOptionsSnapshot<QueryParametersSettings>>();
         queryParametersOptions.Value.Returns(new QueryParametersSettings { MaxLimit = QueryMaxLimit });

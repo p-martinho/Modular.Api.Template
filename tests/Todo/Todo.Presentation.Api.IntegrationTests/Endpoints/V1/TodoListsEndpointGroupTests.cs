@@ -21,7 +21,7 @@ using Todo.Presentation.Api.Dtos.V1.TodoLists.TodoItems.Update;
 using Todo.Presentation.Api.Dtos.V1.TodoLists.Update;
 using Todo.Presentation.Api.Endpoints.V1;
 
-namespace Todo.Presentation.Api.IntegrationTests.Endpoints;
+namespace Todo.Presentation.Api.IntegrationTests.Endpoints.V1;
 
 /// <remarks>
 /// These tests are complementary to the integration tests, to test scenarios not possible to test in the integration tests (for instance, internal errors).

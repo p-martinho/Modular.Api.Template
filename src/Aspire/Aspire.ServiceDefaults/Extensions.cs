@@ -14,9 +14,9 @@ using SharedCore.Common.HealthChecks;
 
 namespace Aspire.ServiceDefaults;
 
-// Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
+// Adds common Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
-// To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
+// To learn more about using this project, see https://aka.ms/aspire/service-defaults
 /// <summary>
 /// The service defaults extensions.
 /// </summary>

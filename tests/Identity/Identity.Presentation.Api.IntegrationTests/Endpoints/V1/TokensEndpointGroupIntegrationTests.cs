@@ -6,7 +6,7 @@ using Identity.Presentation.Api.IntegrationTests.Fixtures;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Identity.Presentation.Api.IntegrationTests.Endpoints;
+namespace Identity.Presentation.Api.IntegrationTests.Endpoints.V1;
 
 public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 {
@@ -31,7 +31,6 @@ public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 
         // Act
         var response = await Client.PostAsync(TokensPath, formContent, TestContext.Current.CancellationToken);
-
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -92,11 +91,12 @@ public class TokensEndpointGroupIntegrationTests : BaseIntegrationTests
 
     private async Task CreateUserAsync(string email, string password)
     {
-        var request = new CreateUserApiDto { Email = email, Password = password };
+        var request = new CreateUserApiDto {Email = email, Password = password};
 
         var response = await Client.PostAsJsonAsync(UsersPath, request, TestContext.Current.CancellationToken);
 
-        var userResponse = await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
+        var userResponse =
+            await response.Content.ReadFromJsonAsync<UserInfoApiDto>(TestContext.Current.CancellationToken);
 
         if (userResponse is null)
         {

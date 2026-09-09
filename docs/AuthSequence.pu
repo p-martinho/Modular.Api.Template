@@ -55,6 +55,4 @@ User -> ClientApp ++ : Create TODO List
 
 ClientApp -> User --
 
-
-
 @enduml

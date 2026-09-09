@@ -9,28 +9,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
-        <PackageReference Include="Scalar.AspNetCore" Version="2.11.0"/>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.17.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj"/>
-        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj"/>
-        <ProjectReference Include="..\Identity.Application\Identity.Application.csproj"/>
+        <ProjectReference Include="..\..\Aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Presentation\SharedCore.Presentation.csproj" />
+        <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
     </ItemGroup>
-
-    <!-- This is needed to add documentation about ProblemDetails to the OpenAPI document -->
-    <Target Name="AddOpenApiDependencies" AfterTargets="ResolveReferences">
-        <ItemGroup>
-            <AdditionalFiles
-                    Include="@(ReferencePath->'%(RootDir)%(Directory)%(Filename).xml')"
-                    Condition="'%(ReferencePath.Filename)' == 'Microsoft.AspNetCore.Http.Abstractions'"
-                    KeepMetadata="Identity;HintPath"/>
-        </ItemGroup>
-    </Target>
 
 </Project>

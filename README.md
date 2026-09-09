@@ -1,5 +1,5 @@
-[![NuGet](https://img.shields.io/nuget/v/PMart.Modular.Api.template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.template)
-[![NuGet](https://img.shields.io/nuget/dt/PMart.Modular.Api.template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.template)
+[![NuGet](https://img.shields.io/nuget/v/PMart.Modular.Api.Template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.Template)
+[![NuGet](https://img.shields.io/nuget/dt/PMart.Modular.Api.Template.svg)](https://www.nuget.org/packages/PMart.Modular.Api.Template)
 [![Build and Test](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/build-and-test.yaml)
 [![CodeQL Analysis](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/p-martinho/Modular.Api.Template/actions/workflows/codeql-analysis.yaml)
 
@@ -82,6 +82,19 @@ and navigate to [https://localhost:7217/scalar]() to see the sample **Todo API**
 You can test the sample APIs, using the provided examples in the `.http` files:
 [Identity.Presentation.Api.http](./src/Identity/Identity.Presentation.Api/Identity.Presentation.Api.http) and [Todo.Presentation.Api.http](./src/Todo/Todo.Presentation.Api/Todo.Presentation.Api.http).
 
+## Update
+
+After having the solution working, you can implement your own modules:
+
+* Create new modules
+* Update `Aspire.AppHost` to add the new database and add reference to the new projects (check the [Aspire section](#aspire))
+* If Docker is enabled, add the new modules to `docker-compose.yml` and `docker-compose.override.yml` (check the [Docker section](#docker-support))
+* Implement them, for each layer (you can get base reference from the sample **Todo** module)
+* Remove the sample modules (**Identity** and **Todo**)
+* Set up the authentication/authorization (with the **Identity** sample, it would be updating the `SeedOpenIdTestingResourcesCommandHandler` and the settings `IdentitySettings`)
+* Review the settings in `appsettings.json`
+* Update NuGet packages
+
 # Design and Architecture
 
 * **Architecture**:
@@ -106,7 +119,7 @@ The solution could be even simpler, for small playground applications or persona
 I tried to get the balance. I think this solution is enterprise level (not for microservices context, this is a modular monolith) and also simple enough to use in small projects, keeping the decoupling, clean code, and [SOLID](https://en.wikipedia.org/wiki/SOLID) principals.
 
 I tried to keep the dependencies at the minimum, as discussed in the section [Technologies and Dependencies](#technologies-and-dependencies).
-Therefore, it was easy to decide to not use __MediatR__ (not even taking into consideration it is becoming commercial). Instead, the solution applies the [CQRS pattern](https://martinfowler.com/bliki/CQRS.html) using command handlers and query handlers, that are called directly and explicitly.
+Therefore, it was easy to decide to not use __MediatR__ (not even taking into consideration it is commercial). Instead, the solution applies the [CQRS pattern](https://martinfowler.com/bliki/CQRS.html) using command handlers and query handlers, that are called directly and explicitly.
 This way, it is easier to debug and understand what is happening instead of just sending a message and then search for the handlers of the message. And it has also performance benefits.
 I totally agree that using __MediatR__ has a lot of benefits, but the intention here was only to keep things simpler and with the fewer dependencies possible.
 
@@ -151,7 +164,7 @@ No other layer has the knowledge of how persistence happens: what tool is used (
 what type of database, etc.
 The repositories include the permissions to data access and the logic to include in the queries the root aggregate with all its related entities.
 
-**Note**: These repositories are not ORM agnostic, they were made to work with [EF Core](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core).
+> **Note:** These repositories are not ORM agnostic, they were made to work with [EF Core](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core).
 
 ### Common
 
@@ -190,9 +203,9 @@ But there are some dependencies that were decided to use because they are popula
 
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core)
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
-* [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview)
+* [Aspire](https://aspire.dev/get-started/what-is-aspire/)
   * The solution includes **Aspire**, to orchestrate the several services (APIs, database, etc.). It is so easy running and connecting everything for local development environments.
-It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
+  It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), which helps a lot to visualize traces, structured logs, and metrics.
 * [OpenTelemetry](https://opentelemetry.io/docs/languages/dotnet/)
   * This open source telemetry framework is enabled by the **Aspire** defaults.
 * [Docker and Docker compose support](https://docs.docker.com/)
@@ -201,20 +214,21 @@ It includes the [Aspire Dashboard](https://aspire.dev/dashboard/overview/), whic
   * The solution includes a sample API to create, store, and authenticate users.
 * [OpenIddict](https://documentation.openiddict.com/)
   * The solution contains the authentication and authorization configured out-of-the-box, as explained in the [auth section](#authentication-and-authorization).
-The decision was to use known standards (OAuth 2.0 and OpenId Connect), using an open source library.
+  The decision was to use known standards (OAuth 2.0 and OpenId Connect), using an open source library.
 * [Serilog](https://serilog.net/)
   * The default logging of ASP.NET Core is not perfect yet. **Serilog** is very popular and useful (structured logs, integration with different targets/sinks, etc.).
 * [OpenApi](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi)
   * The API documentation is built using the `Microsoft.AspNetCore.OpenApi` library, included as well in the ASP.NET Core templates.
 * [Scalar](https://guides.scalar.com/scalar/scalar-api-references/net-integration)
   * The new ASP.NET Core templates do not include **Swagger** anymore. In this case, all the documentation is built using **OpenApi** and then the documents can be used by any interface.
-**Scalar** is one of them, selected here because Swagger UI seems outdated and the "Try out" feature is not very friendly. But is straightforward to switch to Swagger, using the same **OpenApi** documents.
+  **Scalar** is one of them, selected here because Swagger UI seems outdated and the "Try out" feature is not very friendly. But is straightforward to switch to Swagger, using the same **OpenApi** documents.
 * [FluentValidation](https://fluentvalidation.net/)
   * This library is very used and known, but is not absolutely necessary here. The idea is to have a validation in the **Application** layer,
-and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
+  and the flow of a command or query handling should include that validation. After starting by adding some manual validation for the simple sample, I gave up and added this library for that, it is so much easier to maintain and test.
 * [XUnit V3 (with MTP v2)](https://xunit.net/)
+  * XUnit is on version 3, with a lot of improvements, and supporting the modern and lightweight alternative to VSTest for running tests: the Microsoft Testing Platform (MTP), in version 2.
 * [NSubstitute](https://nsubstitute.github.io/)
-  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but [NSubstitute](https://nsubstitute.github.io/) is less verbose, easy to use (and learn) and is well-known as well.
+  * For mocking in unit tests, the [Moq](https://github.com/devlooped/moq) library is more popular, but **NSubstitute**, in my opinion, is less verbose, easy to use (and learn) and is well-known as well.
 * [TestContainers](https://dotnet.testcontainers.org/)
   * For integration tests, it is fundamental to use a real database. This library makes it straightforward, using **Docker**.
 * [NetArchTest.eNhancedEdition](https://github.com/NeVeSpl/NetArchTest.eNhancedEdition)
@@ -248,20 +262,22 @@ the solution uses a custom way to register them by endpoint group. There are ple
 But again, the idea was to keep the external dependencies at the minimum (without having to invent the wheel, of course).
 
 Check the **Todo API** sample, to see how the endpoints are registered, by implementing the `IEndpointGroup`
-(it will be registered automatically by `SharedCore.Presentation.Extensions.EndpointExtensions.MapEndpoints<TProgram>()`).
+(it will be registered automatically by `EndpointExtensions.MapEndpoints<TProgram>()`).
 
 The Presentation layer uses its owns DTOs (the `ApiDtos`), instead of returning the applicational DTOs. Although it introduces more code and complexity (and more mapping),
 the idea is making the API contracts stable (I would recommend having different API DTOs for each API version as well).
 This way, we make sure that any change in the applicational DTO will not cause a breaking change in the API.
 
-The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code.
+The `ResultType` from the `CommandOut<>` or `QueryOut<>` sets the API response code. On success, the endpoint produces a `Status200OK` or `Status201Created` response (depends on the type of operation of the endpoint).
+On a non-success result, a `ProblemDetails` response is produced, and the response code and details are mapped from the `OutputResult` (using the `OutputResultMappingExtensions.ToProblemDetails()`).
 
 ## API Versioning
 
 The solution supports API versioning by defining the existent versions (including the deprecated ones) and assigning the endpoint groups to a version.
 For each API version, it will be created one **OpenApi** document.
 
-Check the API versions defined in `Program.cs` of the **Todo API** and the way the version is assigned in the `TodoListsEndpointGroup`.
+Check the way the version is assigned in the `TodoListsEndpointGroup` in the **Todo API**.
+For setting specific versions as deprecated, provide them in `app.MapEndpoints<Program>()` call, in `Program.cs`.
 
 ## Shared Libraries
 
@@ -271,11 +287,11 @@ This way, all the modules can reuse the same code, same patterns, same classes, 
 
 ## Error Handling
 
-The way the command and query handlers are built, they always return a `CommandOut<>` or `QueryOut<>` and never throw exceptions (use the **Result pattern**).
+The way the command and query handlers are built, they always return a `CommandOut<>` or `QueryOut<>` and never throw exceptions (they use the **Result pattern**).
 The exceptions should happen only on exceptional errors.
 
 In case of an exception, the handlers should catch the exception, log it, and then return an output with the result type `ResultType.InternalError`.
-Then, the APIs map it to a `500` response, without exposing details about the internal exception.
+Then, the APIs map it to a `Status500InternalServerError` response, without exposing details about the internal exception.
 
 In case of error (validation error, internal error, resource not found, etc.), the APIs return a [problem details response](https://datatracker.ietf.org/doc/html/rfc9457) (`ProblemHttpResult`).
 In case of an internal error output from the handlers (not an unhandled exception), and if the `InternalErrorMiddleware` is enabled, the request body will be logged, to help the debug of the issue.
@@ -319,15 +335,17 @@ This is the authentication and authorization flow in the samples included in the
 
 The template uses the [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for data persistence.
 
-When you run the application, the database will be automatically created (if not yet) and the latest migrations will be applied.
+When you run the application, the database will be automatically created (if not yet) and the migrations will be applied.
 In a non-development environment, the migrations are not automatic, and you should apply them using [bundles](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#bundles), for instance.
 
 The `SharedCore.Persistence` project adds the **SQL Server** provider by default. To have a different database type, this can be overriden.
  
-The template supports soft delete. If needed, the entity should implement `ISoftDeletableEntity`. Auditable properties can also be automatically added and updated, being the entity derived from `BaseAuditableEntity`.
+The template supports soft delete. For that, the entity should implement `ISoftDeletableEntity`.
+Auditable properties can also be automatically added and updated, being the entity derived from `BaseAuditableEntity`.
 These two features work using [EF Core interceptors](https://learn.microsoft.com/en-us/ef/core/logging-events-diagnostics/interceptors).
 
-Regarding the repositories, they include methods to filter and sort the results, but they are very restricted to simple use cases. There are packages like [Sieve](https://github.com/Biarity/Sieve) to use with more comprehensive use cases.
+Regarding the repositories, they include methods to filter and sort the results, but they are very restricted to simple use cases.
+There are packages like [Sieve](https://github.com/Biarity/Sieve) to use with more comprehensive use cases.
 
 ### Migrations
 
@@ -337,16 +355,15 @@ You need to create a new migration.
 To create a migration, you need to have installed the [EF Core CLI Tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet). Then, in the root of the solution, run the following command (example for the **Todo** application):
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\src\Todo\Todo.Presentation.Api\ --project .\src\Todo\Todo.Persistence\ -- --environment Migration
+dotnet ef migrations add <MigrationName> --startup-project ./src/Todo/Todo.Presentation.Api/ --project ./src/Todo/Todo.Persistence/ -- --environment Migration
 ```
 
 > **Note:** The `--environment Migration` parameter is used to the pending migrations not being applied, which is the default in the `Development` environment.
 
-
 If you ever need to add migrations to the `SharedCore.Persistence.IntegrationTests`, this would be the command:
 
 ```
-dotnet ef migrations add <MigrationName> --startup-project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\ --project .\tests\SharedCore\SharedCore.Persistence.IntegrationTests\
+dotnet ef migrations add <MigrationName> --startup-project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/ --project ./tests/SharedCore/SharedCore.Persistence.IntegrationTests/
 ```
 
 ## Logging and Telemetry
@@ -359,7 +376,7 @@ The `docker-compose.override.yml` file (if added) includes the **Aspire Dashboar
 
 ## Aspire
 
-The solution has support for [Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview). Locally, you only have to run the `Aspire.AppHost` project.
+The solution has support for [Aspire](https://aspire.dev/get-started/what-is-aspire/). Locally, you only have to run the `Aspire.AppHost` project.
 It will automatically instantiate a Docker container for the SQL Server (requires **Docker Desktop** running), add the databases, waits for the databases are up, and then run the modules APIs.
 The **Aspire Dashboard** is launched.
 
@@ -380,6 +397,31 @@ The `docker-compose.override.yml` will run the following services: the modules A
 To add a new module to Docker compose, add the new module to `docker-compose.yml` and `docker-compose.override.yml` (check how it is done for the sample modules, use similar configurations).
 
 To access the Aspire Dashboard from Docker, check the logs of the container, there will be the link to the Dashboard with the login token.
+
+## HTTPS
+
+The APIs enforce HTTPS, using the HTTPS redirection middleware (`UseHttpsRedirection()`).
+
+For HTTPS in local development, you need to trust the .NET development certificate (just once):
+
+```
+dotnet dev-certs https --trust
+```
+
+Anyway, enforced HTTPS is problematic when running locally with Docker. The certificate must be available in the Docker container.
+For that (**note: only required to run the APIs in Docker**), create a certificate with the same name as the project and set its password in the user secrets (example for the **TODO API**):
+
+```
+dotnet dev-certs https -ep %appdata%/ASP.NET/Https/Todo.Presentation.Api.pfx -p <PASSWORD>
+dotnet dev-certs https --trust
+dotnet user-secrets -p ./src/Todo.Presentation.Api/Todo.Presentation.Api.csproj set "Kestrel:Certificates:Development:Password" "<PASSWORD>"
+```
+
+The `docker-compose.override.yml` has the required volume mappings to share the certificate and user secrets with the container.
+
+> **Note:** For local container-to-container communication, the easiest approach is to communicate over plain HTTP inside the Docker network.
+  Therefore, HTTPS is disabled for the Identity API in `docker-compose.override.yml` through the option `IdentitySettings:DisableHttps`.
+  This way, TODO API can call Identity API inside local Docker network over HTTP, without certificate (developer certificates only work for localhost domain, not identity.api for instance).
 
 ## Health Checks
 
@@ -408,25 +450,27 @@ To assess the code coverage, and if your IDE does not include a tool for it, fol
     dotnet tool install dotnet-reportgenerator-globaltool --global
     ```
 
-2. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
+2. Remove (if existent) the folder `TestResults` in the **root folder** (it contains previous coverage files)
+
+3. Run the tests with code coverage enabled. Run this command in the **root folder** of the solution:
 
     ``` bash
-    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml --coverage-settings ./tests/CodeCoverage-settings.xml
+    dotnet test --solution YourSolutionName.slnx --coverage --coverage-output-format cobertura --coverage-settings ./tests/CodeCoverage-settings.xml
     ```
 
-3. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
+4. Use the **ReportGenerator** tool to create HTML from the XML coverage files. Run this command in the **root folder** of the solution:
 
     ``` bash
-    ReportGenerator -reports:**/coverage.cobertura.xml -targetdir:CoverageReport
+    ReportGenerator -reports:./TestResults/*.cobertura.xml -targetdir:CoverageReport
     ```
 
-4. Open the HTML file `CoverageReport\index.html` to see the results.
+5. Open the HTML file `CoverageReport/index.html` to see the results.
 
 ## Mapping
 
 The way the application is built, we need mappings between DTOs and entities and between DTOs and API DTOs.
 
-The mapping is done via **extensions**. There are several mapping libraries (like [Mapperly](https://github.com/riok/mapperly) or [AutoMapper](https://automapper.org/)),
+The mapping is done via **extensions**. There are several mapping libraries (like [Mapperly](https://github.com/riok/mapperly), for instance),
 but their usage sometimes brings more problems than advantages, and also, once more, the idea is to keep the external dependencies to a minimum.
 
 ## Code Style
@@ -461,4 +505,9 @@ The template includes a `.editorconfig` file, to help maintain consistent coding
 # Final Notes
 
 * I would recommend using Enumeration classes instead of `enum`s for enumerations with logic (switch statements, etc.).
-The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
+  The enumeration classes bring several benefits. You can explore a library like [PMart.Enumeration](https://github.com/p-martinho/Enumeration).
+* For a more simple solution with just one API, I would suggest to check an approach like [PMart.Minimal.Api.Template](https://github.com/p-martinho/Minimal.Api.Template).
+* Adding a UI/UX project (e.g. Blazor web app) is perfectly fine. Add a new project to the src directory and reference the API project, to have access to its DTOs.
+  But, the UI project should not use anything from **Application** and so on (respect the layered architecture).
+* If you prefer to have just one API (a real monolith, one application only, just one deployment), it is easy.
+  You just need to merge the API projects into one, and reference the **Application** projects of each module.

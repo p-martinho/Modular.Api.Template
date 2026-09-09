@@ -1,4 +1,4 @@
-using Identity.Domain.ValueObjects;
+using Identity.Domain.ValueObjects.Users;
 
 namespace Identity.Domain.Tests.ValueObjects;
 

@@ -9,13 +9,13 @@ using SharedCore.Persistence.IntegrationTests.TestServices;
 
 namespace SharedCore.Persistence.IntegrationTests;
 
-public sealed class BaseDbContextTests : IClassFixture<EfCoreFixture>, IDisposable
+public sealed class BaseDbContextIntegrationTests : IClassFixture<EfCoreFixture>, IDisposable
 {
     private readonly IServiceScope _testScope;
     private readonly TestDbContext _context;
     private readonly TestCurrentUser _currentUser;
 
-    public BaseDbContextTests(EfCoreFixture fixture)
+    public BaseDbContextIntegrationTests(EfCoreFixture fixture)
     {
         _testScope = fixture.ServiceProvider.CreateScope();
         _context = _testScope.ServiceProvider.GetRequiredService<TestDbContext>();
@@ -228,7 +228,6 @@ public sealed class BaseDbContextTests : IClassFixture<EfCoreFixture>, IDisposab
 
     public void Dispose()
     {
-        _context.Dispose();
         _testScope.Dispose();
     }
 }

@@ -54,6 +54,7 @@
     <!--#if (false) -->
     <Folder Name="/Template Items/">
         <File Path=".template.config/template.json"/>
+        <File Path="docs/TemplateDeveloperNotes.md"/>
         <File Path="Modular.Api.Template.csproj"/>
         <File Path="README-template.md"/>
     </Folder>
@@ -65,7 +66,6 @@
     </Folder>
     <Folder Name="/Tests/Identity/">
         <Project Path="tests/Identity/Identity.Application.Tests/Identity.Application.Tests.csproj"/>
-        <Project Path="tests/Identity/Identity.Common.Tests/Identity.Common.Tests.csproj"/>
         <Project Path="tests/Identity/Identity.Domain.Tests/Identity.Domain.Tests.csproj"/>
         <Project Path="tests/Identity/Identity.Presentation.Api.IntegrationTests/Identity.Presentation.Api.IntegrationTests.csproj"/>
     </Folder>

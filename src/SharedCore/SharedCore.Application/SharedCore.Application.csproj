@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="12.1.0"/>
+        <PackageReference Include="FluentValidation" Version="12.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SharedCore.Persistence\SharedCore.Persistence.csproj"/>
+        <ProjectReference Include="..\SharedCore.Persistence\SharedCore.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

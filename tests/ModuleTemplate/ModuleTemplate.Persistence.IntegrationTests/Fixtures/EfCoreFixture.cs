@@ -12,10 +12,13 @@ namespace ModuleTemplate.Persistence.IntegrationTests.Fixtures;
 
 public sealed class EfCoreFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-latest";
+
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
     private IServiceScope? _serviceScope;
 
-    internal ModuleTemplateDbContext Context => _serviceScope!.ServiceProvider.GetRequiredService<ModuleTemplateDbContext>();
+    internal ModuleTemplateDbContext Context =>
+        _serviceScope!.ServiceProvider.GetRequiredService<ModuleTemplateDbContext>();
 
     public async ValueTask InitializeAsync()
     {
@@ -44,7 +47,7 @@ public sealed class EfCoreFixture : IAsyncLifetime
     public async ValueTask DisposeAsync()
     {
         await _msSqlContainer.DisposeAsync();
-        
+
         _serviceScope?.Dispose();
     }
 }

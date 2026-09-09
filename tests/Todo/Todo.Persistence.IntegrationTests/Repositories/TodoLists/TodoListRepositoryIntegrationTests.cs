@@ -9,19 +9,19 @@ using Todo.Persistence.Repositories.TodoLists;
 
 namespace Todo.Persistence.IntegrationTests.Repositories.TodoLists;
 
-public class TodoListRepositoryTests
+public class TodoListRepositoryIntegrationTests : BaseRepositoryIntegrationTests
 {
     private readonly ITodoListRepository _repository;
     private readonly ICurrentUser _currentUser;
 
-    public TodoListRepositoryTests(EfCoreFixture fixture)
+    public TodoListRepositoryIntegrationTests(EfCoreFixture fixture) : base(fixture)
     {
         var queryParametersOptions = Substitute.For<IOptionsSnapshot<QueryParametersSettings>>();
         queryParametersOptions.Value.Returns(new QueryParametersSettings());
 
         _currentUser = Substitute.For<ICurrentUser>();
 
-        _repository = new TodoListRepository(fixture.Context, queryParametersOptions, _currentUser);
+        _repository = new TodoListRepository(DbContext, queryParametersOptions, _currentUser);
     }
 
     [Theory]

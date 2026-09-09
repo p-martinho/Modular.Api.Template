@@ -1,4 +1,4 @@
-namespace Identity.Domain.ValueObjects;
+namespace Identity.Domain.ValueObjects.Users;
 
 /// <summary>
 /// The name of the application identity user.

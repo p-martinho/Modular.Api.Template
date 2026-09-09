@@ -13,8 +13,6 @@ namespace SharedCore.Presentation.OpenApi;
 [ExcludeFromCodeCoverage]
 public class SecuritySchemesDocumentTransformer : IOpenApiDocumentTransformer
 {
-    private const string BearerAuthenticationScheme = "Bearer";
-
     private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
 
     /// <summary>
@@ -39,12 +37,12 @@ public class SecuritySchemesDocumentTransformer : IOpenApiDocumentTransformer
             document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
             document.Components.SecuritySchemes.Add(
-                BearerAuthenticationScheme,
+                SharedApiInfoDetails.SecurityScheme,
                 new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
+                    Scheme = SharedApiInfoDetails.SecurityScheme,
                     BearerFormat = "Json Web Token",
                     In = ParameterLocation.Header
                 }

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\ModuleTemplate\ModuleTemplate.Domain\ModuleTemplate.Domain.csproj"/>
+        <ProjectReference Include="..\..\..\src\ModuleTemplate\ModuleTemplate.Domain\ModuleTemplate.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\" />
-      <Folder Include="ValueObjects\" />
+        <Folder Include="Entities\" />
+        <Folder Include="ValueObjects\" />
     </ItemGroup>
 
 </Project>

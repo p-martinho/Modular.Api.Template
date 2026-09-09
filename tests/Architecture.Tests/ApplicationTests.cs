@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Architecture.Tests.Extensions;
 using Architecture.Tests.Helpers;
 using NetArchTest.Rules;
@@ -63,7 +62,7 @@ public class ApplicationTests
         var conditionList = Types.InAssemblies(Assemblies.Application)
             .That().ImplementInterface(typeof(ICommandHandler<,>))
             .And().AreClasses()
-            .And().DoNotHaveName(typeof(CommandHandler<,>).Name)
+            .And().DoNotHaveName(nameof(CommandHandler<,>))
             .ShouldNot().BePublic();
 
         // Act
@@ -80,7 +79,7 @@ public class ApplicationTests
         var conditionList = Types.InAssemblies(Assemblies.Application)
             .That().ImplementInterface(typeof(ICommandHandler<>))
             .And().AreClasses()
-            .And().DoNotHaveName(typeof(CommandHandler<>).Name)
+            .And().DoNotHaveName(nameof(CommandHandler<>))
             .ShouldNot().BePublic();
 
         // Act
@@ -97,7 +96,7 @@ public class ApplicationTests
         var conditionList = Types.InAssemblies(Assemblies.Application)
             .That().ImplementInterface(typeof(IQueryHandler<,>))
             .And().AreClasses()
-            .And().DoNotHaveName(typeof(QueryHandler<,>).Name)
+            .And().DoNotHaveName(nameof(QueryHandler<,>))
             .ShouldNot().BePublic();
 
         // Act
@@ -114,7 +113,7 @@ public class ApplicationTests
         var conditionList = Types.InAssemblies(Assemblies.Application)
             .That().ImplementInterface(typeof(IQueryHandler<>))
             .And().AreClasses()
-            .And().DoNotHaveName(typeof(QueryHandler<>).Name)
+            .And().DoNotHaveName(nameof(QueryHandler<>))
             .ShouldNot().BePublic();
 
         // Act

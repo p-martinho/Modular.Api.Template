@@ -4,14 +4,19 @@ using Microsoft.Extensions.Hosting;
 using SharedCore.Common.ApplicationContext;
 using SharedCore.Persistence.Constants;
 using SharedCore.Persistence.DependencyInjection;
+using SharedCore.Persistence.IntegrationTests.Fixtures;
 using SharedCore.Persistence.IntegrationTests.TestServices;
 using Testcontainers.MsSql;
+
+[assembly: AssemblyFixture(typeof(EfCoreFixture))]
 
 namespace SharedCore.Persistence.IntegrationTests.Fixtures;
 
 public class EfCoreFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-latest";
+
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
 
     public IServiceProvider ServiceProvider = null!;
 
@@ -40,13 +45,13 @@ public class EfCoreFixture : IAsyncLifetime
         ServiceProvider = services.BuildServiceProvider();
     }
 
-    public virtual async ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore().ConfigureAwait(false);
 
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual ValueTask DisposeAsyncCore()
     {
         return _msSqlContainer.DisposeAsync();

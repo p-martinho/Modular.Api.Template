@@ -1,6 +1,6 @@
 using Todo.Domain.Entities.TodoLists;
 
-namespace Todo.Domain.Tests.Entities;
+namespace Todo.Domain.Tests.Entities.TodoLists;
 
 public class TodoListTests
 {

@@ -1,18 +1,21 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
 
         <UserSecretsId>aspire-cf3293e2-5be6-40c8-ab31-0c4c0334d633</UserSecretsId>
+
+        <!-- Enable the centralized Aspire CLI bundle (in this version, the default is false, with the warning ASPIRE010, but CLI bundle is highly recommended) -->
+        <AspireUseCliBundle>true</AspireUseCliBundle>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.0.0"/>
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.5.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj"/>
-        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj"/>
+        <ProjectReference Include="..\..\Identity\Identity.Presentation.Api\Identity.Presentation.Api.csproj" />
+        <ProjectReference Include="..\..\Todo\Todo.Presentation.Api\Todo.Presentation.Api.csproj" />
     </ItemGroup>
 
 </Project>

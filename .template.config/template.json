@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json.schemastore.org/template",
+  "$schema": "https://json.schemastore.org/template",
   "author": "PMart",
   "classifications": [
     "ASP.NET",
@@ -88,6 +88,7 @@
         ".vs/**",
         "sqldata/**",
         "CoverageReport/**",
+        "TestResults/**",
         "README.md",
         "*.csproj",
         "icon.*",

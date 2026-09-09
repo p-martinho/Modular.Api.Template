@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\..\SharedCore\SharedCore.Domain\SharedCore.Domain.csproj"/>
+        <ProjectReference Include="..\..\SharedCore\SharedCore.Domain\SharedCore.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.11" />
     </ItemGroup>
 
 </Project>

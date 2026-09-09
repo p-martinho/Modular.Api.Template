@@ -1,10 +1,10 @@
-using Asp.Versioning;
 using Aspire.ServiceDefaults;
 using Identity.Presentation.Api.DependencyInjection;
 using Identity.Presentation.Api.Extensions;
 using Identity.Presentation.Api.OpenApi;
 using Serilog;
 using SharedCore.Presentation.Extensions;
+using AppDiExtensions = Identity.Application.DependencyInjection.DependencyInjectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +14,9 @@ builder.AddServiceDefaults();
 
 builder.Services.AddCustomHealthChecks(builder.Configuration);
 
-ApiVersion[] activeApiVersions = [new(1, 0)];
-ApiVersion[] deprecatedApiVersions = [];
-var apiVersions = activeApiVersions.Concat(deprecatedApiVersions).ToArray();
-
-builder.Services.AddOpenApiDocuments(apiVersions);
-
 builder.Services.AddApiDependencies(builder.Configuration, builder.Environment);
+
+builder.Services.AddOpenApiDocuments();
 
 // Build app.
 
@@ -30,23 +26,33 @@ await app.SeedResourcesAsync();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+// No HTTPS redirection is useful in local docker compose.
+if (!AppDiExtensions.IsToDisableHttps(app.Configuration, app.Environment))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseInternalErrorMiddleware();
 
 app.MapDefaultEndpoints();
 
-app.MapEndpoints<Program>(activeApiVersions, deprecatedApiVersions);
+app.MapEndpoints<Program>();
 
 if (app.Environment.IsDevelopment())
 {
     // This needs to be after mapping the API versions (in MapEndpoints())
-    app.MapOpenApi().CacheOutput();
-    app.MapScalar(apiVersions);
+    app.MapOpenApi()
+        .WithDocumentPerVersion()
+        .CacheOutput();
+
+    app.MapScalar();
 }
 
 // Run app.

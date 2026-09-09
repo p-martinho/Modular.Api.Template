@@ -12,10 +12,11 @@ namespace Todo.Persistence.IntegrationTests.Fixtures;
 
 public sealed class EfCoreFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
-    private IServiceScope? _serviceScope;
+    private const string MsSqlImageName = "mcr.microsoft.com/mssql/server:2022-latest";
 
-    internal TodoDbContext Context => _serviceScope!.ServiceProvider.GetRequiredService<TodoDbContext>();
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder(MsSqlImageName).Build();
+
+    public IServiceProvider ServiceProvider = null!;
 
     public async ValueTask InitializeAsync()
     {
@@ -36,15 +37,11 @@ public sealed class EfCoreFixture : IAsyncLifetime
         // Adding using DI, for integration testing, to include interceptors, migration, etc.
         services.AddSharedPersistence<TodoDbContext>(configuration);
 
-        var serviceProvider = services.BuildServiceProvider();
-
-        _serviceScope = serviceProvider.CreateScope();
+        ServiceProvider = services.BuildServiceProvider();
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        await _msSqlContainer.DisposeAsync();
-        
-        _serviceScope?.Dispose();
+        return _msSqlContainer.DisposeAsync();
     }
 }
